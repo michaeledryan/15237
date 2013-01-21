@@ -4,7 +4,9 @@ var SCREEN_WIDTH = 800,
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
       
-var xpos = 142, 
+var mmX = 0,
+	mmY = 0,
+	xpos = 142, 
   ypos = 36, 
   index = 0, 
   numFrames = 30, 
@@ -14,6 +16,13 @@ var xpos = 142,
  //load the image
 image = new Image();
 image.src = "sprites/megaman.gif";
+
+canvas.addEventListener('keydown', onKeyDown, false);
+canvas.addEventListener('keyup', onKeyUp, false);
+
+// make canvas focusable, then give it focus!
+canvas.setAttribute('tabindex','0');
+canvas.focus();
 
 image.onload = function() {
 
@@ -28,9 +37,30 @@ function init(){
   beginStage();
 
 
-  setInterval(loop, 1000);
+  setInterval(loop, 1000/30);
 }
 
+
+function onKeyUp(event) {
+    console.log('keyCode: ' + event.keyCode);
+}
+
+
+function onKeyDown(event) {
+    switch(event.keyCode)
+	{
+		// right arrow
+		case 39:
+			mmX += 10;
+			break;
+		case 37:
+			mmX -= 10;
+			break;
+		default:
+			console.log('keyCode: ' + event.keyCode);
+	}
+	
+}
 
 function beginStage() {};
 
@@ -51,7 +81,7 @@ function loop() {
       the rectangle of our canvas that we are drawing into however, will not. 
       tricky!
   */
-  ctx.drawImage(image,xpos,ypos,frameX,frameY,0,0,frameX, frameY);
+  ctx.drawImage(image,xpos,ypos,frameX,frameY,mmX,mmY,frameX, frameY);
   
   //each time around we add the frame size to our xpos, moving along the source image
   //increase the index so we know which frame of our animation we are currently on
