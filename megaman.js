@@ -1,75 +1,77 @@
 var MEGAMAN = (function() {
-	var exports = {};
+  var exports = {};
   image = new Image();
   image.src = "sprites/megaman.gif";
 
-  var jump = false;
+  var jump = false,
       mmX = 0,
-	    mmY = 500,
-	   	xpos = 142,
-    	ypos = 36,
-     	index = 0,
-     	numFrames = 30,
-    	frameX = 20,
-     	frameY = 25,
-      origY = mmY,
+      // Screen height - height of megaman, to put him on the bottom of the canvas.
+      mmY = 600 - 25,
+      xpos = 142,
+      ypos = 36,
+      index = 0,
+      numFrames = 30,
+      frameX = 20,
+      frameY = 25,
+      jumpHeight;
+      up = false;
 
-	exports.moveMegaman = function(event) {
+  exports.moveMegaman = function(event) {
     switch(event.keyCode)
-		{
-		// right arrow
-		case 39:
-			clearMegaman();
-			mmX += 20;
-			break;
+    {
+    // right arrow
+    case 39:
+      mmX += 10;
+      break;
     // left arrow
-		case 37:
-		  clearMegaman();
-		  mmX -= 20;
-			break;
-		// up arrow	
-		case 38:
-			if (jump === false) {
-				origY = mmY;
-				clearMegaman();
-				jumpMegaman();
-			}
-			break;
-		default:
-			console.log('keyCode: ' + event.keyCode);
-		}
-	}
-
-	exports.drawMegaman = function() {
-  	ctx.drawImage(image, xpos, ypos, frameX, frameY, mmX, mmY, frameX, frameY);
-  	index += 1;
-  	//if our index is higher than our total number of frames, we're at the end and better start over
-  	if (index >= 2) {
-      xpos -= 31;
-      index=0;
-  	//if we've gotten to the limit of our source image's width, we need to move down one row of frames
-  	} else {
-      xpos += 31;
-  	}
-  }
-  
-  // this is hacky
-  exports.gravityMegaman = function() {
-    if (origY !== mmY) {
-    	jump = true;
-    	clearMegaman();
-    	mmY += 25;
-    } else {
-    	jump = false;
+    case 37:
+      mmX -= 10;
+      break;
+    // up arrow 
+    case 38:
+      if (jump === false) {
+        up = true;
+        jumpHeight = mmY - 50;
+        exports.jumpMegaman();
+      }
+      break;
+    default:
+      console.log('keyCode: ' + event.keyCode);
     }
   }
 
-  function jumpMegaman() {
-  	mmY -= 50;
+  exports.drawMegaman = function() {
+    ctx.clearRect(0,0, SCREEN_HEIGHT,SCREEN_WIDTH);
+    ctx.drawImage(image, xpos, ypos, frameX, frameY, mmX, mmY, frameX, frameY);
+    index += 1;
+    //if our index is higher than our total number of frames, we're at the end and better start over
+    if (index >= 2) {
+      xpos -= 31;
+      index=0;
+    //if we've gotten to the limit of our source image's width, we need to move down one row of frames
+    } else {
+      xpos += 31;
+    }
   }
+  
+  // this is hacky 
+  // When jump is true, it stops the user from jumping again until he has fallen back down. 
+  // When up is true, megaman is ascending. 
+  // when up is false, megaman is descennding
 
-  function clearMegaman() {
-  	ctx.clearRect(0,0, SCREEN_HEIGHT,SCREEN_WIDTH);
+  exports.jumpMegaman = function() {
+    if (mmY > jumpHeight && up === true) {
+      jump = true;
+      mmY -= 2;
+    } else if (mmY === jumpHeight) {
+      up = false;
+      mmY += 2;
+    } else if ((mmY + frameY) < SCREEN_HEIGHT && up == false) {
+      jump = true;
+      mmY += 2;
+    } else {
+      jump = false;
+    }
   }
 
   return exports;

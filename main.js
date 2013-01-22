@@ -11,5 +11,10 @@ canvas.addEventListener('keydown', MEGAMAN.moveMegaman, false);
 canvas.setAttribute('tabindex','0');
 canvas.focus();
 
-window.setInterval(MEGAMAN.drawMegaman, 10);
-window.setInterval(MEGAMAN.gravityMegaman, 100);
+function loop() {
+  MEGAMAN.drawMegaman();
+  MEGAMAN.jumpMegaman();
+  PLATFORM.drawPlatform();
+};
+
+window.setInterval(loop, 10);
