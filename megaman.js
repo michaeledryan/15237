@@ -19,20 +19,20 @@ var MEGAMAN = (function() {
 		{
 		// right arrow
 		case 39:
-			exports.clearMegaman();
+			clearMegaman();
 			mmX += 20;
 			break;
     // left arrow
 		case 37:
-		  exports.clearMegaman();
+		  clearMegaman();
 		  mmX -= 20;
 			break;
 		// up arrow	
 		case 38:
 			if (jump === false) {
 				origY = mmY;
-				exports.clearMegaman();
-				exports.jumpMegaman();
+				clearMegaman();
+				jumpMegaman();
 			}
 			break;
 		default:
@@ -56,18 +56,18 @@ var MEGAMAN = (function() {
   exports.gravityMegaman = function() {
     if (origY !== mmY) {
     	jump = true;
-    	exports.clearMegaman();
+    	clearMegaman();
     	mmY += 25;
     } else {
     	jump = false;
     }
   }
 
-  exports.jumpMegaman = function() {
+  function jumpMegaman() {
   	mmY -= 50;
   }
 
-  exports.clearMegaman = function() {
+  function clearMegaman() {
   	ctx.clearRect(0,0, SCREEN_HEIGHT,SCREEN_WIDTH);
   }
 
