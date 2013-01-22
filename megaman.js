@@ -52,7 +52,8 @@ var MEGAMAN = (function() {
       xpos += 31;
   	}
   }
-
+  
+  // this is hacky
   exports.gravityMegaman = function() {
     if (origY !== mmY) {
     	jump = true;
