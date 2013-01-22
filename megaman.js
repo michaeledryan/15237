@@ -16,7 +16,7 @@ var MEGAMAN = (function() {
       jumpHeight;
       up = false;
 
-  exports.moveMegaman = function(event) {
+  exports.moveListener = function(event) {
     switch(event.keyCode)
     {
     // right arrow
@@ -27,6 +27,14 @@ var MEGAMAN = (function() {
     case 37:
       mmX -= 10;
       break;
+    default:
+      console.log('keyCode: ' + event.keyCode);
+    }
+  }
+
+  exports.jumpListener = function(event) {
+    switch(event.keyCode)
+    {
     // up arrow 
     case 38:
       if (jump === false) {
@@ -67,10 +75,38 @@ var MEGAMAN = (function() {
       up = false;
       mmY += 2;
     } else if ((mmY + frameY) < SCREEN_HEIGHT && up == false) {
-      jump = true;
-      mmY += 2;
+      console.log(checkVerticalCollision());
+      if (checkVerticalCollision()) {
+        jump = false;
+      } else {
+        mmY += 2;
+      }
     } else {
       jump = false;
+    }
+  }
+
+  exports.getBottomY = function() {
+    return mmY + frameY;
+  }
+
+  exports.getLeftX = function() {
+    return mmX;
+  }
+
+  exports.getRightX = function() {
+    return mmX + frameX;
+  }
+
+  exports.getCenterX = function() {
+    return exports.getLeftX() + ((exports.getRightX() - exports.getLeftX()) / 2);
+  }
+
+  function checkVerticalCollision() {
+    if (exports.getBottomY() === PLATFORM.getTopY() && exports.getCenterX() >= PLATFORM.getLeftX() && exports.getCenterX() <= PLATFORM.getRightX()) {
+      return true;
+    } else {
+      return false;
     }
   }
 
