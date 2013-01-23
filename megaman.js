@@ -15,20 +15,35 @@ var MEGAMAN = (function() {
       frameY = 25,
       jumpHeight;
       up = false;
+      moveRight = false;
+      moveLeft = false;
 
-  exports.moveListener = function(event) {
+  exports.moveStartListener = function(event) {
     switch(event.keyCode)
     {
     // right arrow
     case 39:
+      moveRight = true;
       mmX += 10;
       break;
     // left arrow
     case 37:
+      moveLeft = true;
       mmX -= 10;
       break;
     default:
       console.log('keyCode: ' + event.keyCode);
+    }
+  }
+
+  exports.moveEndListener = function(event) {
+    switch(event.keyCode) {
+      case 39:
+        moveRight = false;
+        break;
+      case 37:
+        moveLeft = false;
+        break;
     }
   }
 
@@ -71,6 +86,12 @@ var MEGAMAN = (function() {
     if (mmY > jumpHeight && up === true) {
       jump = true;
       mmY -= 2;
+      if (moveLeft) {
+        mmX -= 2;
+      } 
+      if (moveRight) {
+        mmX += 2;
+      }
     } else if (mmY === jumpHeight) {
       up = false;
       mmY += 2;
@@ -80,6 +101,12 @@ var MEGAMAN = (function() {
         jump = false;
       } else {
         mmY += 2;
+        if (moveLeft) {
+          mmX -= 2;
+        } 
+        if (moveRight) {
+          mmX += 2;
+      }
       }
     } else {
       jump = false;

@@ -5,7 +5,8 @@ var SCREEN_WIDTH  = 800,
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
-canvas.addEventListener('keydown', MEGAMAN.moveListener, false);
+canvas.addEventListener('keydown', MEGAMAN.moveStartListener, false);
+canvas.addEventListener('keyup', MEGAMAN.moveEndListener, false);
 canvas.addEventListener('keydown', MEGAMAN.jumpListener, false);
 
 // make canvas focusable, then give it focus!
