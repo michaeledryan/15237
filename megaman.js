@@ -50,6 +50,9 @@ var MEGAMAN = (function() {
 
   exports.drawMegaman = function() {
     exports.moveMegaMan();
+    if (!!left) {
+      ypos = 725;
+    } else ypos = 200;
     ctx.clearRect(0,0, SCREEN_WIDTH,SCREEN_HEIGHT);
     ctx.drawImage(image, xpos, ypos, frameX, frameY, mmX, mmY, frameX, frameY);
     index += 1;
