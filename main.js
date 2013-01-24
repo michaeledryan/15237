@@ -5,18 +5,21 @@ var SCREEN_WIDTH  = 800,
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
-canvas.addEventListener('keydown', MEGAMAN.moveStartListener, false);
-canvas.addEventListener('keyup', MEGAMAN.moveEndListener, false);
-canvas.addEventListener('keydown', MEGAMAN.jumpListener, false);
+canvas.addEventListener('keydown', MEGAMAN.keyDownListener, false);
+canvas.addEventListener('keyup', MEGAMAN.keyUpListener, false);
 
 // make canvas focusable, then give it focus!
 canvas.setAttribute('tabindex','0');
 canvas.focus();
 
+function playMP3() {
+  document.getElementById("mp3").play();
+}
+
 function loop() {
-  MEGAMAN.drawMegaman();
-  MEGAMAN.jumpMegaman();
+  MEGAMAN.doGame();
   PLATFORM.drawPlatform();
 };
 
-window.setInterval(loop, 10);
+playMP3();
+window.setInterval(loop, 1000/30);

@@ -1,115 +1,96 @@
 var MEGAMAN = (function() {
   var exports = {};
   image = new Image();
-  image.src = "sprites/megaman.gif";
+  image.src = "sprites/mm.png";
 
-  var jump = false,
+  var jump = 0,
+      up = false,
+      top = 0,
       mmX = 0,
       // Screen height - height of megaman, to put him on the bottom of the canvas.
-      mmY = 600 - 25,
-      xpos = 142,
-      ypos = 36,
+      mmY = 600 - 50,
+      xpos = 0,
+      ypos = 200,
       index = 0,
-      numFrames = 30,
-      frameX = 20,
-      frameY = 25,
-      jumpHeight;
-      up = false;
-      moveRight = false;
-      moveLeft = false;
+      frameX = 50,
+      frameY = 50,
+      jumpHeight = 60,
+      left = false,
+      keys = {};
 
-  exports.moveStartListener = function(event) {
-    switch(event.keyCode)
-    {
-    // right arrow
-    case 39:
-      moveRight = true;
+  exports.keyDownListener = function(event) {
+    keys[event.keyCode] = true;
+  }
+
+  exports.keyUpListener = function(event) {
+    keys[event.keyCode] = undefined;
+  }
+
+  exports.doGame = function() {
+    exports.jumpMegaman();
+    exports.drawMegaman();
+  }
+
+  exports.moveMegaMan = function() {
+    //if (keys["32"])
+    if (keys["39"]) {
       mmX += 10;
-      break;
-    // left arrow
-    case 37:
-      moveLeft = true;
+      left = false;
+    }
+    if (keys["37"]){
       mmX -= 10;
-      break;
-    default:
-      console.log('keyCode: ' + event.keyCode);
+      left = true;
     }
-  }
-
-  exports.moveEndListener = function(event) {
-    switch(event.keyCode) {
-      case 39:
-        moveRight = false;
-        break;
-      case 37:
-        moveLeft = false;
-        break;
-    }
-  }
-
-  exports.jumpListener = function(event) {
-    switch(event.keyCode)
-    {
-    // up arrow 
-    case 38:
-      if (jump === false) {
+    if (keys["38"]) {
+      if (jump === 0) {
         up = true;
-        jumpHeight = mmY - 50;
-        exports.jumpMegaman();
       }
-      break;
-    default:
-      console.log('keyCode: ' + event.keyCode);
     }
   }
 
   exports.drawMegaman = function() {
-    ctx.clearRect(0,0, SCREEN_HEIGHT,SCREEN_WIDTH);
+    exports.moveMegaMan();
+    ctx.clearRect(0,0, SCREEN_WIDTH,SCREEN_HEIGHT);
     ctx.drawImage(image, xpos, ypos, frameX, frameY, mmX, mmY, frameX, frameY);
     index += 1;
     //if our index is higher than our total number of frames, we're at the end and better start over
-    if (index >= 2) {
-      xpos -= 31;
-      index=0;
+    if (index >= 8) {
+      xpos = 0;
+      index = 0;
     //if we've gotten to the limit of our source image's width, we need to move down one row of frames
     } else {
-      xpos += 31;
+      xpos += frameX;
     }
   }
   
-  // this is hacky 
-  // When jump is true, it stops the user from jumping again until he has fallen back down. 
-  // When up is true, megaman is ascending. 
-  // when up is false, megaman is descennding
 
+  /*
+   * Jump is now an int that gets increased to mark progress in the jump. We need to rewrite a lot about this.
+   */
   exports.jumpMegaman = function() {
-    if (mmY > jumpHeight && up === true) {
-      jump = true;
-      mmY -= 2;
-      if (moveLeft) {
-        mmX -= 2;
-      } 
-      if (moveRight) {
-        mmX += 2;
+    if (jump < jumpHeight && up === true) {
+      jump += 5;
+      mmY -= 5;
+    } else if (jump === jumpHeight) {
+        up = false;
+      if (top !== 3){
+        top++;
       }
-    } else if (mmY === jumpHeight) {
-      up = false;
-      mmY += 2;
-    } else if ((mmY + frameY) < SCREEN_HEIGHT && up == false) {
+      else {
+        top = 0;
+        jump -= 5;
+        mmY += 5;
+      }
+    } else if ((mmY + frameY+1) < SCREEN_HEIGHT && up == false) {
       console.log(checkVerticalCollision());
       if (checkVerticalCollision()) {
-        jump = false;
+        jump = 0;
       } else {
-        mmY += 2;
-        if (moveLeft) {
-          mmX -= 2;
-        } 
-        if (moveRight) {
-          mmX += 2;
-      }
+        mmY += 5;
       }
     } else {
-      jump = false;
+      jump = 0;
+      up = false;
     }
   }
 
