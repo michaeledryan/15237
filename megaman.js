@@ -8,12 +8,12 @@ var MEGAMAN = (function() {
       top = 0,
       mmX = 0,
       // Screen height - height of megaman, to put him on the bottom of the canvas.
-      mmY = 600 - 50,
+      mmY = 600 - 45,
       xpos = 0,
       ypos = 200,
       index = 0,
       frameX = 50,
-      frameY = 50,
+      frameY = 45,
       jumpHeight = 60,
       left = false,
       keys = {};
