@@ -11,6 +11,9 @@ var PLATFORM = (function() {
     this.getTopY = function() {
       return yPos;
     };
+    this.getBottomY = function() {
+      return yPos + height;
+    };
     this.getLeftX = function() {
       return xPos;
     };

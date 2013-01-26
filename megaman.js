@@ -18,7 +18,8 @@ var MEGAMAN = (function() {
       left = false,
       shot = false,
       keys = {},
-      vert = 0;
+      vert = 0,
+      headVert = 0;
 
   exports.keyDownListener = function(event) {
     keys[event.keyCode] = true;
@@ -153,6 +154,10 @@ var MEGAMAN = (function() {
     }
   }
 
+  exports.getTopY = function() {
+    return mmY;
+  }
+
   exports.getBottomY = function() {
     return mmY + frameY;
   }
@@ -169,11 +174,11 @@ var MEGAMAN = (function() {
     return exports.getLeftX() + ((exports.getRightX() - exports.getLeftX()) / 2);
   }
 
+  // To land on platforms
   function checkVerticalCollision() {
     if (PLATFORM.platformList !== undefined) {
       console.log(PLATFORM.platformList);
       for (var i = 0; i < PLATFORM.platformList.length; i++) {
-      //PLATFORM.platformList.forEach(function(p) {
         var p = PLATFORM.platformList[i];
         console.log('length: ' + PLATFORM.platformList.length);
         console.log("current platform " + i);
@@ -181,6 +186,23 @@ var MEGAMAN = (function() {
             && (exports.getCenterX() >= p.getLeftX()) && (exports.getCenterX() <= p.getRightX())) {
           console.log('vert = ' + p.getTopY());
           vert = p.getTopY();
+          return true;
+        }
+      }
+      return false;
+    }
+  }
+
+  // To make sure megaman's head cant phase thru platforma
+  function checkHeadCollision(){
+    if (PLATFORM.platformList !== undefined) {
+      console.log(PLATFORM.platformList);
+      for (var i = 0; i < PLATFORM.platformList.length; i++) {
+        var p = PLATFORM.platformList[i];
+        if ((exports.getTopY() - p.getBottomY() > -3) && ((exports.getTopY() - p.getBottomY()) < 2)
+            && (exports.getCenterX() >= p.getLeftX()) && (exports.getCenterX() <= p.getRightX())) {
+          console.log('headVert = ' + p.getBottomY());
+          headVert = p.getBottomY();
           return true;
         }
       }
