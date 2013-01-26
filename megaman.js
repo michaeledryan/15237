@@ -17,7 +17,8 @@ var MEGAMAN = (function() {
       jumpHeight = 60,
       left = false,
       shot = false,
-      keys = {};
+      keys = {},
+      vert = 0;
 
   exports.keyDownListener = function(event) {
     keys[event.keyCode] = true;
@@ -139,9 +140,10 @@ var MEGAMAN = (function() {
         mmY += 5;
       }
     } else if ((mmY + frameY+1) < SCREEN_HEIGHT && up == false) {
-      if (checkVerticalCollision()) {
+      if (checkVerticalCollision() === true) {
+        console.log('vert in collision: ' + vert);
         jump = 0;
-        mmY = PLATFORM.getTopY() - frameY;
+        mmY = vert - frameY;
       } else {
         mmY += 5;
       }
@@ -168,10 +170,20 @@ var MEGAMAN = (function() {
   }
 
   function checkVerticalCollision() {
-    if ((exports.getBottomY() - PLATFORM.getTopY()) > -3 && (exports.getBottomY() - PLATFORM.getTopY()) < 2
-        && exports.getCenterX() >= PLATFORM.getLeftX() && exports.getCenterX() <= PLATFORM.getRightX()) {
-      return true;
-    } else {
+    if (PLATFORM.platformList !== undefined) {
+      console.log(PLATFORM.platformList);
+      for (var i = 0; i < PLATFORM.platformList.length; i++) {
+      //PLATFORM.platformList.forEach(function(p) {
+        var p = PLATFORM.platformList[i];
+        console.log('length: ' + PLATFORM.platformList.length);
+        console.log("current platform " + i);
+        if ((exports.getBottomY() - p.getTopY() > -3) && ((exports.getBottomY() - p.getTopY()) < 2)
+            && (exports.getCenterX() >= p.getLeftX()) && (exports.getCenterX() <= p.getRightX())) {
+          console.log('vert = ' + p.getTopY());
+          vert = p.getTopY();
+          return true;
+        }
+      }
       return false;
     }
   }

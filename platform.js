@@ -1,26 +1,36 @@
 var PLATFORM = (function() {
 	var exports = {};
+  var firstRun = true;
+  exports.platformList = [];
 
-  var xPos = 100,
-  yPos = 560,
-  width = 50,
-  height = 10;
+  function Platform(xPos, yPos, width, height) {
+    this.xPos = xPos;
+    this.yPos = yPos;
+    this.width = width;
+    this.height = height;
+    this.getTopY = function() {
+      return yPos;
+    };
+    this.getLeftX = function() {
+      return xPos;
+    };
+    this.getRightX = function() {
+      return xPos + width;
+    };
+  }
 
-	exports.drawPlatform = function() {
-		ctx.fillRect(xPos, yPos, width, height);
+	exports.drawPlatforms = function() {
+    if (firstRun === true) {
+      exports.platformList.push(new Platform(200, 550, 80, 10));
+      exports.platformList.push(new Platform(400, 550, 80, 10));
+      exports.platformList.push(new Platform(300, 550, 80, 10));
+      firstRun = false;
+    }
+    for (var i = 0; i < exports.platformList.length; i++) {
+      var p = exports.platformList[i];
+      ctx.fillRect(p.xPos, p.yPos, p.width, p.height);
+    }
 	}
-
-  exports.getTopY = function() {
-    return yPos;
-  }
-
-  exports.getLeftX = function() {
-    return xPos;
-  }
-
-  exports.getRightX = function() {
-    return xPos + width;
-  }
 
 	return exports;
 }());
