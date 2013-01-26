@@ -16,19 +16,34 @@ var MEGAMAN = (function() {
       frameY = 45,
       jumpHeight = 60,
       left = false,
+      shot = false,
       keys = {};
 
   exports.keyDownListener = function(event) {
     keys[event.keyCode] = true;
+    if (event.keyCode === 32) {
+      if (!shot){
+        shoot();
+      }
+      shot = true;
+    }
   }
 
   exports.keyUpListener = function(event) {
     keys[event.keyCode] = undefined;
+    if (event.keyCode === 32) {
+      shot = false;
+    }
   }
 
   exports.doGame = function() {
     exports.jumpMegaman();
     exports.drawMegaman();
+  }
+
+  function doDraw(){
+    ctx.clearRect(0,0, SCREEN_WIDTH,SCREEN_HEIGHT);
+    ctx.drawImage(image, xpos, ypos, frameX, frameY, mmX, mmY, frameX, frameY);
   }
 
   exports.moveMegaMan = function() {
@@ -49,28 +64,61 @@ var MEGAMAN = (function() {
       }
     }
     // shoot
-    if (keys["32"]) {
+ /*   if (keys["32"]) {
       shoot();
-    }
+    }*/
   }
 
-  exports.drawMegaman = function() {
-    exports.moveMegaMan();
-    if (!!left) {
-      ypos = 725;
-    } else ypos = 200;
-    ctx.clearRect(0,0, SCREEN_WIDTH,SCREEN_HEIGHT);
-    ctx.drawImage(image, xpos, ypos, frameX, frameY, mmX, mmY, frameX, frameY);
+
+  function drawMegaManMoving(){
+    //if (keys["32"])
+        
+
+    ypos += 200;
+
+    doDraw();
+    
     index += 1;
-    //if our index is higher than our total number of frames, we're at the end and better start over
     if (index >= 8) {
       xpos = 0;
       index = 0;
-    //if we've gotten to the limit of our source image's width, we need to move down one row of frames
     } else {
       xpos += frameX;
     }
+
   }
+
+   exports.drawMegaman = function() {
+    exports.moveMegaMan();
+    if (!!left) 
+      ypos = 525;
+
+    else ypos = 0;
+   
+    
+    if (!!jump) {
+      xpos = 50;
+      ypos += 406;
+      doDraw();
+      xpos = 0;
+    }
+
+    // JS doesn't have an XOR?
+    else if (keys["37"] || keys["39"] && !(keys["37"] && keys["39"])) {
+      drawMegaManMoving();
+    }
+
+    else {
+
+
+      ypos += 50, xpos = 150;
+    }  
+
+      doDraw();
+
+   
+  }
+  
   
 
   /*
@@ -91,9 +139,9 @@ var MEGAMAN = (function() {
         mmY += 5;
       }
     } else if ((mmY + frameY+1) < SCREEN_HEIGHT && up == false) {
-      console.log(checkVerticalCollision());
       if (checkVerticalCollision()) {
         jump = 0;
+        mmY = PLATFORM.getTopY() - frameY;
       } else {
         mmY += 5;
       }
@@ -120,7 +168,8 @@ var MEGAMAN = (function() {
   }
 
   function checkVerticalCollision() {
-    if (exports.getBottomY() === PLATFORM.getTopY() && exports.getCenterX() >= PLATFORM.getLeftX() && exports.getCenterX() <= PLATFORM.getRightX()) {
+    if ((exports.getBottomY() - PLATFORM.getTopY()) > -3 && (exports.getBottomY() - PLATFORM.getTopY()) < 2
+        && exports.getCenterX() >= PLATFORM.getLeftX() && exports.getCenterX() <= PLATFORM.getRightX()) {
       return true;
     } else {
       return false;
