@@ -5,6 +5,8 @@ var SCREEN_WIDTH  = 800,
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
+var inTitle = true;
+
 canvas.addEventListener('keydown', MEGAMAN.keyDownListener, false);
 canvas.addEventListener('keyup', MEGAMAN.keyUpListener, false);
 
@@ -20,7 +22,12 @@ function loop() {
   MEGAMAN.doGame();
   PLATFORM.drawPlatforms();
   PROJECTILE.moveProjectiles();
+  if (!TITLE.doTitle()){
+    MEGAMAN.doGame();
+    PLATFORM.drawPlatform();
+    PROJECTILE.moveProjectiles();
+  }
 };
 
-playMP3();
+//playMP3();
 window.setInterval(loop, 1000/30);
