@@ -1,6 +1,6 @@
 var MEGAMAN = (function() {
   var exports = {};
-  image = new Image();
+  var image = new Image();
   image.src = "sprites/mm.png";
 
   var jump = 0,
@@ -16,24 +16,16 @@ var MEGAMAN = (function() {
       frameY = 45,
       jumpHeight = 60,
       left = false,
-      shot = false,
+      shot = 0,
+      charge = 0,
       keys = {};
 
   exports.keyDownListener = function(event) {
     keys[event.keyCode] = true;
-    if (event.keyCode === 32) {
-      if (!shot){
-        shoot();
-      }
-      shot = true;
-    }
   }
 
   exports.keyUpListener = function(event) {
     keys[event.keyCode] = undefined;
-    if (event.keyCode === 32) {
-      shot = false;
-    }
   }
 
   exports.doGame = function() {
@@ -47,32 +39,36 @@ var MEGAMAN = (function() {
   }
 
   exports.moveMegaMan = function() {
-    // move right
-    if (keys["39"]) {
-      mmX += 10;
-      left = false;
-    }
     // move left
     if (keys["37"]) {
       mmX -= 10;
       left = true;
     }
+    // move right
+    if (keys["39"]) {
+      mmX += 10;
+      left = false;
+    }
+
     // jump
-    if (keys["38"]) {
+    if (keys["88"]) {
       if (jump === 0) {
         up = true;
       }
     }
     // shoot
- /*   if (keys["32"]) {
+    if (keys["90"]) {
       shoot();
-    }*/
-  }
-
+    }
+    else {
+      shot = 0;
+    }
+}
 
   function drawMegaManMoving(){
-    //if (keys["32"])
-        
+    if (keys["90"]) {
+      ypos += 100;
+    }
 
     ypos += 200;
 
@@ -98,25 +94,23 @@ var MEGAMAN = (function() {
     
     if (!!jump) {
       xpos = 50;
-      ypos += 406;
+      ypos += keys["90"] ? 466 : 406;
       doDraw();
       xpos = 0;
     }
 
     // JS doesn't have an XOR?
-    else if (keys["37"] || keys["39"] && !(keys["37"] && keys["39"])) {
+    else if (!(keys["37"] && keys["39"]) && (keys["37"] || keys["39"] ))  {
       drawMegaManMoving();
     }
 
+    else if (keys["90"])
+      xpos = 50, ypos += 100;
     else {
-
-
       ypos += 50, xpos = 150;
     }  
 
       doDraw();
-
-   
   }
   
   
@@ -176,8 +170,23 @@ var MEGAMAN = (function() {
     }
   }
 
+  function chargedShot(){
+    console.log("charging... " + charge);
+    if (charge < 100)
+      charge+=10;
+    else 
+      PROJECTILE.makeProjectile(mmX + (left ? 0 : frameX), (mmY + (frameY / 2)), left);
+  }
+
   function shoot() {
-    PROJECTILE.makeProjectile(mmX, (mmY + (frameY / 2)), left);
+    if (shot > 30)
+      chargedShot();
+    else if (shot == 0) {
+      PROJECTILE.makeProjectile(mmX + (left ? 0 : frameX), (mmY + (frameY / 2)), left);
+      shot += 5;
+    }
+    else 
+      shot += 5;
   }
 
   return exports;
