@@ -19,6 +19,7 @@ function playMP3() {
 function loop() {
   MEGAMAN.doGame();
   PLATFORM.drawPlatform();
+  PROJECTILE.moveProjectiles();
 };
 
 playMP3();

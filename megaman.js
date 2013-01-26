@@ -32,19 +32,25 @@ var MEGAMAN = (function() {
   }
 
   exports.moveMegaMan = function() {
-    //if (keys["32"])
+    // move right
     if (keys["39"]) {
       mmX += 10;
       left = false;
     }
-    if (keys["37"]){
+    // move left
+    if (keys["37"]) {
       mmX -= 10;
       left = true;
     }
+    // jump
     if (keys["38"]) {
       if (jump === 0) {
         up = true;
       }
+    }
+    // shoot
+    if (keys["32"]) {
+      shoot();
     }
   }
 
@@ -119,6 +125,10 @@ var MEGAMAN = (function() {
     } else {
       return false;
     }
+  }
+
+  function shoot() {
+    PROJECTILE.makeProjectile(mmX, (mmY + (frameY / 2)), left);
   }
 
   return exports;
