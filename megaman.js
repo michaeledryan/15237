@@ -48,7 +48,7 @@ var MEGAMAN = (function() {
     ctx.clearRect(0,0, SCREEN_WIDTH,SCREEN_HEIGHT);
     ctx.drawImage(background, 0, 0, 600, 800, 0, 0, 800, 600)
     ctx.drawImage(image, xpos, ypos, frameX, frameY, mmX, mmY, frameX, frameY);
-    if (charge === 300 || charge % 40){
+    if (charge === 300 || charge % 20){
       ctx.drawImage(image, chargeX, chargeY + (!!left ? chargeFrameY : 0),
                     chargeFrameX, chargeFrameY, mmX + (left ? -5 : frameX *3/4),
                     (mmY + (frameY / 3)) - (!!jump ? 10 : 0), chargeFrameX, chargeFrameY);

@@ -31,5 +31,5 @@ function loop() {
   }
 };
 
-//playMP3();
+playMP3();
 window.setInterval(loop, 1000/30);
