@@ -6,13 +6,13 @@ var PROJECTILE = (function() {
 	var height = 10;
 	var projList = [];
 	var image = new Image();
-	const busterX = 0, busterY = 29;
+	const busterX = 0, busterY = 44;
 	const chargedX = 0, chargedY = 0;
 	const chargedFrameX = 36, chargedFrameY = 22;
 	const busterFrameX = 8, busterFrameY = 6;
 	image.src = "sprites/buster1.png";
 
-	// this fn takes x,y coordiantes for initial positioning and 'left' bool for direction
+	// Constructor for Mega Man's projectiles. Takes coordinates, a starting direction
 	function Projectile(xPos, yPos, left, charged) {
 		this.xPos = xPos;
 		this.yPos = yPos;

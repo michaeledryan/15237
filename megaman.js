@@ -27,6 +27,7 @@ var MEGAMAN = (function() {
       shot = 0,
       charge = 0,
       moving = false,
+      charger = 0;
       keys = {};
       const chargeX = 354, chargeY = 407,
       chargeFrameX = 16, chargeFrameY = 14;
@@ -37,6 +38,8 @@ var MEGAMAN = (function() {
 
   exports.keyUpListener = function(event) {
     keys[event.keyCode] = undefined;
+    if (event.keyCode == 90)
+      charger = 0;
   }
 
   exports.doGame = function() {
@@ -48,7 +51,7 @@ var MEGAMAN = (function() {
     ctx.clearRect(0,0, SCREEN_WIDTH,SCREEN_HEIGHT);
     ctx.drawImage(background, 0, 0, 600, 800, 0, 0, 800, 600)
     ctx.drawImage(image, xpos, ypos, frameX, frameY, mmX, mmY, frameX, frameY);
-    if (charge === 300 || charge % 40){
+    if ( (charge === 300) || (charge > 0 && !(charger++ % 3))){
       ctx.drawImage(image, chargeX, chargeY + (!!left ? chargeFrameY : 0),
                     chargeFrameX, chargeFrameY, mmX + (left ? -5 : frameX *3/4),
                     (mmY + (frameY / 3)) - (!!jump ? 10 : 0), chargeFrameX, chargeFrameY);
@@ -100,6 +103,7 @@ var MEGAMAN = (function() {
       }
       shot = 0;
       charge = 0;
+      charger == 0;
     }
 
     if (!(keys["37"] || keys["39"]))
@@ -140,18 +144,20 @@ var MEGAMAN = (function() {
       xpos = 0;
     }
 
-    // JS doesn't have an XOR?
-    else if (moving)  {
-      drawMegaManMoving();
-    }
-
-    else if (keys["90"])
-      xpos = 50, ypos += 100;
     else {
-      ypos += 50, xpos = 150;
-    }  
+
+      if (moving)  {
+        drawMegaManMoving();
+      }
+
+      else if (keys["90"])
+        xpos = 50, ypos += 100;
+      else {
+        ypos += 50, xpos = 150;
+      }  
 
       doDraw();
+    }
   }
   
   
