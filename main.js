@@ -1,16 +1,18 @@
-// setup
-var SCREEN_WIDTH  = 800,
-    SCREEN_HEIGHT = 600;
+/*
+ * main.js.
+ * Main file for Mega Man. Calls the game loop, the functionality of which 
+ * is split between several files. Also plays the game music.
+ */
+const SCREEN_WIDTH  = 800,
+      SCREEN_HEIGHT = 600;
+
 
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
-var inTitle = true;
-
 canvas.addEventListener('keydown', MEGAMAN.keyDownListener, false);
 canvas.addEventListener('keyup', MEGAMAN.keyUpListener, false);
 
-// make canvas focusable, then give it focus!
 canvas.setAttribute('tabindex','0');
 canvas.focus();
 

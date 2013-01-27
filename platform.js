@@ -32,6 +32,7 @@ var PLATFORM = (function() {
     }
     for (var i = 0; i < exports.platformList.length; i++) {
       var p = exports.platformList[i];
+      ctx.fillStyle = "grey";
       ctx.fillRect(p.xPos, p.yPos, p.width, p.height);
     }
 	}

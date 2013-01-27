@@ -1,0 +1,23 @@
+Mega Man 237
+
+Josh Gerbasi    jgerbasi
+Michael Ryan    mer1
+Marco Talabacu  mtalabac
+
+This game is an adaptation of the NES classic Mega Man that showcases the ideas covered in week 1.
+
+Objective: Get to the end of each level, defeating enemies and avoiding hazards.
+
+Controls:
+
+Z: Shoot the Mega Buster. Hold to charge and release a powerful shot.
+X: Jump.
+
+
+Week 1 Ideas:
+
+The Javascript Canvas:
+
+The entire game is drawn and played on a canvas. Mega man, all projectiles, and enemies are drawn with sprite-based animations. Keypresses are watched for user input, and the game's main engine functionality is called periodically with setInterval.
+
+Object-oriented design is used in almost all aspects of the game, as functions are called to check collisions between mega man, platforms, projectiles, and enemies.

@@ -1,29 +1,38 @@
+/*
+ * title.js
+ *
+ * Handles the title screen of the game. Allows user to start or see 
+ * a set of controls.
+ */
+
 var TITLE = (function() {
   var exports = {};
   var image = new Image();
   image.src = "sprites/title.png";
 
 
-  var select = 0,
-      inTitle = true,
-      instructionText = "This is Mega Man! Fight enemies and get to the end of the levels. \n Controls: \n Z: shoot \n X: jump \n Arrow keys: move \n Hold X to charge your shots!"
-      ;
+  var select = 0, // The menu option being selected.
+      inTitle = true, // Whether or not hte player is still on the titel screen.
+      instructionsText = "This is Mega Man! Fight enemies and get to the end of the levels. \n Controls: \n Z: shoot \n X: jump \n Arrow keys: move \n Hold X to charge your shots!";
+
 
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
 function titleKeyDown(event) {
   if (event.keyCode === 38 || event.keyCode === 40) 
-      select = (select + 1) % 2;
+      select = (select + 1) % 2; // Move the cursor
   if (event.keyCode === 13)
       if (select)
-        alert(instructionText);
-      else
+        alert(instructionsText);
+      else {
+        canvas.removeEventListener('keydown', titleKeyDown, false);
+        ctx.clearRect(0,0, 800, 600);
         inTitle = false;
+      }
 }
 
-
-
+// Draws the menu cursor
 function drawCursor() {
   var ypos = 380 + select * 100;
   ctx.beginPath();
@@ -35,8 +44,8 @@ function drawCursor() {
   ctx.fill();
 }
 
-
-function drawTitle(event) {
+// Draw the image used for the title.
+function drawTitle() {
     ctx.fillStyle = "#010008";
     ctx.clearRect(0,0, 800, 600);
     ctx.fillRect(0,0, 800, 600);
@@ -49,18 +58,17 @@ function drawTitle(event) {
     ctx.fillStyle = "black";
 }
 
+// Wrapper function for this file's functionality.
 exports.doTitle = function() {  
+  if (!inTitle)
+      return false;
   drawTitle();
   return inTitle;
 
 }
 
-
+// Allows keystroke interactivity
 canvas.addEventListener('keydown', titleKeyDown, false);
 
-
-// make canvas focusable, then give it focus!
-
 return exports;
-
 }());

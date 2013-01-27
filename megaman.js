@@ -2,6 +2,8 @@ var MEGAMAN = (function() {
   var exports = {};
   var image = new Image();
   image.src = "sprites/mm.png";
+  var background = new Image();
+  background.src = "sprites/city.png";
 
   var jump = 0,
       up = false,
@@ -24,8 +26,10 @@ var MEGAMAN = (function() {
       rightHorz = 0,
       shot = 0,
       charge = 0,
-      moving = false;
+      moving = false,
       keys = {};
+      const chargeX = 354, chargeY = 407,
+      chargeFrameX = 16, chargeFrameY = 14;
 
   exports.keyDownListener = function(event) {
     keys[event.keyCode] = true;
@@ -42,7 +46,15 @@ var MEGAMAN = (function() {
 
   function doDraw(){
     ctx.clearRect(0,0, SCREEN_WIDTH,SCREEN_HEIGHT);
+    ctx.drawImage(background, 0, 0, 600, 800, 0, 0, 800, 600)
     ctx.drawImage(image, xpos, ypos, frameX, frameY, mmX, mmY, frameX, frameY);
+    if (charge === 300 || charge % 40){
+      ctx.drawImage(image, chargeX, chargeY + (!!left ? chargeFrameY : 0),
+                    chargeFrameX, chargeFrameY, mmX + (left ? -5 : frameX *3/4),
+                    (mmY + (frameY / 3)) - (!!jump ? 10 : 0), chargeFrameX, chargeFrameY);
+    }
+
+
   }
 
   exports.moveMegaMan = function() {
@@ -82,7 +94,12 @@ var MEGAMAN = (function() {
       shoot();
     }
     else {
+      if (charge === 300) {
+        PROJECTILE.makeProjectile(mmX + (left ? 0 : frameX), 
+                                  (mmY + (frameY / 2)), left, true);
+      }
       shot = 0;
+      charge = 0;
     }
 
     if (!(keys["37"] || keys["39"]))
@@ -266,19 +283,16 @@ var MEGAMAN = (function() {
   }
 
 
-  function chargedShot(){
-    console.log("charging... " + charge);
-    if (charge < 100)
-      charge+=10;
-    else 
-      PROJECTILE.makeProjectile(mmX + (left ? 0 : frameX), (mmY + (frameY / 2)), left);
+  function chargeShot(){
+    if (charge < 300)
+      charge += 10;
   }
 
   function shoot() {
     if (shot > 30)
-      chargedShot();
+      chargeShot();
     else if (shot == 0) {
-      PROJECTILE.makeProjectile(mmX + (left ? 0 : frameX), (mmY + (frameY / 2)), left);
+      PROJECTILE.makeProjectile(mmX + (left ? 0 : frameX), (mmY + (frameY / 2)), left, false);
       shot += 5;
     }
     else 
