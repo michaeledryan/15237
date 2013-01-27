@@ -19,9 +19,12 @@ var MEGAMAN = (function() {
       shot = false,
       keys = {},
       vert = 0,
-      headVert = 0;
+      headVert = 0,
+      leftHorz = 0,
+      rightHorz = 0,
       shot = 0,
       charge = 0,
+      moving = false;
       keys = {};
 
   exports.keyDownListener = function(event) {
@@ -45,13 +48,27 @@ var MEGAMAN = (function() {
   exports.moveMegaMan = function() {
     // move left
     if (keys["37"]) {
-      mmX -= 10;
       left = true;
+        if(checkRightPlatformCollision() === true) {
+        mmX = (rightHorz + (frameX + 15));
+        moving = false;
+      }
+      else{
+        mmX -= 10;
+        moving = true;
+      }
     }
     // move right
     if (keys["39"]) {
-      mmX += 10;
       left = false;
+      if(checkLeftPlatformCollision() === true){
+        mmX = (leftHorz - (frameX - 15));
+        moving = false;
+      }
+      else{
+        mmX += 10;
+        moving = true;
+      }
     }
 
     // jump
@@ -67,6 +84,9 @@ var MEGAMAN = (function() {
     else {
       shot = 0;
     }
+
+    if (!(keys["37"] || keys["39"]))
+      moving = false;
 }
 
   function drawMegaManMoving(){
@@ -104,7 +124,7 @@ var MEGAMAN = (function() {
     }
 
     // JS doesn't have an XOR?
-    else if (!(keys["37"] && keys["39"]) && (keys["37"] || keys["39"] ))  {
+    else if (moving)  {
       drawMegaManMoving();
     }
 
@@ -124,9 +144,16 @@ var MEGAMAN = (function() {
    */
   exports.jumpMegaman = function() {
     if (jump < jumpHeight && up === true) {
-      jump += 5;
-      mmY -= 5;
-    } else if (jump === jumpHeight) {
+      if(checkHeadCollision() === true){
+        jump = jumpHeight;
+      }
+      else{
+        jump += 5;
+        mmY -= 5;
+      } 
+
+    }
+    else if (jump === jumpHeight) {
         up = false;
       if (top !== 3){
         top++;
@@ -138,7 +165,6 @@ var MEGAMAN = (function() {
       }
     } else if ((mmY + frameY+1) < SCREEN_HEIGHT && up == false) {
       if (checkVerticalCollision() === true) {
-        console.log('vert in collision: ' + vert);
         jump = 0;
         mmY = vert - frameY;
       } else {
@@ -170,17 +196,17 @@ var MEGAMAN = (function() {
     return exports.getLeftX() + ((exports.getRightX() - exports.getLeftX()) / 2);
   }
 
+  exports.getCenterY = function() {
+    return exports.getTopY() + frameY / 2;
+  }
+
   // To land on platforms
   function checkVerticalCollision() {
     if (PLATFORM.platformList !== undefined) {
-      console.log(PLATFORM.platformList);
       for (var i = 0; i < PLATFORM.platformList.length; i++) {
         var p = PLATFORM.platformList[i];
-        console.log('length: ' + PLATFORM.platformList.length);
-        console.log("current platform " + i);
         if ((exports.getBottomY() - p.getTopY() > -3) && ((exports.getBottomY() - p.getTopY()) < 2)
             && (exports.getCenterX() >= p.getLeftX()) && (exports.getCenterX() <= p.getRightX())) {
-          console.log('vert = ' + p.getTopY());
           vert = p.getTopY();
           return true;
         }
@@ -192,12 +218,10 @@ var MEGAMAN = (function() {
   // To make sure megaman's head cant phase thru platforma
   function checkHeadCollision(){
     if (PLATFORM.platformList !== undefined) {
-      console.log(PLATFORM.platformList);
       for (var i = 0; i < PLATFORM.platformList.length; i++) {
         var p = PLATFORM.platformList[i];
         if ((exports.getTopY() - p.getBottomY() > -3) && ((exports.getTopY() - p.getBottomY()) < 2)
             && (exports.getCenterX() >= p.getLeftX()) && (exports.getCenterX() <= p.getRightX())) {
-          console.log('headVert = ' + p.getBottomY());
           headVert = p.getBottomY();
           return true;
         }
@@ -205,6 +229,42 @@ var MEGAMAN = (function() {
       return false;
     }
   }
+
+  //To check left horizontal collisions
+  function checkLeftPlatformCollision(){
+    if (PLATFORM.platformList !== undefined) {
+      for (var i = 0; i < PLATFORM.platformList.length; i++) {
+        var p = PLATFORM.platformList[i];
+        if ((exports.getRightX() - p.getLeftX() > -16)  && ((exports.getRightX() - p.getLeftX()) < 16)
+            && (((p.getTopY() >= exports.getTopY() && p.getBottomY() <= exports.getBottomY())
+                ||  (p.getBottomY() >= exports.getTopY() && p.getTopY() <= exports.getBottomY())) 
+                || (p.getBottomY() <= exports.getTopY() && p.getTopY() >= exports.getBottomY())
+                || (p.getBottomY() <= exports.getTopY() && p.getTopY() >= exports.getBottomY()) ))  {
+          leftHorz = p.getLeftX();
+          return true;
+        }
+      }
+      return false;
+    }
+  }
+
+  function checkRightPlatformCollision(){
+    if (PLATFORM.platformList !== undefined) {
+      for (var i = 0; i < PLATFORM.platformList.length; i++) {
+        var p = PLATFORM.platformList[i];
+        if ((exports.getLeftX() - p.getRightX() > -16)  && ((exports.getLeftX() - p.getRightX()) < 16)
+            && (((p.getTopY() >= exports.getTopY() && p.getBottomY() <= exports.getBottomY())
+                ||  (p.getBottomY() >= exports.getTopY() && p.getTopY() <= exports.getBottomY())) 
+                || (p.getBottomY() <= exports.getTopY() && p.getTopY() >= exports.getBottomY())
+                || (p.getBottomY() <= exports.getTopY() && p.getTopY() >= exports.getBottomY()) ))  {
+          rightHorz = p.getLeftX();
+          return true;
+        }
+      }
+      return false;
+    }
+  }
+
 
   function chargedShot(){
     console.log("charging... " + charge);

@@ -24,7 +24,7 @@ function loop() {
   PROJECTILE.moveProjectiles();
   if (!TITLE.doTitle()){
     MEGAMAN.doGame();
-    PLATFORM.drawPlatform();
+    PLATFORM.drawPlatforms();
     PROJECTILE.moveProjectiles();
   }
 };
