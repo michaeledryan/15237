@@ -21,9 +21,6 @@ function playMP3() {
 }
 
 function loop() {
-  MEGAMAN.doGame();
-  PLATFORM.drawPlatforms();
-  PROJECTILE.moveProjectiles();
   if (!TITLE.doTitle()){
     MEGAMAN.doGame();
     PLATFORM.drawPlatforms();
@@ -31,5 +28,5 @@ function loop() {
   }
 };
 
-playMP3();
-window.setInterval(loop, 1000/30);
+//playMP3();
+window.setInterval(loop, 1000/10);
