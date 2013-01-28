@@ -25,8 +25,9 @@ function loop() {
     MEGAMAN.doGame();
     PLATFORM.drawPlatforms();
     PROJECTILE.moveProjectiles();
+    ENEMY.drawEnemies();
   }
 };
 
 //playMP3();
-window.setInterval(loop, 1000/10);
+window.setInterval(loop, 1000/30);
