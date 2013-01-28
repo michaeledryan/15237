@@ -20,6 +20,18 @@ var PROJECTILE = (function() {
 		this.height = height;
 		this.left = left;
 		this.charged = charged;
+    this.getTopY = function() {
+      return this.yPos;
+    };
+    this.getBottomY = function() {
+      return this.yPos + height;
+    };
+    this.getLeftX = function() {
+      return this.xPos;
+    };
+    this.getRightX = function() {
+      return this.xPos + width;
+    };
 	}
 
 
@@ -48,16 +60,17 @@ var PROJECTILE = (function() {
 	}
 
 	exports.moveProjectiles = function() {
+    collisionToPlatform();
 		if (projList.length > 0) {
 			for (var i = 0; i < projList.length; i++) {
 				var proj = projList[i];
         var xPos = proj.xPos;
         //console.log(proj.left == false);
 				if (proj.left && xPos > (0 - 100)) {
-					proj.xPos = (xPos - 20);
+					proj.xPos = (xPos - 15);
           drawShot(proj);
 				} else if (!proj.right && xPos < (SCREEN_WIDTH + 20)) {
-					proj.xPos = (xPos + 20);
+					proj.xPos = (xPos + 15);
           drawShot(proj);
 				} else {
 					//console.log(proj + "is outside the canvas bounds")
@@ -65,6 +78,64 @@ var PROJECTILE = (function() {
 			}
 		}
 	}
+
+  function collisionToPlatform() {
+    if (projList.length > 0) {
+      //console.log('got here');
+      var doDelete = false;
+      var delProj;
+      var platforms = PLATFORM.platformList;
+      for(var i = 0; i < projList.length; i ++) {
+        for(var j = 0; j < platforms.length; j++) {
+          platform = platforms[j];
+          projectile = projList[i];
+          if (collisionToPlatformLeft(platform, projectile)) { //|| collisionToPlatformRight(platform, projectile)) {
+            //console.log('Delete this projectile from list: ' + i);
+            delProj = i;
+            doDelete = true;
+          }
+        }
+      }
+      if (doDelete === true) {
+        deleteProjectile(delProj); 
+      }
+    }
+  }
+
+  function collisionToPlatformLeft(platform, projectile) {
+    //console.log(platform, projectile);
+    if  (
+      (((projectile.getBottomY() >= platform.getTopY())  &&   (projectile.getBottomY() <= platform.getBottomY()))   ||  
+        ((projectile.getTopY() <= platform.getBottomY())    &&  (projectile.getTopY() >= platform.getTopY())))  &&   
+      (((projectile.getLeftX() >= platform.getLeftX())  &&  (projectile.getLeftX() <= platform.getRightX()))  ||  
+        ((projectile.getRightX() >= platform.getLeftX())   &&  (projectile.getRightX() <= platform.getRightX())))
+        )
+    {
+      console.log('its true');
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // function collisionToPlatformRight(platform, projectile) {
+  //   if ((projectile.getLeftX() - platform.getRightX() > -21)  && ((projectile.getLeftX() - platform.getRightX()) < 21)
+  //       && (((platform.getTopY() >= projectile.getTopY() && platform.getBottomY() <= projectile.getBottomY())
+  //           ||  (platform.getBottomY() >= projectile.getTopY() && platform.getTopY() <= projectile.getBottomY())) 
+  //           || (platform.getBottomY() <= projectile.getTopY() && platform.getTopY() >= projectile.getBottomY())
+  //           || (platform.getBottomY() <= projectile.getTopY() && platform.getTopY() >= projectile.getBottomY()) ))  {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+
+  function deleteProjectile(i) {
+    console.log('projList before: ' + projList.length);
+    console.log('i = ' + i);
+    projList.splice(i, 1);
+    console.log('projList after: ' + projList.length);
+  }
 
   return exports;
 }());
