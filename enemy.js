@@ -27,6 +27,121 @@ var ENEMY = (function() {
 	    };
 	}
 
+  function Walker(xPos, yPos, left, leftLimit, rightLimit) {
+    this.xPos = xPos;
+    this.yPos = yPos;
+    this.spriteX = 106;
+    this.spriteY = left ? 33 : 93;
+    this.height = 51;
+    this.width = 53;
+    this.health = 30;
+    this.left = left;
+    this.timer = 0;
+    this.turn = 0;
+    this.leftLimit = leftLimit;
+    this.rightLimit = rightLimit;
+
+    this.getTopY = function() {
+          return this.yPos;
+    };
+
+    this.getBottomY = function() {
+      return this.yPos + this.height;
+    };
+
+    this.getLeftX = function() {
+      return this.xPos;
+    };
+
+    this.getRightX = function() {
+      return this.xPos + this.width;
+    };
+    
+    this.move = function() {
+
+      if (this.left && this.xPos >= leftLimit)
+        this.xPos = (this.xPos - 2 === leftLimit) ? leftLimit : this.xPos - 2;
+      else if (!(this.left) && this.xPos + this.width <= rightLimit)
+        this.xPos = (this.xPos + 2 >= rightLimit) ? rightLimit : this.xPos + 2;
+      else
+        console.log("hey");
+        this.turn = 1;
+    }
+  
+    this.draw = function() {
+
+        // if stopped, we do the cycle, increment turn, and switch on turn?
+        // if moving, we go through the images.
+        // left x 106 - 424 by 53. y = 33
+        // right x 106 - 424 by 53. y = 93
+
+        if (this.turn) {
+          if (this.left) {
+            switch(this.turn) 
+            {
+            case 1:
+              this.spriteX = 53;
+              break;
+            case 2:
+              this.spriteX = 0;
+              break;
+            case 3:
+              this.spriteY = 93;
+              break;
+            case 4:
+              this.spriteX = 53;
+              this.left = false;
+              break;
+
+            }
+
+            this.turn = (this.turn + 1) % 5;
+            console.log(this.turn);
+            ctx.drawImage(image, this.spriteX, this.spriteY, this.width, this.height, 
+                          this.xPos, this.yPos, this.width, this.height);
+
+          }
+
+
+        else if (this.right){
+            switch(this.turn) 
+            {
+            case 1:
+              this.spriteX = 53;
+              break;
+            case 2:
+              this.spriteX = 0;
+              break;
+            case 3:
+              this.spriteY = 33;
+              break;
+            case 4:
+              this.spriteX = 53;
+              this.left = true;
+              break;
+            }
+
+            this.turn = (this.turn + 1) % 5;
+            console.log(this.turn);
+            ctx.drawImage(image, this.spriteX, this.spriteY, this.width, this.height, 
+                          this.xPos, this.yPos, this.width, this.height);
+
+          }
+        }
+
+        else {
+          this.spriteX += 53;
+          if (this.spriteX >= 530) 
+            this.spriteX = 106;
+        }
+    
+
+      ctx.drawImage(image, this.spriteX, this.spriteY, this.width, this.height, 
+                    this.xPos, this.yPos, this.width, this.height);
+      }
+  }
+
+
   function Turret(xPos, yPos, left) {
     this.xPos = xPos;
     this.yPos = yPos;
@@ -124,6 +239,7 @@ var ENEMY = (function() {
       exports.enemyList.push(new Flyer(300, 300));
       exports.enemyList.push(new Turret(200, 400, true));
       exports.enemyList.push(new Turret(20, 550, false));
+      exports.enemyList.push(new Walker(100, 100, false, 00, 350));
       firstRun = false;
     }
     for (var i = 0; i < exports.enemyList.length; i++) {

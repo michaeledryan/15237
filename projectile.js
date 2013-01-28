@@ -134,10 +134,10 @@ var PROJECTILE = (function() {
   // }
 
   function deleteProjectile(i) {
-    console.log('projList before: ' + projList.length);
-    console.log('i = ' + i);
+ //   console.log('projList before: ' + projList.length);
+ //   console.log('i = ' + i);
     projList.splice(i, 1);
-    console.log('projList after: ' + projList.length);
+ //   console.log('projList after: ' + projList.length);
   }
 
   return exports;
