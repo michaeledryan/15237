@@ -26,6 +26,7 @@ function loop() {
     PLATFORM.drawPlatforms();
     PROJECTILE.moveProjectiles();
     ENEMY.drawEnemies();
+    MEGAMAN.drawHealth();
   }
 };
 

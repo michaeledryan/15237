@@ -10,22 +10,25 @@ var PROJECTILE = (function() {
 	const chargedX = 0, chargedY = 0;
 	const chargedFrameX = 36, chargedFrameY = 22;
 	const busterFrameX = 8, busterFrameY = 6;
+	const badX = 0, badY = 50;
+	const badFrameX = 15, badFrameY = 11;
 	image.src = "sprites/buster1.png";
 
 	// Constructor for Mega Man's projectiles. Takes coordinates, a starting direction
-	function Projectile(xPos, yPos, left, charged) {
+	function Projectile(xPos, yPos, left, charged, enemy) {
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.width = width;
 		this.height = height;
 		this.left = left;
+		this.enemy = enemy;
 		this.charged = charged;
 	}
 
 
 	// This fn is used to connect the projectile to the shooter
-	exports.makeProjectile = function(xPos, yPos, left, charged) {
-		proj = new Projectile(xPos, yPos, left, charged);
+	exports.makeProjectile = function(xPos, yPos, left, charged, enemy) {
+		proj = new Projectile(xPos, yPos, left, charged, enemy);
 		drawShot(proj);
 		projList.push(proj);
 	}
@@ -34,16 +37,16 @@ var PROJECTILE = (function() {
 		xPos = proj.xPos;
 		yPos = proj.yPos;
 		if (proj.charged)
-			if (proj.left)
-				ctx.drawImage(image, chargedX, chargedY + chargedFrameY, 
+				ctx.drawImage(image, chargedX, chargedY + (proj.left) ? chargedFrameY : 0, 
 					chargedFrameX, chargedFrameY, xPos, yPos-chargedFrameY/2, 
 					chargedFrameX, chargedFrameY);
-			else
-				ctx.drawImage(image, chargedX, chargedY, 
-					chargedFrameX, chargedFrameY, xPos, yPos-chargedFrameY/2, 
-					chargedFrameX, chargedFrameY);
+		else if (proj.enemy) 
+			ctx.drawImage(image, badX, badY, badFrameX + proj.left ? badFrameX : 0, 
+										badFrameY, xPos, yPos, badFrameX, badFrameY);	
 		else
-			ctx.drawImage(image, busterX, busterY, busterFrameX, busterFrameY, xPos, yPos, busterFrameX, busterFrameY);
+			ctx.drawImage(image, busterX, busterY, busterFrameX, 
+										busterFrameY, xPos, yPos, busterFrameX, 
+										busterFrameY);
 
 	}
 

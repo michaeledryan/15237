@@ -1,9 +1,11 @@
 var MEGAMAN = (function() {
   var exports = {};
   var image = new Image();
-  image.src = "sprites/mm.png";
+      image.src = "sprites/mm.png";
   var background = new Image();
-  background.src = "sprites/city.png";
+      background.src = "sprites/city.png";
+  var heatlhImage = new Image();
+      heatlhImage.src = "sprites/health.png";
 
   var jump = 0,
       up = false,
@@ -27,6 +29,7 @@ var MEGAMAN = (function() {
       shot = 0,
       charge = 0,
       moving = false,
+      health = 16,
       charger = 0;
       keys = {};
       const chargeX = 354, chargeY = 407,
@@ -100,7 +103,7 @@ var MEGAMAN = (function() {
     else {
       if (charge === 300) {
         PROJECTILE.makeProjectile(mmX + (left ? 0 : frameX), 
-                                  (mmY + (frameY / 2)), left, true);
+                                  (mmY + (frameY / 2)), left, true, false);
       }
       shot = 0;
       charge = 0;
@@ -229,8 +232,8 @@ var MEGAMAN = (function() {
     if (PLATFORM.platformList !== undefined) {
       for (var i = 0; i < PLATFORM.platformList.length; i++) {
         var p = PLATFORM.platformList[i];
-        if ((exports.getBottomY() - p.getTopY() > -3) && ((exports.getBottomY() - p.getTopY()) < 2)
-            && (exports.getCenterX() - p.getLeftX() >= -5) && (exports.getCenterX() - p.getRightX() < 5)) {
+        if ((exports.getBottomY() - p.getTopY() > -3) && ((exports.getBottomY() - p.getTopY()) < 5)
+            && (exports.getCenterX() - p.getLeftX() >= -11) && (exports.getCenterX() - p.getRightX() < 11)) {
           vert = p.getTopY();
           return true;
         }
@@ -245,8 +248,8 @@ var MEGAMAN = (function() {
     if (PLATFORM.platformList !== undefined) {
       for (var i = 0; i < PLATFORM.platformList.length; i++) {
         var p = PLATFORM.platformList[i];
-        if ((exports.getTopY() - p.getBottomY() > -3) && ((exports.getTopY() - p.getBottomY()) < 2)
-            && (exports.getCenterX() - p.getLeftX() >= -5) && (exports.getCenterX() - p.getRightX() < 5)) {
+        if ((exports.getTopY() - p.getBottomY() > -3) && ((exports.getTopY() - p.getBottomY()) < 5)
+            && (exports.getCenterX() - p.getLeftX() >= -11) && (exports.getCenterX() - p.getRightX() < 11)) {
           headVert = p.getBottomY();
           return true;
         }
@@ -300,12 +303,21 @@ var MEGAMAN = (function() {
     if (shot > 30)
       chargeShot();
     else if (shot == 0) {
-      PROJECTILE.makeProjectile(mmX + (left ? 0 : frameX), (mmY + (frameY / 2)), left, false);
+      PROJECTILE.makeProjectile(mmX + (left ? 0 : frameX), (mmY + (frameY / 2)), left, false, false);
       shot += 5;
     }
     else 
       shot += 5;
   }
+
+  exports.drawHealth = function(){
+    var barX = 15;
+    var barY = 44;
+    ctx.drawImage(heatlhImage, 0, 0, 13, 51, 10, 10, 13, 51);
+    for (var i = 0; i < health; i++)
+      ctx.drawImage(heatlhImage, 0, 52, 5, 1, barX, barY - 2*i, 5, 1);
+  }
+
 
   return exports;
 }());
