@@ -123,7 +123,7 @@ var ENEMY = (function() {
     if(firstRun === true) {
       exports.enemyList.push(new Flyer(300, 300));
       exports.enemyList.push(new Turret(200, 400, true));
-      exports.enemyList.push(new Turret(200, 300, false));
+      exports.enemyList.push(new Turret(20, 550, false));
       firstRun = false;
     }
     for (var i = 0; i < exports.enemyList.length; i++) {
