@@ -22,6 +22,7 @@ var ENEMY = (function() {
     this.turn = 0;
     this.leftLimit = leftLimit;
     this.rightLimit = rightLimit;
+    this.type = "walker";
 
     this.getTopY = function() {
           return this.yPos;
@@ -134,6 +135,7 @@ var ENEMY = (function() {
     this.health = 30;
     this.left = left;
     this.timer = 0;
+    this.type = "turret";
 
     this.getTopY = function() {
           return this.yPos;
@@ -184,6 +186,7 @@ var ENEMY = (function() {
     this.height = 32;
     this.width = 31;
     this.health = 30;
+    this.type = "flyer";
 
     this.getTopY = function() {
       return this.yPos;
@@ -212,9 +215,9 @@ var ENEMY = (function() {
         else
           this.yPos = ((this.yPos - 5) < mmY) ? mmY : this.yPos - .5;    
         if (mmX > this.xPos) 
-          this.xPos += 1;
+          this.xPos += .5;
         else
-          this.xPos -= 1;
+          this.xPos -= .5;
     }
 
         // Animates the helicopter blades.
