@@ -56,6 +56,7 @@ function loop() {
         return;
       }
     }
+    console.log("did i win");
     if (nextLevel = MEGAMAN.checkFinishedLevel()){
       currentLevel += nextLevel - 2;
       loadLevel(currentLevel);

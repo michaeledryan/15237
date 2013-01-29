@@ -18,7 +18,7 @@ var MEGAMAN = (function() {
       index = 0,
       frameX = 50,
       frameY = 45,
-      jumpHeight = 80,
+      jumpHeight = 90,
       left = false,
       shot = false,
       keys = {},
@@ -84,7 +84,7 @@ var MEGAMAN = (function() {
   exports.setMMLocation = function(loc){
     mmX = loc.X;
     mmY = loc.Y;
-    jump = 0, up = false, top = 0, left = false, shot = false, health = 16,
+    jump = 0, up = false, top = 0, left = false, shot = false, health = 16000,
     keys = {}, shot = 0, charge = 0, moving = false, charger = 0;
     invincible = 0;
   }

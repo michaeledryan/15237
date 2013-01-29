@@ -142,11 +142,11 @@ var ENEMY = (function() {
     };
 
     this.getBottomY = function() {
-      return this.yPos + this.height;
+      return this.yPos + this.height - 2;
     };
 
     this.getLeftX = function() {
-      return this.xPos;
+      return this.xPos + 5;
     };
 
     this.getRightX = function() {
