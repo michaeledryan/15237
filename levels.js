@@ -57,7 +57,7 @@ var LEVELS = (function() {
         result.push(new ENEMY.Turret(419, 319, true, 30));
         result.push(new ENEMY.Turret(299, 524, true, 30));
         result.push(new ENEMY.Turret(419, 249, true, 30));
-        result.push(new ENEMY.Turret(38, 80, false, 30));
+        result.push(new ENEMY.Turret(739, 80, true, 30));
         result.push(new ENEMY.Turret(38, 180, false, 30));
         result.push(new ENEMY.Turret(518, 249, false, 30));
         result.push(new ENEMY.Turret(518, 449, false, 30));
