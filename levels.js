@@ -21,6 +21,9 @@ var LEVELS = (function() {
         case 2:
             return new Exit(760, 80, 60);
             break;
+        case 3:
+            return new Exit(760, 80, 60);
+            break;
     }
     
   }
@@ -94,13 +97,16 @@ var LEVELS = (function() {
         //End platforms
         result.push(new PLATFORM.Platform(720, 280, 40, 40));
         result.push(new PLATFORM.Platform(550, 220, 100, 40));
-        result.push(new PLATFORM.Platform(510, 200, 40, 40));
-        result.push(new PLATFORM.Platform(470, 80, 40, 120));
+        result.push(new PLATFORM.Platform(510, 210, 40, 40));
+        result.push(new PLATFORM.Platform(470, 90, 40, 120));
         result.push(new PLATFORM.Platform(680, 140, 120, 40));
 
         break;
       case 3:
-
+        result.push(new PLATFORM.Flicker(100, 560, 80, 40, 20));
+        result.push(new PLATFORM.Flicker(300, 560, 80, 40, 20));
+        result.push(new PLATFORM.Flicker(500, 560, 80, 40, 20));
+        result.push(new PLATFORM.Flicker(720, 500, 40, 40, 20));        
 
         break;
     }
@@ -123,9 +129,9 @@ var LEVELS = (function() {
         result.push(new ENEMY.Turret(419, 249, true, 30));
         result.push(new ENEMY.Turret(739, 80, true, 30));
         result.push(new ENEMY.Turret(38, 180, false, 30));
-        result.push(new ENEMY.Turret(518, 249, false, 30));
-        result.push(new ENEMY.Turret(518, 449, false, 30));
-        result.push(new ENEMY.Turret(739, 349, true, 30));
+        result.push(new ENEMY.Turret(518, 252, false, 30));
+        result.push(new ENEMY.Turret(518, 452, false, 30));
+        result.push(new ENEMY.Turret(739, 352, true, 30));
 
 
 
@@ -150,7 +156,7 @@ var LEVELS = (function() {
         result.push(new ENEMY.Turret(179, 185, true, 30));
         result.push(new ENEMY.Turret(38, 125, false, 30));
         result.push(new ENEMY.Turret(699, 285, true, 30));
-        result.push(new ENEMY.Turret(508, 170, false, 30));
+        result.push(new ENEMY.Turret(508, 175, false, 30));
         result.push(new ENEMY.Turret(659, 145, true, 30));
         result.push(new ENEMY.Turret(508, 100, false, 30));
         result.push(new ENEMY.Turret(448, 145, true, 30));
@@ -191,6 +197,10 @@ var LEVELS = (function() {
         result.Y = 555;
         break;
       case 2:
+        result.X = 0;
+        result.Y = 555;
+        break;
+    case 3:
         result.X = 0;
         result.Y = 555;
         break;

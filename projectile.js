@@ -16,8 +16,8 @@ var PROJECTILE = (function() {
   exports.Projectile = function(xPos, yPos, left, charged, enemy) {
     this.xPos = xPos;
     this.yPos = yPos;
-    this.width = charged ? chargedWidth : (enemy ? badWidth : busterWidth);
-    this.height = charged ? chargedHeight : (enemy ? badHeight : busterHeight);
+    this.width = charged ? (chargedWidth) : (enemy ? badWidth : busterWidth);
+    this.height = charged ? (chargedHeight) : (enemy ? badHeight : busterHeight);
     this.left = left;
     this.enemy = enemy;
     this.charged = charged;
@@ -25,10 +25,10 @@ var PROJECTILE = (function() {
       return this.yPos;
     };
     this.getBottomY = function() {
-      return this.yPos + this.height;
+      return this.yPos;
     };
     this.getLeftX = function() {
-      return this.xPos;
+      return this.xPos + 5;
     };
     this.getRightX = function() {
       return this.xPos + this.width;
@@ -39,7 +39,7 @@ var PROJECTILE = (function() {
 	// This fn is used to connect the projectile to the shooter
 	exports.makeProjectile = function(xPos, yPos, left, charged, enemy) {
 		proj = new exports.Projectile(xPos, yPos, left, charged, enemy);
-		drawShot(proj);
+		//drawShot(proj);
 		projList.push(proj);
 	}
 
@@ -75,7 +75,7 @@ var PROJECTILE = (function() {
 				if (proj.left && xPos > (0 - 100)) {
 					proj.xPos = (xPos - 15);
           drawShot(proj);
-				} else if (!proj.right && xPos < (SCREEN_WIDTH + 20)) {
+				} else if (!proj.left && xPos < (SCREEN_WIDTH + 20)) {
 					proj.xPos = (xPos + 15);
           drawShot(proj);
 				} else {
@@ -94,9 +94,11 @@ var PROJECTILE = (function() {
         for(var j = 0; j < platforms.length; j++) {
           platform = platforms[j];
           projectile = projList[i];
-          if (exports.collisionToObject(platform, projectile)) {
-            delProj = i;
-            doDelete = true;
+          if (platform.timer === undefined || (platform.timer > 0)) {
+            if (exports.collisionToObject(platform, projectile)) {
+              delProj = i;
+              doDelete = true;
+            }
           }
         }
       }
@@ -155,7 +157,14 @@ var PROJECTILE = (function() {
   }
 
   exports.collisionToObject = function(object, projectile) {
-    if 
+    if (projectile.charged !== undefined)
+      return (((projectile.getBottomY() >= (object.getTopY() + 3))  &&   (projectile.getBottomY() <= (object.getBottomY() - 3))   ||  
+        ((projectile.getTopY() <= (object.getBottomY() - 3))    &&  (projectile.getTopY() >= (object.getTopY() + 3))))  &&   
+      (((projectile.getLeftX() >= (object.getLeftX() - 10))  &&  (projectile.getLeftX() <= (object.getRightX() + 10)))  ||  
+        ((projectile.getRightX() >= (object.getLeftX() - 10))   &&  (projectile.getRightX() <= (object.getRightX() + 10))))
+        )
+
+    else if       
       (((projectile.getBottomY() >= (object.getTopY() + 3))  &&   (projectile.getBottomY() <= (object.getBottomY() - 3))   ||  
         ((projectile.getTopY() <= (object.getBottomY() - 3))    &&  (projectile.getTopY() >= (object.getTopY() + 3))))  &&   
       (((projectile.getLeftX() >= (object.getLeftX() + 3))  &&  (projectile.getLeftX() <= (object.getRightX() - 3)))  ||  

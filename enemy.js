@@ -25,26 +25,25 @@ var ENEMY = (function() {
     this.type = "walker";
 
     this.getTopY = function() {
-          return this.yPos;
+      return this.yPos;
     };
 
     this.getBottomY = function() {
-      return this.yPos + this.height;
+      return this.yPos + this.height + 10;
     };
 
     this.getLeftX = function() {
-      return this.xPos;
+      return this.xPos + this.width / 3;
     };
 
     this.getRightX = function() {
-      return this.xPos + this.width/2;
+      return this.xPos + 2 * this.width /3;
     };
     
     /*
      * If they aren't at the limit, move them in the proper direction.
      * If they are, tell them to turn.
      */
-
     this.move = function() {
       enemyCollisionToMegaman();
       if (this.left && this.xPos >= leftLimit)
@@ -259,15 +258,20 @@ var ENEMY = (function() {
 
   function enemyCollisionToMegaman() {
     if ((!MEGAMAN.gameOver) && (exports.enemyList.length > 0)) {
-     var mm = MEGAMAN;
-     for(var i = 0; i < exports.enemyList.length; i++) {
-       enemy = exports.enemyList[i];
-       if (PROJECTILE.collisionToObject(mm, enemy)) {
-         MEGAMAN.damageMegamanRamming();
-       }
-     }
-   }
- }
+      var mm = MEGAMAN;
+      for(var i = 0; i < exports.enemyList.length; i++) {
+        enemy = exports.enemyList[i];
+        if (enemy.leftLimit) {
+          if (PROJECTILE.collisionToObject(enemy, mm)) 
+          MEGAMAN.damageMegamanRamming();
+        } 
+        else {
+          if (PROJECTILE.collisionToObject(mm, enemy)) 
+            MEGAMAN.damageMegamanRamming();
+        }
+      }
+    }
+  }
 
 
 	return exports;
