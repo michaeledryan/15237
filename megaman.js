@@ -51,7 +51,7 @@ var MEGAMAN = (function() {
   }
 
   exports.checkFinishedLevel = function(){
-    if (keys["82"])
+    if (keys["82"] || MEGAMAN.getLeftX() > 800)
       return true;
     return false;
   }
