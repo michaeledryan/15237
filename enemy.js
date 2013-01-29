@@ -254,7 +254,7 @@ var ENEMY = (function() {
 
   exports.damageEnemy = function(enemy, index, projectile) {
     // Makes sure projectile is from megaman
-    if (!projectile.enemy) {
+    if (projectile.enemy == false) {
       // Charged shot does more damage
       projectile.charged ? enemy.health -= 10 : enemy.health -= 5;
     }

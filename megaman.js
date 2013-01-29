@@ -323,12 +323,15 @@ var MEGAMAN = (function() {
       ctx.drawImage(heatlhImage, 0, 52, 5, 1, barX, barY - 2*i, 5, 1);
   }
 
-  exports.damageMegaman = function() {
-    health -= 2;
+  exports.damageMegaman = function(projectile) {
+    console.log(projectile.enemy);
+    if (projectile.enemy === true) {
+      health -= 5;
+      console.log('Megeman got hit, health: ' + health);
+    }
     if (health <= 0) {
       gameOver = true;
     }
-    console.log('Megeman got hit, health: ' + health);
   }
 
 
