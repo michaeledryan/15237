@@ -15,14 +15,15 @@ var PROJECTILE = (function() {
 	image.src = "sprites/buster1.png";
 
 	// Constructor for Mega Man's projectiles. Takes coordinates, a starting direction
-	function Projectile(xPos, yPos, left, charged, enemy) {
-		this.xPos = xPos;
-		this.yPos = yPos;
-		this.width = width;
-		this.height = height;
-		this.left = left;
-		this.enemy = enemy;
-		this.charged = charged;
+	// Constructor for Mega Man's projectiles. Takes coordinates, a starting direction
+  exports.Projectile = function(xPos, yPos, left, charged, enemy) {
+    this.xPos = xPos;
+    this.yPos = yPos;
+    this.width = width;
+    this.height = height;
+    this.left = left;
+    this.enemy = enemy;
+    this.charged = charged;
     this.getTopY = function() {
       return this.yPos;
     };
@@ -35,15 +36,19 @@ var PROJECTILE = (function() {
     this.getRightX = function() {
       return this.xPos + width;
     };
-	}
+  }
 
 
 	// This fn is used to connect the projectile to the shooter
 	exports.makeProjectile = function(xPos, yPos, left, charged, enemy) {
-		proj = new Projectile(xPos, yPos, left, charged, enemy);
+		proj = new exports.Projectile(xPos, yPos, left, charged, enemy);
 		drawShot(proj);
 		projList.push(proj);
 	}
+
+  exports.clearList = function(){
+    platformList = [];
+  }
 
 	function drawShot (proj) {
 		xPos = proj.xPos;

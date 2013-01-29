@@ -11,9 +11,7 @@ var MEGAMAN = (function() {
   var jump = 0,
       up = false,
       top = 0,
-      mmX = 0,
-      // Screen height - height of megaman, to put him on the bottom of the canvas.
-      mmY = 600 - 45,
+      mmX, mmY,
       xpos = 0,
       ypos = 200,
       index = 0,
@@ -49,6 +47,20 @@ var MEGAMAN = (function() {
   exports.doGame = function() {
     exports.jumpMegaman();
     exports.drawMegaman();
+  }
+
+  exports.checkFinishedLevel = function(){
+    if (keys["82"])
+      return true;
+    return false;
+  }
+
+
+  exports.setMMLocation = function(loc){
+    mmX = loc.X;
+    mmY = loc.Y;
+    jump = 0, up = false, top = 0, left = false, shot = false, health = 16,
+    keys = {}, shot = 0, charge = 0, moving = false, charger = 0;
   }
 
   function doDraw(){

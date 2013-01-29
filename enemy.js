@@ -5,30 +5,11 @@ var ENEMY = (function() {
   image.src = "sprites/enemies.png";
 	exports.enemyList = [];
 
-	function Enemy(xPos, yPos, width, height, type, health, damage) {
-		this.xPos = xPos;
-		this.yPos = yPos;
-		this.width = width;
-		this.height = height;
-		this.type = type;
-    this.health = health;
-    this.damage = damage;
-		this.getTopY = function() {
-        return yPos;
-	    };
-	    this.getBottomY = function() {
-	      return yPos + height;
-	    };
-	    this.getLeftX = function() {
-	      return xPos;
-	    };
-	    this.getRightX = function() {
-	      return xPos + width;
-	    };
-	}
-
-  // Enemy that paces on platform
-  function Walker(xPos, yPos, left, leftLimit, rightLimit) {
+	/*
+   * Generates Walker enemies. These enemies pace bkac and forth on a given
+   * plane between the leftLimit and rightLimit.
+   */
+  exports.Walker = function(xPos, yPos, left, leftLimit, rightLimit) {
     this.xPos = xPos;
     this.yPos = yPos;
     this.spriteX = 106;
@@ -58,6 +39,11 @@ var ENEMY = (function() {
       return this.xPos + this.width;
     };
     
+    /*
+     * If they aren't at the limit, move them in the proper direction.
+     * If they are, tell them to turn.
+     */
+
     this.move = function() {
 
       if (this.left && this.xPos >= leftLimit)
@@ -65,17 +51,13 @@ var ENEMY = (function() {
       else if (!(this.left) && this.xPos + this.width <= rightLimit)
         this.xPos = (this.xPos + 2 >= rightLimit) ? rightLimit : this.xPos + 2;
       else
-        //console.log("hey");
         this.turn = (this.turn === 0) ? 1 : this.turn;
     }
   
+    /*
+     * Draws the walker walking or turning based on its state.
+     */
     this.draw = function() {
-
-        // if stopped, we do the cycle, increment turn, and switch on turn?
-        // if moving, we go through the images.
-        // left x 106 - 424 by 53. y = 33
-        // right x 106 - 424 by 53. y = 93
-
         if (this.turn != 0) {
           if (this.left) {
             switch(this.turn) 
@@ -122,7 +104,6 @@ var ENEMY = (function() {
             }
 
             this.turn = (this.turn + 1) % 5;
-
             ctx.drawImage(image, this.spriteX, this.spriteY, this.width, this.height, 
                           this.xPos, this.yPos, this.width, this.height);
           }
@@ -139,8 +120,11 @@ var ENEMY = (function() {
       }
   }
 
-  // Enemy does not move, shoots projectile's on a timer
-  function Turret(xPos, yPos, left) {
+
+  /*
+   * Generates a Turret enemy. Stays stationary and fires at an interval.
+   */
+  exports.Turret = function(xPos, yPos, left, offset) {
     this.xPos = xPos;
     this.yPos = yPos;
     this.spriteX = 530;
@@ -167,8 +151,11 @@ var ENEMY = (function() {
       return this.xPos + this.width;
     };
     
+    /*
+     * This doesn't move, so we'll handle the firing.
+     */
     this.move = function() {
-      if (this.timer++ === 30) {
+      if (this.timer++ === 60 + offset) {
         PROJECTILE.makeProjectile(this.xPos + (this.left ? - 11 : this.width), 
                         (this.yPos + (this.height / 2) - 5), this.left, 
                         false, true);
@@ -176,14 +163,20 @@ var ENEMY = (function() {
       }
     }
 
+    /*
+     * Draws the turret.
+     */
     this.draw = function() {
       ctx.drawImage(image, this.spriteX, this.spriteY, this.width, this.height, 
                     this.xPos, this.yPos, this.width, this.height);
       }
   }
 
-  // Enemy that flies towards megaman and ignores platform collision
-  function Flyer(xPos, yPos) {
+
+  /*
+   * Creates a Flyer enemy. This moves towards Mega Man relentelessly.
+   */
+  exports.Flyer = function(xPos, yPos, respawn) {
     this.xPos = xPos;
     this.yPos = yPos;
     this.spriteX = 0;
@@ -208,11 +201,11 @@ var ENEMY = (function() {
       return this.xPos + this.width;
     };
     
+    // Move towards Mega Man
     this.move = function() {
       var mmY = MEGAMAN.getTopY();
       var mmX = MEGAMAN.getCenterX();
 
-        // AI for walker to follow megaman
         if (mmY > this.yPos) 
           this.yPos = ((this.yPos + 5) > mmY) ? mmY : this.yPos + .5;
         else
@@ -223,6 +216,7 @@ var ENEMY = (function() {
           this.xPos -= 1;
     }
 
+        // Animates the helicopter blades.
     this.draw = function() {
       ctx.drawImage(image, this.spriteX, this.spriteY, this.width, this.height, 
                     this.xPos, this.yPos, this.width, this.height);
@@ -233,18 +227,13 @@ var ENEMY = (function() {
 
   }
 
+  exports.setEnemyList = function(newList){
+    console.log(newList);
+    exports.enemyList = newList;
+    console.log(exports.enemyList);
+  }
+
 	exports.drawEnemies = function() {
-    if(firstRun === true) {
-      exports.enemyList.push(new Flyer(300, 300));
-      exports.enemyList.push(new Turret(200, 400, true));
-      exports.enemyList.push(new Turret(20, 500, false));
-      exports.enemyList.push(new Turret(300, 300, false));
-      //exports.enemyList.push(new Turret(400, 300, false));
-      exports.enemyList.push(new Walker(100, 100, false, 00, 350))
-      exports.enemyList.push(new Walker(300, 400, false, 00, 350));
-      exports.enemyList.push(new Walker(100, 400, false, 00, 350));
-      firstRun = false;
-    }
     for (var i = 0; i < exports.enemyList.length; i++) {
       var e = exports.enemyList[i];
       e.move();
