@@ -64,8 +64,8 @@ var ENEMY = (function() {
       else if (!(this.left) && this.xPos + this.width <= rightLimit)
         this.xPos = (this.xPos + 2 >= rightLimit) ? rightLimit : this.xPos + 2;
       else
-        console.log("hey");
-        this.turn = 1;
+        //console.log("hey");
+        this.turn = (this.turn === 0) ? 1 : this.turn;
     }
   
     this.draw = function() {
@@ -75,7 +75,7 @@ var ENEMY = (function() {
         // left x 106 - 424 by 53. y = 33
         // right x 106 - 424 by 53. y = 93
 
-        if (this.turn) {
+        if (this.turn != 0) {
           if (this.left) {
             switch(this.turn) 
             {
@@ -96,14 +96,13 @@ var ENEMY = (function() {
             }
 
             this.turn = (this.turn + 1) % 5;
-            console.log(this.turn);
             ctx.drawImage(image, this.spriteX, this.spriteY, this.width, this.height, 
                           this.xPos, this.yPos, this.width, this.height);
 
           }
 
 
-        else if (this.right){
+        else if (!this.left){
             switch(this.turn) 
             {
             case 1:
@@ -122,10 +121,9 @@ var ENEMY = (function() {
             }
 
             this.turn = (this.turn + 1) % 5;
-            console.log(this.turn);
+
             ctx.drawImage(image, this.spriteX, this.spriteY, this.width, this.height, 
                           this.xPos, this.yPos, this.width, this.height);
-
           }
         }
 
@@ -133,11 +131,10 @@ var ENEMY = (function() {
           this.spriteX += 53;
           if (this.spriteX >= 530) 
             this.spriteX = 106;
-        }
-    
-
-      ctx.drawImage(image, this.spriteX, this.spriteY, this.width, this.height, 
+//          console.log("afasdf");
+          ctx.drawImage(image, this.spriteX, this.spriteY, this.width, this.height, 
                     this.xPos, this.yPos, this.width, this.height);
+        }
       }
   }
 
