@@ -9,7 +9,8 @@ const SCREEN_WIDTH  = 800,
 
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
-var nextLevel = 1;
+var currentLevel = 1;
+var lives = 2;
 
 canvas.addEventListener('keydown', MEGAMAN.keyDownListener, false);
 canvas.addEventListener('keyup', MEGAMAN.keyUpListener, false);
@@ -22,6 +23,7 @@ function loadLevel(level){
   ENEMY.setEnemyList(LEVELS.getEnemies(level));
   PROJECTILE.clearList();
   MEGAMAN.setMMLocation(LEVELS.getMMLocation(level));
+  MEGAMAN.setExit(LEVELS.getExit(level));
 }
 
 function playMP3() {
@@ -29,17 +31,38 @@ function playMP3() {
 }
 
 function loop() {
+  var nextLevel;
   if (!TITLE.doTitle()){
     MEGAMAN.doGame();
     PLATFORM.drawPlatforms();
     ENEMY.drawEnemies();
     PROJECTILE.moveProjectiles();
     MEGAMAN.drawHealth();
-    if (MEGAMAN.checkFinishedLevel())
-      loadLevel(++nextLevel);
+    MEGAMAN.doExit();
+    if (MEGAMAN.gameOver) {
+      if (lives){
+        alert("You died! " + --lives + " lives left!");
+        loadLevel(currentLevel);
+        MEGAMAN.gameOver = false;
+        return;
+      }
+      else {
+        alert("Game over!");
+        currentLevel = 1;
+        loadLevel(currentLevel);
+        MEGAMAN.gameOver = false;
+        lives = 3;
+        TITLE.setTitle();
+        return;
+      }
+    }
+    if (nextLevel = MEGAMAN.checkFinishedLevel()){
+      currentLevel += nextLevel - 2;
+      loadLevel(currentLevel);
+    }
   }
 }
 
 //playMP3();
-loadLevel(nextLevel);
+loadLevel(currentLevel);
 window.setInterval(loop, 1000/30);

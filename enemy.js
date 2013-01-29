@@ -16,7 +16,7 @@ var ENEMY = (function() {
     this.spriteY = left ? 33 : 93;
     this.height = 51;
     this.width = 53;
-    this.health = 30;
+    this.health = 50;
     this.left = left;
     this.timer = 0;
     this.turn = 0;
@@ -37,7 +37,7 @@ var ENEMY = (function() {
     };
 
     this.getRightX = function() {
-      return this.xPos + this.width;
+      return this.xPos + this.width/2;
     };
     
     /*
@@ -48,9 +48,9 @@ var ENEMY = (function() {
     this.move = function() {
       enemyCollisionToMegaman();
       if (this.left && this.xPos >= leftLimit)
-        this.xPos = (this.xPos - 2 === leftLimit) ? leftLimit : this.xPos - 2;
+        this.xPos = (this.xPos - 4 === leftLimit) ? leftLimit : this.xPos - 4;
       else if (!(this.left) && this.xPos + this.width <= rightLimit)
-        this.xPos = (this.xPos + 2 >= rightLimit) ? rightLimit : this.xPos + 2;
+        this.xPos = (this.xPos + 4 >= rightLimit) ? rightLimit : this.xPos + 4;
       else
         this.turn = (this.turn === 0) ? 1 : this.turn;
     }
@@ -249,7 +249,7 @@ var ENEMY = (function() {
     // Makes sure projectile is from megaman
     if (projectile.enemy === false) {
       // Charged shot does more damage
-      projectile.charged ? enemy.health -= 10 : enemy.health -= 5;
+      projectile.charged ? enemy.health -= 30 : enemy.health -= 10;
     }
     // Enemy has died, remove from enemyList array
     if(enemy.health <= 0) {

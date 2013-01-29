@@ -67,6 +67,11 @@ exports.doTitle = function() {
 
 }
 
+  exports.setTitle = function() {
+    inTitle = true;
+    canvas.addEventListener('keydown', titleKeyDown, false);    
+  }
+
 // Allows keystroke interactivity
 canvas.addEventListener('keydown', titleKeyDown, false);
 

@@ -2,13 +2,36 @@ var LEVELS = (function() {
   var exports = {};
   var currentLevel;
   
+  function Exit(x, y, height) {
+    this.x = x;
+    this.y = y;
+    this.height = height;
+    this.draw = function() {
+        ctx.fillStyle = "green";
+        ctx.fillRect(x, y, 40, height);
+    }
+  }
+
+  exports.getExit = function(level) {
+    switch(level) {
+
+        case 1:
+            return new Exit(760, 540, 60);
+            break;
+        case 2:
+
+            break;
+    }
+    
+  }
+
   exports.getPlatforms = function(level) {
     var result = [];
 
     switch(level){
       case 1:
         //***********Border Platforms*************
-        result.push(new PLATFORM.Platform(0, 0, 800, 80));
+        result.push(new PLATFORM.Platform(0, -40, 800, 40));
         result.push(new PLATFORM.Platform(0, 80, 40, 520));
         result.push(new PLATFORM.Platform(760, 80, 40, 460));
 
@@ -35,10 +58,12 @@ var LEVELS = (function() {
         result.push(new PLATFORM.Platform(640, 300, 120, 40));
         result.push(new PLATFORM.Platform(520, 400, 120, 40));
         result.push(new PLATFORM.Platform(640, 500, 120, 40));
-
-
+        break;
+      case 2:
+        result.push 
 
       break;
+
     }
 
     console.log(result);

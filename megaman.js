@@ -8,7 +8,8 @@ var MEGAMAN = (function() {
   var heatlhImage = new Image();
       heatlhImage.src = "sprites/health.png";
 
-  var jump = 0,
+  var exit, atExit = false,
+      jump = 0,
       up = false,
       top = 0,
       mmX, mmY,
@@ -28,7 +29,7 @@ var MEGAMAN = (function() {
       shot = 0,
       charge = 0,
       moving = false,
-      health = 16,
+      health = 1,
       charger = 0;
       invincible = 0;
       keys = {};
@@ -45,15 +46,38 @@ var MEGAMAN = (function() {
       charger = 0;
   }
 
+
+  exports.setExit = function(newExit){
+    exit = newExit;
+
+  }
+
+
+  exports.doExit = function(){
+    exit.draw();
+    if (((exports.getCenterY() > exit.y)) && (exports.getCenterY() < (exit.y + exit.height)) && 
+        ((exports.getCenterX() - exit.x + 40)) < 40 && ((exports.getCenterX() - exit.x) > -10))
+      inExit = true;
+    else
+      inExit = false;
+  }
+
+
+
   exports.doGame = function() {
     exports.jumpMegaman();
     exports.drawMegaman();
   }
 
   exports.checkFinishedLevel = function(){
-    if (keys["82"])
-      return true;
-    return false;
+    if (inExit)
+      return 3;
+    else if (keys["82"])
+      return 2;
+    else if (keys["78"])
+      return 3;
+    else if (keys["66"])
+      return 1;
   }
 
 
@@ -62,16 +86,19 @@ var MEGAMAN = (function() {
     mmY = loc.Y;
     jump = 0, up = false, top = 0, left = false, shot = false, health = 16,
     keys = {}, shot = 0, charge = 0, moving = false, charger = 0;
+    invincible = 0;
   }
 
   function doDraw(){
     ctx.clearRect(0,0, SCREEN_WIDTH,SCREEN_HEIGHT);
     ctx.drawImage(background, 0, 0, 600, 800, 0, 0, 800, 600)
-    ctx.drawImage(image, xpos, ypos, frameX, frameY, mmX, mmY, frameX, frameY);
-    if ( (charge === 300) || (charge > 0 && !(charger++ % 3))){
-      ctx.drawImage(image, chargeX, chargeY + (!!left ? chargeFrameY : 0),
-                    chargeFrameX, chargeFrameY, mmX + (left ? -5 : frameX *3/4),
-                    (mmY + (frameY / 3)) - (!!jump ? 10 : 0), chargeFrameX, chargeFrameY);
+    if (!(invincible % 3)){
+      ctx.drawImage(image, xpos, ypos, frameX, frameY, mmX, mmY, frameX, frameY);
+      if ( (charge === 300) || (charge > 0 && !(charger++ % 3))){
+        ctx.drawImage(image, chargeX, chargeY + (!!left ? chargeFrameY : 0),
+                      chargeFrameX, chargeFrameY, mmX + (left ? -5 : frameX *3/4),
+                      (mmY + (frameY / 3)) - (!!jump ? 10 : 0), chargeFrameX, chargeFrameY);
+    }
     }
 
 
@@ -119,7 +146,7 @@ var MEGAMAN = (function() {
     else {
       if (charge === 300) {
         PROJECTILE.makeProjectile(mmX + (left ? 0 : frameX), 
-                                  (mmY + (frameY / 2)), left, true, false);
+                                  (mmY + (frameY / (jump ? 3 : 2))), left, true, false);
       }
       shot = 0;
       charge = 0;
@@ -326,7 +353,7 @@ var MEGAMAN = (function() {
     if (shot > 30)
       chargeShot();
     else if (shot == 0) {
-      PROJECTILE.makeProjectile(mmX + (left ? 0 : frameX), (mmY + (frameY / 2)), left, false, false);
+      PROJECTILE.makeProjectile(mmX + (left ? 0 : frameX), (mmY + (frameY / (jump ? 3 : 2))), left, false, false);
       shot += 5;
     }
     else 
@@ -342,16 +369,15 @@ var MEGAMAN = (function() {
   }
 
   exports.damageMegaman = function(projectile) {
-    console.log(projectile.enemy);
-    if (projectile.enemy === true) {
-      health -= 4;
-      console.log('Megeman got hit, health: ' + health);
+    if (invincible === 0){
+      if (projectile.enemy === true) {
+        health -= 4;
+        invincible = 20;
+      }
+      if (health <= 0) {
+        exports.gameOver = true;
+      }
     }
-    if (health <= 0) {
-      exports.gameOver = true;
-    }
-    console.log("Game over: " + exports.gameOver);
-
   }
   //
   exports.damageMegamanRamming = function() {
@@ -359,11 +385,9 @@ var MEGAMAN = (function() {
    // invincible gets decremented in drawmegaman() above
    if(invincible === 0) {
     health -= 2;
-    console.log('Megeman got hit, health: ' + health);
     if (health <= 0) {
       exports.gameOver = true;
     }
-    console.log("Game over: " + exports.gameOver);
     invincible = 20;
    }
 

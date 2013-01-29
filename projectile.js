@@ -1,17 +1,14 @@
 var PROJECTILE = (function() {
 	var exports = {};
-	var xPos;
-	var yPos;
-	var width = 10;
-	var height = 10;
 	var projList = [];
 	var image = new Image();
 	const busterX = 0, busterY = 44;
+  const busterWidth = 10, busterHeight = 10;
 	const chargedX = 0, chargedY = 0;
-	const chargedFrameX = 36, chargedFrameY = 22;
+	const chargedWidth = 36, chargedHeight = 22;
 	const busterFrameX = 8, busterFrameY = 6;
 	const badX = 0, badY = 50;
-	const badFrameX = 15, badFrameY = 11;
+	const badWidth = 15, badHeight = 11;
 	image.src = "sprites/buster1.png";
 
 	// Constructor for Mega Man's projectiles. Takes coordinates, a starting direction
@@ -19,8 +16,8 @@ var PROJECTILE = (function() {
   exports.Projectile = function(xPos, yPos, left, charged, enemy) {
     this.xPos = xPos;
     this.yPos = yPos;
-    this.width = width;
-    this.height = height;
+    this.width = charged ? chargedWidth : (enemy ? badWidth : busterWidth);
+    this.height = charged ? chargedHeight : (enemy ? badHeight : busterHeight);
     this.left = left;
     this.enemy = enemy;
     this.charged = charged;
@@ -28,13 +25,13 @@ var PROJECTILE = (function() {
       return this.yPos;
     };
     this.getBottomY = function() {
-      return this.yPos + height;
+      return this.yPos + this.height;
     };
     this.getLeftX = function() {
       return this.xPos;
     };
     this.getRightX = function() {
-      return this.xPos + width;
+      return this.xPos + this.width;
     };
   }
 
@@ -47,19 +44,19 @@ var PROJECTILE = (function() {
 	}
 
   exports.clearList = function(){
-    platformList = [];
+    projList = [];
   }
 
 	function drawShot (proj) {
 		xPos = proj.xPos;
 		yPos = proj.yPos;
 		if (proj.charged)
-				ctx.drawImage(image, chargedX, chargedY + (proj.left) ? chargedFrameY : 0, 
-					chargedFrameX, chargedFrameY, xPos, yPos-chargedFrameY/2, 
-					chargedFrameX, chargedFrameY);
+				ctx.drawImage(image, chargedX, chargedY + (proj.left) ? chargedHeight : 0, 
+					chargedWidth, chargedHeight, xPos, yPos-chargedHeight/2, 
+					chargedWidth, chargedHeight);
 		else if (proj.enemy) 
-			ctx.drawImage(image, badX, badY, badFrameX + proj.left ? badFrameX : 0, 
-										badFrameY, xPos, yPos, badFrameX, badFrameY);	
+			ctx.drawImage(image, badX + proj.left ? 0: + badWidth, badY, badWidth, 
+										badHeight, xPos, yPos, badWidth, badHeight);	
 		else
 			ctx.drawImage(image, busterX, busterY, busterFrameX, 
 										busterFrameY, xPos, yPos, busterFrameX, 
@@ -124,9 +121,9 @@ var PROJECTILE = (function() {
             delProj = i;
             if (projectile.enemy === false) {
               doDelete = true;
+              ENEMY.damageEnemy(enemy, j, projectile);
             }
             // Passes enemy object, index in enemyList array, and projectile type for damage calculation
-            ENEMY.damageEnemy(enemy, j, projectile);
           }
         }
       }
@@ -158,11 +155,11 @@ var PROJECTILE = (function() {
   }
 
   exports.collisionToObject = function(object, projectile) {
-    if  (
-      (((projectile.getBottomY() >= object.getTopY())  &&   (projectile.getBottomY() <= object.getBottomY()))   ||  
-        ((projectile.getTopY() <= object.getBottomY())    &&  (projectile.getTopY() >= object.getTopY())))  &&   
-      (((projectile.getLeftX() >= object.getLeftX())  &&  (projectile.getLeftX() <= object.getRightX()))  ||  
-        ((projectile.getRightX() >= object.getLeftX())   &&  (projectile.getRightX() <= object.getRightX())))
+    if 
+      (((projectile.getBottomY() >= (object.getTopY() + 3))  &&   (projectile.getBottomY() <= (object.getBottomY() - 3))   ||  
+        ((projectile.getTopY() <= (object.getBottomY() - 3))    &&  (projectile.getTopY() >= (object.getTopY() + 3))))  &&   
+      (((projectile.getLeftX() >= (object.getLeftX() + 3))  &&  (projectile.getLeftX() <= (object.getRightX() - 3)))  ||  
+        ((projectile.getRightX() >= (object.getLeftX() + 3))   &&  (projectile.getRightX() <= (object.getRightX() - 3))))
         )
     {
       return true;
