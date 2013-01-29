@@ -104,8 +104,8 @@ var PROJECTILE = (function() {
     }
   }
 
-  // If you comment this out where its called, all turrets shoot their projectiles, but for some reason the last
-  // turret's projectiles get deleted instantly
+  // If you comment this out where its called, all turrets shoot their projectiles, but for some reason if this method is used,
+  // the last turret to be pushed onto the list's projectiles get deleted instantly
   function collisionToEnemy() {
     if ((ENEMY.enemyList.length > 0) && (projList.length > 0)) {
       var doDelete = false;
