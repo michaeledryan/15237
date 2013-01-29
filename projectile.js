@@ -109,8 +109,8 @@ var PROJECTILE = (function() {
     }
   }
 
-  // If you comment this out where its called, all turrets shoot their projectiles, but for some reason if this method is used,
-  // the last turret to be pushed onto the list's projectiles get deleted instantly
+  // If you comment this out where its called, all turrets shoot their projectiles, but when this is used
+  // the last turret to be pushed onto list doesnt shoot his projectiles
   function collisionToEnemy() {
     if ((ENEMY.enemyList.length > 0) && (projList.length > 0)) {
       var doDelete = false;
@@ -122,7 +122,9 @@ var PROJECTILE = (function() {
           projectile = projList[i];
           if (collisionToObject(enemy, projectile)) {
             delProj = i;
-            doDelete = true;
+            if (projectile.enemy === false) {
+              doDelete = true;
+            }
             // Passes enemy object, index in enemyList array, and projectile type for damage calculation
             ENEMY.damageEnemy(enemy, j, projectile);
           }
@@ -143,8 +145,10 @@ var PROJECTILE = (function() {
         projectile = projList[i];
         if (collisionToObject(mm, projectile)) {
           delProj = i;
-          doDelete = true;
-          MEGAMAN.damageMegaman();
+          if (projectile.enemy === true) {
+            doDelete = true;
+          }
+          MEGAMAN.damageMegaman(projectile);
         }
       }
       if (doDelete === true) {
