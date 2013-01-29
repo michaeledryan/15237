@@ -12,7 +12,7 @@ var TITLE = (function() {
 
 
   var select = 0, // The menu option being selected.
-      inTitle = true, // Whether or not hte player is still on the titel screen.
+      inTitle = true, // Whether or not the player is still on the title screen.
       instructionsText = "This is Mega Man! Fight enemies and get to the end of the levels. \n Controls: \n Z: shoot \n X: jump \n Arrow keys: move \n Hold X to charge your shots!";
 
 

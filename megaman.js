@@ -1,5 +1,6 @@
 var MEGAMAN = (function() {
   var exports = {};
+  exports.gameOver = false;
   var image = new Image();
       image.src = "sprites/mm.png";
   var background = new Image();
@@ -100,6 +101,8 @@ var MEGAMAN = (function() {
     if (keys["90"]) {
       shoot();
     }
+
+    // charged shot
     else {
       if (charge === 300) {
         PROJECTILE.makeProjectile(mmX + (left ? 0 : frameX), 
@@ -203,6 +206,7 @@ var MEGAMAN = (function() {
     }
   }
 
+  // For megaman's unit collision/positioning, ideally this would be object-oriented
   exports.getTopY = function() {
     return mmY;
   }
@@ -258,7 +262,7 @@ var MEGAMAN = (function() {
     }
   }
 
-  //To check left horizontal collisions
+  // To check left horizontal collisions
   function checkLeftPlatformCollision(){
     if (PLATFORM.platformList !== undefined) {
       for (var i = 0; i < PLATFORM.platformList.length; i++) {
@@ -276,6 +280,7 @@ var MEGAMAN = (function() {
     }
   }
 
+  // To check right horizontal collisions
   function checkRightPlatformCollision(){
     if (PLATFORM.platformList !== undefined) {
       for (var i = 0; i < PLATFORM.platformList.length; i++) {
@@ -316,6 +321,14 @@ var MEGAMAN = (function() {
     ctx.drawImage(heatlhImage, 0, 0, 13, 51, 10, 10, 13, 51);
     for (var i = 0; i < health; i++)
       ctx.drawImage(heatlhImage, 0, 52, 5, 1, barX, barY - 2*i, 5, 1);
+  }
+
+  exports.damageMegaman = function() {
+    health -= 2;
+    if (health <= 0) {
+      gameOver = true;
+    }
+    console.log('Megeman got hit, health: ' + health);
   }
 
 

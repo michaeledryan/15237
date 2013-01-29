@@ -63,12 +63,13 @@ var PROJECTILE = (function() {
 	}
 
 	exports.moveProjectiles = function() {
+    collisionToEnemy();
     collisionToPlatform();
+    collisionToMegaman();
 		if (projList.length > 0) {
 			for (var i = 0; i < projList.length; i++) {
 				var proj = projList[i];
         var xPos = proj.xPos;
-        //console.log(proj.left == false);
 				if (proj.left && xPos > (0 - 100)) {
 					proj.xPos = (xPos - 15);
           drawShot(proj);
@@ -76,15 +77,14 @@ var PROJECTILE = (function() {
 					proj.xPos = (xPos + 15);
           drawShot(proj);
 				} else {
-					//console.log(proj + "is outside the canvas bounds")
 				}
 			}
 		}
 	}
 
+  // Makes sure projectiles disappear after collision with platform
   function collisionToPlatform() {
     if (projList.length > 0) {
-      //console.log('got here');
       var doDelete = false;
       var delProj;
       var platforms = PLATFORM.platformList;
@@ -92,8 +92,7 @@ var PROJECTILE = (function() {
         for(var j = 0; j < platforms.length; j++) {
           platform = platforms[j];
           projectile = projList[i];
-          if (collisionToPlatformLeft(platform, projectile)) { //|| collisionToPlatformRight(platform, projectile)) {
-            //console.log('Delete this projectile from list: ' + i);
+          if (collisionToObject(platform, projectile)) {
             delProj = i;
             doDelete = true;
           }
@@ -105,39 +104,66 @@ var PROJECTILE = (function() {
     }
   }
 
-  function collisionToPlatformLeft(platform, projectile) {
-    //console.log(platform, projectile);
+  // If you comment this out where its called, all turrets shoot their projectiles, but for some reason the last
+  // turret's projectiles get deleted instantly
+  function collisionToEnemy() {
+    if ((ENEMY.enemyList.length > 0) && (projList.length > 0)) {
+      var doDelete = false;
+      var delProj;
+      var enemies = ENEMY.enemyList;
+      for(var i = 0; i < projList.length; i ++) {
+        for(var j = 0; j < enemies.length; j++) {
+          enemy = enemies[j];
+          projectile = projList[i];
+          if (collisionToObject(enemy, projectile)) {
+            delProj = i;
+            doDelete = true;
+            // Passes enemy object, index in enemyList array, and projectile type for damage calculation
+            ENEMY.damageEnemy(enemy, j, projectile);
+          }
+        }
+      }
+      if (doDelete === true) {
+        deleteProjectile(delProj); 
+      }
+    }
+  }
+
+  function collisionToMegaman() {
+    if ((!MEGAMAN.gameOver) && (projList.length > 0)) {
+      var doDelete = false;
+      var delProj;
+      var mm = MEGAMAN;
+      for(var i = 0; i < projList.length; i ++) {
+        projectile = projList[i];
+        if (collisionToObject(mm, projectile)) {
+          delProj = i;
+          doDelete = true;
+          MEGAMAN.damageMegaman();
+        }
+      }
+      if (doDelete === true) {
+        deleteProjectile(delProj); 
+      }
+    }
+  }
+
+  function collisionToObject(object, projectile) {
     if  (
-      (((projectile.getBottomY() >= platform.getTopY())  &&   (projectile.getBottomY() <= platform.getBottomY()))   ||  
-        ((projectile.getTopY() <= platform.getBottomY())    &&  (projectile.getTopY() >= platform.getTopY())))  &&   
-      (((projectile.getLeftX() >= platform.getLeftX())  &&  (projectile.getLeftX() <= platform.getRightX()))  ||  
-        ((projectile.getRightX() >= platform.getLeftX())   &&  (projectile.getRightX() <= platform.getRightX())))
+      (((projectile.getBottomY() >= object.getTopY())  &&   (projectile.getBottomY() <= object.getBottomY()))   ||  
+        ((projectile.getTopY() <= object.getBottomY())    &&  (projectile.getTopY() >= object.getTopY())))  &&   
+      (((projectile.getLeftX() >= object.getLeftX())  &&  (projectile.getLeftX() <= object.getRightX()))  ||  
+        ((projectile.getRightX() >= object.getLeftX())   &&  (projectile.getRightX() <= object.getRightX())))
         )
     {
-      console.log('its true');
       return true;
     } else {
       return false;
     }
   }
 
-  // function collisionToPlatformRight(platform, projectile) {
-  //   if ((projectile.getLeftX() - platform.getRightX() > -21)  && ((projectile.getLeftX() - platform.getRightX()) < 21)
-  //       && (((platform.getTopY() >= projectile.getTopY() && platform.getBottomY() <= projectile.getBottomY())
-  //           ||  (platform.getBottomY() >= projectile.getTopY() && platform.getTopY() <= projectile.getBottomY())) 
-  //           || (platform.getBottomY() <= projectile.getTopY() && platform.getTopY() >= projectile.getBottomY())
-  //           || (platform.getBottomY() <= projectile.getTopY() && platform.getTopY() >= projectile.getBottomY()) ))  {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
   function deleteProjectile(i) {
- //   console.log('projList before: ' + projList.length);
- //   console.log('i = ' + i);
     projList.splice(i, 1);
- //   console.log('projList after: ' + projList.length);
   }
 
   return exports;

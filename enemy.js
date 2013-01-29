@@ -27,6 +27,7 @@ var ENEMY = (function() {
 	    };
 	}
 
+  // Enemy that paces on platform
   function Walker(xPos, yPos, left, leftLimit, rightLimit) {
     this.xPos = xPos;
     this.yPos = yPos;
@@ -138,7 +139,7 @@ var ENEMY = (function() {
       }
   }
 
-
+  // Enemy does not move, shoots projectile's on a timer
   function Turret(xPos, yPos, left) {
     this.xPos = xPos;
     this.yPos = yPos;
@@ -181,7 +182,7 @@ var ENEMY = (function() {
       }
   }
 
-
+  // Enemy that flies towards megaman and ignores platform collision
   function Flyer(xPos, yPos) {
     this.xPos = xPos;
     this.yPos = yPos;
@@ -211,6 +212,7 @@ var ENEMY = (function() {
       var mmY = MEGAMAN.getTopY();
       var mmX = MEGAMAN.getCenterX();
 
+        // AI for walker to follow megaman
         if (mmY > this.yPos) 
           this.yPos = ((this.yPos + 5) > mmY) ? mmY : this.yPos + .5;
         else
@@ -235,8 +237,12 @@ var ENEMY = (function() {
     if(firstRun === true) {
       exports.enemyList.push(new Flyer(300, 300));
       exports.enemyList.push(new Turret(200, 400, true));
-      exports.enemyList.push(new Turret(20, 550, false));
-      exports.enemyList.push(new Walker(100, 100, false, 00, 350));
+      exports.enemyList.push(new Turret(20, 500, false));
+      exports.enemyList.push(new Turret(300, 300, false));
+      //exports.enemyList.push(new Turret(400, 300, false));
+      exports.enemyList.push(new Walker(100, 100, false, 00, 350))
+      exports.enemyList.push(new Walker(300, 400, false, 00, 350));
+      exports.enemyList.push(new Walker(100, 400, false, 00, 350));
       firstRun = false;
     }
     for (var i = 0; i < exports.enemyList.length; i++) {
@@ -245,6 +251,19 @@ var ENEMY = (function() {
       e.draw();
     }
 	}
+
+  exports.damageEnemy = function(enemy, index, projectile) {
+    // Makes sure projectile is from megaman
+    if (!projectile.enemy) {
+      // Charged shot does more damage
+      projectile.charged ? enemy.health -= 10 : enemy.health -= 5;
+    }
+    // Enemy has died, remove from enemyList array
+    if(enemy.health <= 0) {
+      exports.enemyList.splice(index, 1);
+    }
+  }
+
 
 	return exports;
 }());
