@@ -117,7 +117,9 @@ var PROJECTILE = (function() {
           projectile = projList[i];
           if (collisionToObject(enemy, projectile)) {
             delProj = i;
-            doDelete = true;
+            if (projectile.enemy === false) {
+              doDelete = true;
+            }
             // Passes enemy object, index in enemyList array, and projectile type for damage calculation
             ENEMY.damageEnemy(enemy, j, projectile);
           }
@@ -138,7 +140,9 @@ var PROJECTILE = (function() {
         projectile = projList[i];
         if (collisionToObject(mm, projectile)) {
           delProj = i;
-          doDelete = true;
+          if (projectile.enemy === true) {
+            doDelete = true;
+          }
           MEGAMAN.damageMegaman(projectile);
         }
       }

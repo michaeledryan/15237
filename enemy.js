@@ -239,7 +239,7 @@ var ENEMY = (function() {
       exports.enemyList.push(new Turret(200, 400, true));
       exports.enemyList.push(new Turret(20, 500, false));
       exports.enemyList.push(new Turret(300, 300, false));
-      //exports.enemyList.push(new Turret(400, 300, false));
+      exports.enemyList.push(new Turret(400, 300, false));
       exports.enemyList.push(new Walker(100, 100, false, 00, 350))
       exports.enemyList.push(new Walker(300, 400, false, 00, 350));
       exports.enemyList.push(new Walker(100, 400, false, 00, 350));
@@ -254,7 +254,7 @@ var ENEMY = (function() {
 
   exports.damageEnemy = function(enemy, index, projectile) {
     // Makes sure projectile is from megaman
-    if (projectile.enemy == false) {
+    if (projectile.enemy === false) {
       // Charged shot does more damage
       projectile.charged ? enemy.health -= 10 : enemy.health -= 5;
     }
