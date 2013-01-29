@@ -260,7 +260,7 @@ var ENEMY = (function() {
      for(var i = 0; i < exports.enemyList.length; i++) {
        enemy = exports.enemyList[i];
        if (PROJECTILE.collisionToObject(mm, enemy)) {
-         MEGAMAN.damageMegamanTimer();
+         MEGAMAN.damageMegamanRamming();
        }
      }
    }

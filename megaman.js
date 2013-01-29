@@ -30,6 +30,7 @@ var MEGAMAN = (function() {
       moving = false,
       health = 16,
       charger = 0;
+      invincible = 0;
       keys = {};
       const chargeX = 354, chargeY = 407,
       chargeFrameX = 16, chargeFrameY = 14;
@@ -176,6 +177,11 @@ var MEGAMAN = (function() {
       }  
 
       doDraw();
+    }
+
+    //decrement invincible for megaman 
+    if(invincible !== 0) {
+      invincible--;
     }
   }
   
@@ -338,17 +344,29 @@ var MEGAMAN = (function() {
   exports.damageMegaman = function(projectile) {
     console.log(projectile.enemy);
     if (projectile.enemy === true) {
-      health -= 5;
+      health -= 4;
       console.log('Megeman got hit, health: ' + health);
     }
     if (health <= 0) {
-      gameOver = true;
+      exports.gameOver = true;
     }
-  }
+    console.log("Game over: " + exports.gameOver);
 
-  exports.damageMegamanTimer = function() {
+  }
+  //
+  exports.damageMegamanRamming = function() {
    // timer logic
-   console.log("ow");
+   // invincible gets decremented in drawmegaman() above
+   if(invincible === 0) {
+    health -= 2;
+    console.log('Megeman got hit, health: ' + health);
+    if (health <= 0) {
+      exports.gameOver = true;
+    }
+    console.log("Game over: " + exports.gameOver);
+    invincible = 20;
+   }
+
  }
 
 
