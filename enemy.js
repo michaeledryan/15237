@@ -45,7 +45,7 @@ var ENEMY = (function() {
      */
 
     this.move = function() {
-
+      enemyCollisionToMegaman();
       if (this.left && this.xPos >= leftLimit)
         this.xPos = (this.xPos - 2 === leftLimit) ? leftLimit : this.xPos - 2;
       else if (!(this.left) && this.xPos + this.width <= rightLimit)
@@ -206,6 +206,7 @@ var ENEMY = (function() {
       var mmY = MEGAMAN.getTopY();
       var mmX = MEGAMAN.getCenterX();
 
+      enemyCollisionToMegaman();
         if (mmY > this.yPos) 
           this.yPos = ((this.yPos + 5) > mmY) ? mmY : this.yPos + .5;
         else
@@ -252,6 +253,18 @@ var ENEMY = (function() {
       exports.enemyList.splice(index, 1);
     }
   }
+
+  function enemyCollisionToMegaman() {
+    if ((!MEGAMAN.gameOver) && (exports.enemyList.length > 0)) {
+     var mm = MEGAMAN;
+     for(var i = 0; i < exports.enemyList.length; i++) {
+       enemy = exports.enemyList[i];
+       if (PROJECTILE.collisionToObject(mm, enemy)) {
+         MEGAMAN.damageMegamanTimer();
+       }
+     }
+   }
+ }
 
 
 	return exports;

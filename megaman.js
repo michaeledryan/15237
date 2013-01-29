@@ -346,6 +346,11 @@ var MEGAMAN = (function() {
     }
   }
 
+  exports.damageMegamanTimer = function() {
+   // timer logic
+   console.log("ow");
+ }
+
 
   return exports;
 }());

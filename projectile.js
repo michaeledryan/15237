@@ -97,7 +97,7 @@ var PROJECTILE = (function() {
         for(var j = 0; j < platforms.length; j++) {
           platform = platforms[j];
           projectile = projList[i];
-          if (collisionToObject(platform, projectile)) {
+          if (exports.collisionToObject(platform, projectile)) {
             delProj = i;
             doDelete = true;
           }
@@ -120,7 +120,7 @@ var PROJECTILE = (function() {
         for(var j = 0; j < enemies.length; j++) {
           enemy = enemies[j];
           projectile = projList[i];
-          if (collisionToObject(enemy, projectile)) {
+          if (exports.collisionToObject(enemy, projectile)) {
             delProj = i;
             if (projectile.enemy === false) {
               doDelete = true;
@@ -143,7 +143,7 @@ var PROJECTILE = (function() {
       var mm = MEGAMAN;
       for(var i = 0; i < projList.length; i ++) {
         projectile = projList[i];
-        if (collisionToObject(mm, projectile)) {
+        if (exports.collisionToObject(mm, projectile)) {
           delProj = i;
           if (projectile.enemy === true) {
             doDelete = true;
@@ -157,7 +157,7 @@ var PROJECTILE = (function() {
     }
   }
 
-  function collisionToObject(object, projectile) {
+  exports.collisionToObject = function(object, projectile) {
     if  (
       (((projectile.getBottomY() >= object.getTopY())  &&   (projectile.getBottomY() <= object.getBottomY()))   ||  
         ((projectile.getTopY() <= object.getBottomY())    &&  (projectile.getTopY() >= object.getTopY())))  &&   
