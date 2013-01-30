@@ -6,18 +6,25 @@ Marco Talabacu  mtalabac
 
 This game is an adaptation of the NES classic Mega Man that showcases the ideas covered in week 1.
 
-Objective: Get to the end of each level, defeating enemies and avoiding hazards.
+Objective: Get to the end of each level (marked by green door), defeating various enemies and avoiding hazards.
 
 Controls:
 
-Z: Shoot the Mega Buster. Hold to charge and release a powerful shot.
+Z: Shoot the Mega Buster. Hold to charge and release a more powerful shot.
 X: Jump.
+
+Cheat Codes:
+
+N: Skip to next level.
+B: Go to previous level.
 
 
 Week 1 Ideas:
 
 The Javascript Canvas:
 
-The entire game is drawn and played on a canvas. Mega man, all projectiles, and enemies are drawn with sprite-based animations. Keypresses are watched for user input, and the game's main engine functionality is called periodically with setInterval.
+The entire game is drawn and played on a canvas. Mega man, all projectiles, and enemies are drawn with sprite-based animations. Keypresses are watched using event listeners for user input, and the game's main engine functionality is called periodically with setInterval.
 
-Object-oriented design is used in almost all aspects of the game, as functions are called to check collisions between mega man, platforms, projectiles, and enemies.
+Object-oriented design is used in almost all aspects of the game, as functions are called to check collisions between mega man, platforms, projectiles, and enemies. 
+
+Our code is broken up into psuedo-modules using the idea of javascript closures. This allowed us to create namespaces for the different objects and separated the code into modular pieces for easier development and debugging. The closures also allowed us to store environmental variables within the 'modules' that could be shared between files.
