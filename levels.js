@@ -21,6 +21,9 @@ var LEVELS = (function() {
         case 2:
             return new Exit(760, 80, 60);
             break;
+        case 3:
+          return new Exit(760, 80, 60);
+          break;
     }
     
   }
@@ -51,10 +54,10 @@ var LEVELS = (function() {
         result.push(new PLATFORM.Platform(180, 180, 160, 40));
 
         //*************Divider*********************
-        result.push(new PLATFORM.Platform(440, 200, 80, 400));
+        result.push(new PLATFORM.Platform(440, 240, 80, 360));
 
         //*************Right Side******************
-        result.push(new PLATFORM.Platform(520, 200, 120, 40));
+        result.push(new PLATFORM.Platform(440, 200, 200, 40));
         result.push(new PLATFORM.Platform(640, 300, 120, 40));
         result.push(new PLATFORM.Platform(520, 400, 120, 40));
         result.push(new PLATFORM.Platform(640, 500, 120, 40));
@@ -64,6 +67,7 @@ var LEVELS = (function() {
         result.push(new PLATFORM.Platform(0, 0, 800, 80));
         result.push(new PLATFORM.Platform(0, 80, 40, 440));
         result.push(new PLATFORM.Platform(760, 180, 40, 460));
+        result.push(new PLATFORM.Platform(-40, 520, 40, 80));
 
         //***************Row 1*****************
         result.push(new PLATFORM.Platform(100, 560, 80, 40));
@@ -100,7 +104,19 @@ var LEVELS = (function() {
 
         break;
       case 3:
+        //***************Border****************
+        result.push(new PLATFORM.Platform(0, 0, 800, 80));
+        result.push(new PLATFORM.Platform(0, 80, 40, 440));
+        result.push(new PLATFORM.Platform(760, 180, 40, 460));
+        result.push(new PLATFORM.Platform(-40, 520, 40, 80));
 
+        //      3 step
+        result.push(new PLATFORM.Platform(260, 560, 180, 40));
+        result.push(new PLATFORM.Platform(320, 520, 120, 40));
+        result.push(new PLATFORM.Platform(380, 480, 60, 40));
+
+        // pit fall
+        
 
         break;
     }
@@ -144,14 +160,14 @@ var LEVELS = (function() {
         result.push(new ENEMY.Turret(463, 405, false, 30));
         result.push(new ENEMY.Turret(338, 340, false, 30));
         result.push(new ENEMY.Turret(238, 305, false, 30));
-        result.push(new ENEMY.Turret(38, 385, false, 30));
-        result.push(new ENEMY.Turret(38, 416, false, 30));
-        result.push(new ENEMY.Turret(38, 447, false, 30));
+        result.push(new ENEMY.Turret(38, 345, false, 30));
+        result.push(new ENEMY.Turret(38, 376, false, 30));
+        result.push(new ENEMY.Turret(38, 407, false, 30));
         result.push(new ENEMY.Turret(179, 185, true, 30));
         result.push(new ENEMY.Turret(38, 125, false, 30));
         result.push(new ENEMY.Turret(699, 285, true, 30));
         result.push(new ENEMY.Turret(508, 170, false, 30));
-        result.push(new ENEMY.Turret(659, 145, true, 30));
+        result.push(new ENEMY.Turret(508, 135, false, 30));
         result.push(new ENEMY.Turret(508, 100, false, 30));
         result.push(new ENEMY.Turret(448, 145, true, 30));
 
@@ -194,6 +210,11 @@ var LEVELS = (function() {
         result.X = 0;
         result.Y = 555;
         break;
+      case 3:
+        result.X = 0;
+        result.Y = 555;
+        break;
+
     }
 
     return result;
