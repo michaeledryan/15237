@@ -56,6 +56,7 @@ var MEGAMAN = (function() {
     if (((exports.getCenterY() > exit.y)) && (exports.getCenterY() < (exit.y + exit.height)) && 
         ((exports.getCenterX() - exit.x + 40)) < 40 && ((exports.getCenterX() - exit.x) > -10)) {
         calculateScore();
+        playWAV();
         inExit = true;
     }
     else
@@ -425,6 +426,11 @@ var MEGAMAN = (function() {
     exports.score += (mmLives * 500);
     // reward higher score for more time remaining
     exports.score += Math.floor(timer/30);
+  }
+
+  // YEAH BUDDAYYYYYY!!!
+  function playWAV() {
+    document.getElementById("wav").play();
   }
 
   return exports;
