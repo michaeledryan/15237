@@ -113,7 +113,6 @@ var ENEMY = (function() {
           this.spriteX += 53;
           if (this.spriteX >= 530) 
             this.spriteX = 106;
-//          console.log("afasdf");
           ctx.drawImage(image, this.spriteX, this.spriteY, this.width, this.height, 
                     this.xPos, this.yPos, this.width, this.height);
         }
@@ -224,7 +223,7 @@ var ENEMY = (function() {
           this.xPos -= .5;
     }
 
-        // Animates the helicopter blades.
+    // Animates the helicopter blades.
     this.draw = function() {
       ctx.drawImage(image, this.spriteX, this.spriteY, this.width, this.height, 
                     this.xPos, this.yPos, this.width, this.height);
@@ -236,9 +235,7 @@ var ENEMY = (function() {
   }
 
   exports.setEnemyList = function(newList){
-    console.log(newList);
     exports.enemyList = newList;
-    console.log(exports.enemyList);
   }
 
 	exports.drawEnemies = function() {
