@@ -10,7 +10,7 @@ const SCREEN_WIDTH  = 800,
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 var currentLevel = 1;
-var lives = 2;
+var lives = 3;
 
 canvas.addEventListener('keydown', MEGAMAN.keyDownListener, false);
 canvas.addEventListener('keyup', MEGAMAN.keyUpListener, false);
@@ -37,13 +37,14 @@ function loop() {
     PLATFORM.drawPlatforms();
     ENEMY.drawEnemies();
     PROJECTILE.moveProjectiles();
-    MEGAMAN.drawHealth();
+    MEGAMAN.drawHealth(lives, currentLevel);
     MEGAMAN.doExit();
     if (MEGAMAN.gameOver) {
       if (lives){
-        alert("You died! " + --lives + " lives left!");
+        //alert("You died! " + --lives + " lives left!");
         loadLevel(currentLevel);
         MEGAMAN.gameOver = false;
+        lives--;
         return;
       }
       else {
@@ -56,7 +57,6 @@ function loop() {
         return;
       }
     }
-    console.log("did i win");
     if (nextLevel = MEGAMAN.checkFinishedLevel()){
       currentLevel += nextLevel - 2;
       loadLevel(currentLevel);

@@ -15,15 +15,17 @@ var LEVELS = (function() {
   exports.getExit = function(level) {
     switch(level) {
 
-        case 1:
-            return new Exit(760, 540, 60);
-            break;
-        case 2:
-            return new Exit(760, 80, 60);
-            break;
-        case 3:
-          return new Exit(760, 80, 60);
-          break;
+      case 1:
+        return new Exit(760, 540, 60);
+        break;
+
+      case 2:
+        return new Exit(760, 80, 60);
+        break;
+
+      case 3:
+        return new Exit(760, 80, 60);
+        break;
     }
     
   }
@@ -98,8 +100,8 @@ var LEVELS = (function() {
         //End platforms
         result.push(new PLATFORM.Platform(720, 280, 40, 40));
         result.push(new PLATFORM.Platform(550, 220, 100, 40));
-        result.push(new PLATFORM.Platform(510, 200, 40, 40));
-        result.push(new PLATFORM.Platform(470, 80, 40, 120));
+        result.push(new PLATFORM.Platform(510, 210, 40, 40));
+        result.push(new PLATFORM.Platform(470, 90, 40, 120));
         result.push(new PLATFORM.Platform(680, 140, 120, 40));
 
         break;
@@ -117,6 +119,7 @@ var LEVELS = (function() {
 
         // pit fall
         
+
 
         break;
     }
@@ -139,9 +142,9 @@ var LEVELS = (function() {
         result.push(new ENEMY.Turret(419, 249, true, 30));
         result.push(new ENEMY.Turret(739, 80, true, 30));
         result.push(new ENEMY.Turret(38, 180, false, 30));
-        result.push(new ENEMY.Turret(518, 249, false, 30));
-        result.push(new ENEMY.Turret(518, 449, false, 30));
-        result.push(new ENEMY.Turret(739, 349, true, 30));
+        result.push(new ENEMY.Turret(518, 252, false, 30));
+        result.push(new ENEMY.Turret(518, 452, false, 30));
+        result.push(new ENEMY.Turret(739, 352, true, 30));
 
 
 
@@ -151,7 +154,12 @@ var LEVELS = (function() {
         result.push(new ENEMY.Walker(440, 149, false, 440, 640));
         result.push(new ENEMY.Walker(520, 549, false, 520, 760));
 
-        
+        result.push(new ENEMY.Flyer(270, 354, false));
+        result.push(new ENEMY.Flyer(120, 354, false));
+        result.push(new ENEMY.Flyer(180, 129, false));
+        result.push(new ENEMY.Flyer(440, 149, false));
+        result.push(new ENEMY.Flyer(520, 549, false));
+            
 
         break;
 
@@ -214,7 +222,6 @@ var LEVELS = (function() {
         result.X = 0;
         result.Y = 555;
         break;
-
     }
 
     return result;

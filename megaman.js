@@ -8,33 +8,23 @@ var MEGAMAN = (function() {
   var heatlhImage = new Image();
       heatlhImage.src = "sprites/health.png";
 
-  var exit, atExit = false,
-      jump = 0,
-      up = false,
-      top = 0,
-      mmX, mmY,
-      xpos = 0,
+  var exit, atExit = false, jump, up,
+      top, mmX, mmY, left, shot, keys = {}, 
+      shot = 0, charge = 0, moving = false, health = 1, 
+      charger = 0, invincible = 0;
+
+  var xpos = 0,
       ypos = 200,
-      index = 0,
-      frameX = 50,
-      frameY = 45,
+      index = 0, 
       jumpHeight = 90,
-      left = false,
-      shot = false,
-      keys = {},
       vert = 0,
       headVert = 0,
       leftHorz = 0,
-      rightHorz = 0,
-      shot = 0,
-      charge = 0,
-      moving = false,
-      health = 1,
-      charger = 0;
-      invincible = 0;
-      keys = {};
+      rightHorz = 0;
+
       const chargeX = 354, chargeY = 407,
-      chargeFrameX = 16, chargeFrameY = 14;
+      chargeFrameX = 16, chargeFrameY = 14,
+      frameX = 50,frameY = 45;
 
   exports.keyDownListener = function(event) {
     keys[event.keyCode] = true;
@@ -155,6 +145,9 @@ var MEGAMAN = (function() {
 
     if (!(keys["37"] || keys["39"]))
       moving = false;
+    if (keys["72"]) {
+      health = 16;
+    }
 }
 
   function drawMegaManMoving(){
@@ -257,7 +250,7 @@ var MEGAMAN = (function() {
   }
 
   exports.getBottomY = function() {
-    return mmY + frameY;
+    return mmY + frameY - 2;
   }
 
   exports.getLeftX = function() {
@@ -269,7 +262,7 @@ var MEGAMAN = (function() {
   }
 
   exports.getCenterX = function() {
-    return exports.getLeftX() + ((exports.getRightX() - exports.getLeftX()) / 2);
+    return exports.getLeftX() + frameX/2;
   }
 
   exports.getCenterY = function() {
@@ -281,10 +274,12 @@ var MEGAMAN = (function() {
     if (PLATFORM.platformList !== undefined) {
       for (var i = 0; i < PLATFORM.platformList.length; i++) {
         var p = PLATFORM.platformList[i];
-        if ((exports.getBottomY() - p.getTopY() > -3) && ((exports.getBottomY() - p.getTopY()) < 5)
-            && (exports.getCenterX() - p.getLeftX() >= -11) && (exports.getCenterX() - p.getRightX() < 11)) {
-          vert = p.getTopY();
-          return true;
+        if (p.timer === undefined || (p.timer > 0)) {
+          if ((exports.getBottomY() - p.getTopY() > -3) && ((exports.getBottomY() - p.getTopY()) < 5)
+              && (exports.getCenterX() - p.getLeftX() >= -11) && (exports.getCenterX() - p.getRightX() < 11)) {
+            vert = p.getTopY();
+            return true;
+          }
         }
       }
       jump = 2;
@@ -297,10 +292,12 @@ var MEGAMAN = (function() {
     if (PLATFORM.platformList !== undefined) {
       for (var i = 0; i < PLATFORM.platformList.length; i++) {
         var p = PLATFORM.platformList[i];
-        if ((exports.getTopY() - p.getBottomY() > -3) && ((exports.getTopY() - p.getBottomY()) < 5)
-            && (exports.getCenterX() - p.getLeftX() >= -11) && (exports.getCenterX() - p.getRightX() < 11)) {
-          headVert = p.getBottomY();
-          return true;
+        if (p.timer === undefined || (p.timer > 0)) {
+          if ((exports.getTopY() - p.getBottomY() > -3) && ((exports.getTopY() - p.getBottomY()) < 5)
+              && (exports.getCenterX() - p.getLeftX() >= -11) && (exports.getCenterX() - p.getRightX() < 11)) {
+            headVert = p.getBottomY();
+            return true;
+          }
         }
       }
       return false;
@@ -312,13 +309,15 @@ var MEGAMAN = (function() {
     if (PLATFORM.platformList !== undefined) {
       for (var i = 0; i < PLATFORM.platformList.length; i++) {
         var p = PLATFORM.platformList[i];
-        if ((exports.getRightX() - p.getLeftX() > -16)  && ((exports.getRightX() - p.getLeftX()) < 16)
-            && (((p.getTopY() >= exports.getTopY() && p.getBottomY() <= exports.getBottomY())
-                ||  (p.getBottomY() >= exports.getTopY() && p.getTopY() <= exports.getBottomY())) 
-                || (p.getBottomY() <= exports.getTopY() && p.getTopY() >= exports.getBottomY())
-                || (p.getBottomY() <= exports.getTopY() && p.getTopY() >= exports.getBottomY()) ))  {
-          leftHorz = p.getLeftX();
-          return true;
+        if (p.timer === undefined || (p.timer > 0)){
+          if ((exports.getRightX() - p.getLeftX() > -16)  && ((exports.getRightX() - p.getLeftX()) < 16)
+              && (((p.getTopY() >= exports.getTopY() && p.getBottomY() <= exports.getBottomY())
+                  ||  (p.getBottomY() >= exports.getTopY() && p.getTopY() <= exports.getBottomY())) 
+                  || (p.getBottomY() <= exports.getTopY() && p.getTopY() >= exports.getBottomY())
+                  || (p.getBottomY() <= exports.getTopY() && p.getTopY() >= exports.getBottomY()) ))  {
+            leftHorz = p.getLeftX();
+            return true;
+          }
         }
       }
       return false;
@@ -330,13 +329,15 @@ var MEGAMAN = (function() {
     if (PLATFORM.platformList !== undefined) {
       for (var i = 0; i < PLATFORM.platformList.length; i++) {
         var p = PLATFORM.platformList[i];
-        if ((exports.getLeftX() - p.getRightX() > -16)  && ((exports.getLeftX() - p.getRightX()) < 16)
-            && (((p.getTopY() >= exports.getTopY() && p.getBottomY() <= exports.getBottomY())
-                ||  (p.getBottomY() >= exports.getTopY() && p.getTopY() <= exports.getBottomY())) 
-                || (p.getBottomY() <= exports.getTopY() && p.getTopY() >= exports.getBottomY())
-                || (p.getBottomY() <= exports.getTopY() && p.getTopY() >= exports.getBottomY()) ))  {
-          rightHorz = p.getRightX();
-          return true;
+        if (p.timer === undefined || (p.timer > 0)) {
+          if ((exports.getLeftX() - p.getRightX() > -16)  && ((exports.getLeftX() - p.getRightX()) < 16)
+              && (((p.getTopY() >= exports.getTopY() && p.getBottomY() <= exports.getBottomY())
+                  ||  (p.getBottomY() >= exports.getTopY() && p.getTopY() <= exports.getBottomY())) 
+                  || (p.getBottomY() <= exports.getTopY() && p.getTopY() >= exports.getBottomY())
+                  || (p.getBottomY() <= exports.getTopY() && p.getTopY() >= exports.getBottomY()) ))  {
+            rightHorz = p.getRightX();
+            return true;
+          }
         }
       }
       return false;
@@ -360,12 +361,18 @@ var MEGAMAN = (function() {
       shot += 5;
   }
 
-  exports.drawHealth = function(){
+  exports.drawHealth = function(lives, level){
     var barX = 15;
     var barY = 44;
     ctx.drawImage(heatlhImage, 0, 0, 13, 51, 10, 10, 13, 51);
     for (var i = 0; i < health; i++)
       ctx.drawImage(heatlhImage, 0, 52, 5, 1, barX, barY - 2*i, 5, 1);
+    for (var i = 0; i < lives; i++) {
+      ctx.drawImage(image, 375, 427, 16, 17, barX + 40 + 20*i, barY - 10, 16, 17);
+    }
+    ctx.fillStyle = "white";
+    ctx.font = "normal 20px monospace";
+    ctx.fillText("Level: " + level, 690, 35);
   }
 
   exports.damageMegaman = function(projectile) {

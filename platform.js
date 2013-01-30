@@ -25,6 +25,36 @@ var PLATFORM = (function() {
     };
   }
 
+  exports.Flicker= function(xPos, yPos, timer, offset) {
+    this.xPos = xPos;
+    this.yPos = yPos;
+    this.width = 40;
+    this.height = 40;
+    this.timer = timer - offset;
+    this.topTimer = timer;
+    this.getTopY = function() {
+      return yPos;
+    };
+    this.getBottomY = function() {
+      return yPos + this.height;
+    };
+    this.getLeftX = function() {
+      return xPos;
+    };
+    this.getRightX = function() {
+      return xPos + this.width;
+    };
+
+    this.resetFlicker = function(){
+      if (!PROJECTILE.collisionToObject(MEGAMAN, this)){
+        if (this.timer-- <= -this.topTimer)
+          this.timer = this.topTimer;
+      }
+    }
+
+  }
+
+
 	function drawPlatform(p) {
     var y = p.getTopY();
     var x = p.getLeftX();
@@ -46,7 +76,6 @@ var PLATFORM = (function() {
       ctx.drawImage(image, 40, 20, frameSize, frameSize, x+i, y+j, frameSize, frameSize);
 
     }
-
     // Bottom Rows
     ctx.drawImage(image, 0, 40, frameSize, frameSize, x, y+j, frameSize, frameSize);
     for (var i = 20; i <= (p.getRightX() - p.getLeftX() - 40); i += 20){
@@ -54,6 +83,9 @@ var PLATFORM = (function() {
     }
     ctx.drawImage(image, 40, 40, frameSize, frameSize, x+i, y+j, frameSize, frameSize);
 
+    if (p.topTimer) {
+      p.timer--;
+    }
 
   }
 
@@ -65,7 +97,10 @@ var PLATFORM = (function() {
     for (var i = 0; i < exports.platformList.length; i++) {
       var p = exports.platformList[i];
       //ctx.fillStyle = "grey";
-      drawPlatform(p);
+      if (p.timer === undefined || (p.timer >0 ))
+        drawPlatform(p);
+      else
+        p.resetFlicker();
       //ctx.fillRect(p.xPos, p.yPos, p.width, p.height);
     }
   }
