@@ -17,6 +17,9 @@ Cheat Codes:
 
 N: Skip to next level.
 B: Go to previous level.
+R: Restart Current level.
+H: Refill your health.
+F (hold after jumping) : Jetpack (hold to jump infinitely high)
 
 
 Week 1 Ideas:
@@ -28,3 +31,35 @@ The entire game is drawn and played on a canvas. Mega man, all projectiles, and 
 Object-oriented design is used in almost all aspects of the game, as functions are called to check collisions between mega man, platforms, projectiles, and enemies. 
 
 Our code is broken up into psuedo-modules using the idea of javascript closures. This allowed us to create namespaces for the different objects and separated the code into modular pieces for easier development and debugging. The closures also allowed us to store environmental variables within the 'modules' that could be shared between files.
+
+
+Citations:
+
+Sprites, from Mega Man 7, Mega Man 8 and Mega Man X.
+
+Turret enemy and blast:
+http://www.sprites-inc.co.uk/files/X/X1/Enemy/old%20(up%20untill%20the%20rest%20are%20re-ripped)/mmm-mmxwallblast.gif
+
+Flying and Walking Enemies:
+http://www.spriters-resource.com/snes/mmx/enemies1.png
+
+Background:
+http://wallpaperbackgrounds.com/Content/wallpapers/video%20game/mega%20man/16803-50973.jpg
+
+Title Screen:
+http://www.bonus-level.com/Bonus_Level_Uploads/2010/11/nesessities_megamanii_title.jpg
+
+Buster Shots and Health Bar:
+http://spriters-resource.com/snes/mmx/weapons.png
+
+Mega Man:
+http://www.freewebs.com/rinicthefox/A%20Sprite%20Sheet%20of%20Bass,Megaman,Protoman,and%20sk8brder40.PNG
+
+Platforms:
+http://www.vgmaps.com/Atlas/SuperNES/MegaManVII-TurboMan.png
+
+Theme Song:
+http://www.anonpartyhard.com/loops/5/low/Megaman%202%20-%20Theme.mp3
+
+Ronnie Coleman:
+https://www.youtube.com/watch?v=TRcR-_nF84o

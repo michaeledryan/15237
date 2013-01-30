@@ -1,6 +1,18 @@
+/*
+
+Mega Man 237
+
+Josh Gerbasi    jgerbasi
+Michael Ryan    mer1
+Marco Talabacu  mtalabac
+
+*/
+
 var MEGAMAN = (function() {
   var exports = {};
   exports.gameOver = false;
+  exports.score = 0;
+      
   var image = new Image();
       image.src = "sprites/mm.png";
   var background = new Image();
@@ -8,10 +20,15 @@ var MEGAMAN = (function() {
   var heatlhImage = new Image();
       heatlhImage.src = "sprites/health.png";
 
-  var exit, atExit = false, jump, up,
+  var exit, atExit = false, jump, up, mmLives,
       top, mmX, mmY, left, shot, keys = {}, 
       shot = 0, charge = 0, moving = false, health = 1, 
       charger = 0, invincible = 0;
+
+  var exit, jump, up, timer,
+      top, mmX, mmY, left, shot, keys, 
+      shot, charge, moving, health, 
+      charger, invincible;
 
   var xpos = 0,
       ypos = 200,
@@ -20,8 +37,10 @@ var MEGAMAN = (function() {
       vert = 0,
       headVert = 0,
       leftHorz = 0,
+      atExit = false,
       rightHorz = 0;
 
+      exports.gameOver = false;
       const chargeX = 354, chargeY = 407,
       chargeFrameX = 16, chargeFrameY = 14,
       frameX = 50,frameY = 45;
@@ -39,20 +58,20 @@ var MEGAMAN = (function() {
 
   exports.setExit = function(newExit){
     exit = newExit;
-
   }
 
 
   exports.doExit = function(){
     exit.draw();
     if (((exports.getCenterY() > exit.y)) && (exports.getCenterY() < (exit.y + exit.height)) && 
-        ((exports.getCenterX() - exit.x + 40)) < 40 && ((exports.getCenterX() - exit.x) > -10))
-      inExit = true;
+        ((exports.getCenterX() - exit.x + 40)) < 40 && ((exports.getCenterX() - exit.x) > -10)) {
+        calculateScore();
+        playWAV();
+        inExit = true;
+    }
     else
       inExit = false;
   }
-
-
 
   exports.doGame = function() {
     exports.jumpMegaman();
@@ -76,7 +95,7 @@ var MEGAMAN = (function() {
     mmY = loc.Y;
     jump = 0, up = false, top = 0, left = false, shot = false, health = 16,
     keys = {}, shot = 0, charge = 0, moving = false, charger = 0;
-    invincible = 0;
+    invincible = 0; timer = 30000;
   }
 
   function doDraw(){
@@ -88,13 +107,18 @@ var MEGAMAN = (function() {
         ctx.drawImage(image, chargeX, chargeY + (!!left ? chargeFrameY : 0),
                       chargeFrameX, chargeFrameY, mmX + (left ? -5 : frameX *3/4),
                       (mmY + (frameY / 3)) - (!!jump ? 10 : 0), chargeFrameX, chargeFrameY);
+      }
     }
-    }
-
-
   }
 
   exports.moveMegaMan = function() {
+    timer--;
+
+    if (keys["70"]) {
+      jumpHeight = 10000;
+    }
+    else 
+      jumpHeight = 90;
     // move left
     if (keys["37"]) {
       left = true;
@@ -354,7 +378,7 @@ var MEGAMAN = (function() {
     if (shot > 30)
       chargeShot();
     else if (shot == 0) {
-      PROJECTILE.makeProjectile(mmX + (left ? 0 : frameX), (mmY + (frameY / (jump ? 3 : 2))), left, false, false);
+      PROJECTILE.makeProjectile(mmX + (left ? 0 : frameX), (mmY + (frameY / (jump ? 3 : 2.1))), left, false, false);
       shot += 5;
     }
     else 
@@ -364,15 +388,21 @@ var MEGAMAN = (function() {
   exports.drawHealth = function(lives, level){
     var barX = 15;
     var barY = 44;
+    mmLives = lives;
     ctx.drawImage(heatlhImage, 0, 0, 13, 51, 10, 10, 13, 51);
     for (var i = 0; i < health; i++)
       ctx.drawImage(heatlhImage, 0, 52, 5, 1, barX, barY - 2*i, 5, 1);
+
     for (var i = 0; i < lives; i++) {
-      ctx.drawImage(image, 375, 427, 16, 17, barX + 40 + 20*i, barY - 10, 16, 17);
+      ctx.drawImage(image, 375, 427, 16, 17, barX + 90 + 20*i, barY - 30, 16, 17);
     }
     ctx.fillStyle = "white";
     ctx.font = "normal 20px monospace";
-    ctx.fillText("Level: " + level, 690, 35);
+
+    ctx.fillText("Level: " + level, barX + 10, 60);
+    ctx.fillText("Lives: " , barX + 10, 30);
+    ctx.fillText("Time: " + Math.floor(timer/30), 660, 30);
+    ctx.fillText("Score:" + exports.score, 660, 60);
   }
 
   exports.damageMegaman = function(projectile) {
@@ -397,9 +427,21 @@ var MEGAMAN = (function() {
     }
     invincible = 20;
    }
+  }
 
- }
+  function calculateScore() {
+    // reward higher score for more health remaining
+    exports.score += (health * 100);
+    // reward higher score for more lives remaining
+    exports.score += (mmLives * 500);
+    // reward higher score for more time remaining
+    exports.score += Math.floor(timer/30);
+  }
 
+  // YEAH BUDDAYYYYYY!!!
+  function playWAV() {
+    document.getElementById("wav").play();
+  }
 
   return exports;
 }());

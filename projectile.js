@@ -1,3 +1,13 @@
+/*
+
+Mega Man 237
+
+Josh Gerbasi    jgerbasi
+Michael Ryan    mer1
+Marco Talabacu  mtalabac
+
+*/
+
 var PROJECTILE = (function() {
 	var exports = {};
 	var projList = [];
@@ -158,6 +168,7 @@ var PROJECTILE = (function() {
 
   exports.collisionToObject = function(object, projectile) {
     if (projectile.charged !== undefined)
+      // Collision logic w/ range offsets for smoother animations
       return (((projectile.getBottomY() >= (object.getTopY() + 3))  &&   (projectile.getBottomY() <= (object.getBottomY() - 3))   ||  
         ((projectile.getTopY() <= (object.getBottomY() - 3))    &&  (projectile.getTopY() >= (object.getTopY() + 3))))  &&   
       (((projectile.getLeftX() >= (object.getLeftX() - 10))  &&  (projectile.getLeftX() <= (object.getRightX() + 10)))  ||  

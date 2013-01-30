@@ -1,3 +1,13 @@
+/*
+
+Mega Man 237
+
+Josh Gerbasi    jgerbasi
+Michael Ryan    mer1
+Marco Talabacu  mtalabac
+
+*/
+
 var ENEMY = (function() {
 	var exports = {};
   var firstRun = true;
@@ -113,7 +123,6 @@ var ENEMY = (function() {
           this.spriteX += 53;
           if (this.spriteX >= 530) 
             this.spriteX = 106;
-//          console.log("afasdf");
           ctx.drawImage(image, this.spriteX, this.spriteY, this.width, this.height, 
                     this.xPos, this.yPos, this.width, this.height);
         }
@@ -224,7 +233,7 @@ var ENEMY = (function() {
           this.xPos -= .5;
     }
 
-        // Animates the helicopter blades.
+    // Animates the helicopter blades.
     this.draw = function() {
       ctx.drawImage(image, this.spriteX, this.spriteY, this.width, this.height, 
                     this.xPos, this.yPos, this.width, this.height);
@@ -236,9 +245,7 @@ var ENEMY = (function() {
   }
 
   exports.setEnemyList = function(newList){
-    console.log(newList);
     exports.enemyList = newList;
-    console.log(exports.enemyList);
   }
 
 	exports.drawEnemies = function() {
@@ -257,6 +264,7 @@ var ENEMY = (function() {
     }
     // Enemy has died, remove from enemyList array
     if(enemy.health <= 0) {
+      MEGAMAN.score += 100;
       exports.enemyList.splice(index, 1);
     }
   }

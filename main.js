@@ -1,8 +1,13 @@
 /*
- * main.js.
- * Main file for Mega Man. Calls the game loop, the functionality of which 
- * is split between several files. Also plays the game music.
- */
+
+Mega Man 237
+
+Josh Gerbasi    jgerbasi
+Michael Ryan    mer1
+Marco Talabacu  mtalabac
+
+*/
+
 const SCREEN_WIDTH  = 800,
       SCREEN_HEIGHT = 600;
 
@@ -10,7 +15,7 @@ const SCREEN_WIDTH  = 800,
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 var currentLevel = 1;
-var lives = 3;
+var lives = 5;
 
 canvas.addEventListener('keydown', MEGAMAN.keyDownListener, false);
 canvas.addEventListener('keyup', MEGAMAN.keyUpListener, false);
@@ -41,7 +46,6 @@ function loop() {
     MEGAMAN.doExit();
     if (MEGAMAN.gameOver) {
       if (lives){
-        //alert("You died! " + --lives + " lives left!");
         loadLevel(currentLevel);
         MEGAMAN.gameOver = false;
         lives--;
@@ -52,18 +56,28 @@ function loop() {
         currentLevel = 1;
         loadLevel(currentLevel);
         MEGAMAN.gameOver = false;
-        lives = 3;
-        TITLE.setTitle();
+        lives = 5;
+        TITLE.setTitle(0);
         return;
       }
     }
     if (nextLevel = MEGAMAN.checkFinishedLevel()){
-      currentLevel += nextLevel - 2;
-      loadLevel(currentLevel);
+      if (((currentLevel + nextLevel - 2) > 0) 
+        &&  ((currentLevel + nextLevel - 2) < 5)) {
+        currentLevel += nextLevel - 2;
+        if (currentLevel === 4) {
+          currentLevel = 1;
+          loadLevel(currentLevel);
+          MEGAMAN.gameOver = false;
+          TITLE.setTitle(MEGAMAN.score);
+          return;
+        }
+        loadLevel(currentLevel);
+      }
     }
   }
 }
 
-//playMP3();
+playMP3();
 loadLevel(currentLevel);
 window.setInterval(loop, 1000/30);
