@@ -24,7 +24,7 @@ var LEVELS = (function() {
         break;
 
       case 3:
-        return new Exit(760, 80, 60);
+        return new Exit(760, 80, 80);
         break;
     }
     
@@ -109,16 +109,51 @@ var LEVELS = (function() {
         //***************Border****************
         result.push(new PLATFORM.Platform(0, 0, 800, 80));
         result.push(new PLATFORM.Platform(0, 80, 40, 440));
-        result.push(new PLATFORM.Platform(760, 180, 40, 460));
+        result.push(new PLATFORM.Platform(760, 160, 40, 480));
         result.push(new PLATFORM.Platform(-40, 520, 40, 80));
 
-        //      3 step
-        result.push(new PLATFORM.Platform(260, 560, 180, 40));
-        result.push(new PLATFORM.Platform(320, 520, 120, 40));
-        result.push(new PLATFORM.Platform(380, 480, 60, 40));
+        //      5 step
+        result.push(new PLATFORM.Platform(140, 560, 220, 40));
+        result.push(new PLATFORM.Platform(180, 520, 180, 40));
+        result.push(new PLATFORM.Platform(240, 480, 120, 40));
+        result.push(new PLATFORM.Platform(300, 440, 60, 40));
+        result.push(new PLATFORM.Platform(360, 380, 40, 220));
 
         // pit fall
-        
+        result.push(new PLATFORM.Flicker(440, 440, 40, 30));
+        result.push(new PLATFORM.Flicker(600, 480, 40, 40));
+        result.push(new PLATFORM.Platform(720, 560, 40, 40));
+
+        // left step ups
+        result.push(new PLATFORM.Flicker(40, 400, 40, 40));
+        result.push(new PLATFORM.Flicker(80, 400, 40, 40));
+        result.push(new PLATFORM.Flicker(40, 360, 40, 30));
+
+        result.push(new PLATFORM.Flicker(40, 220, 40, 55));
+
+        //solid
+        result.push(new PLATFORM.Platform(120, 300, 120, 40));
+        result.push(new PLATFORM.Platform(240, 260, 40, 80));
+
+
+        // upper runway
+        result.push(new PLATFORM.Flicker(160, 180, 40, 55));
+        result.push(new PLATFORM.Flicker(200, 180, 40, 50));
+        result.push(new PLATFORM.Flicker(240, 180, 40, 45));
+        result.push(new PLATFORM.Flicker(280, 180, 40, 40));
+        result.push(new PLATFORM.Flicker(320, 180, 40, 35));
+        result.push(new PLATFORM.Flicker(360, 180, 40, 30));
+        result.push(new PLATFORM.Flicker(400, 180, 40, 25));
+        result.push(new PLATFORM.Flicker(440, 180, 40, 20));
+        result.push(new PLATFORM.Flicker(480, 180, 40, 15));
+        result.push(new PLATFORM.Flicker(520, 180, 40, 10));
+        result.push(new PLATFORM.Flicker(520, 180, 40, 5));
+
+
+        //scum flickers
+        result.push(new PLATFORM.Flicker(680, 80, 35, 5));
+        result.push(new PLATFORM.Flicker(680, 120, 35, 5));       
+
 
 
         break;
@@ -154,11 +189,11 @@ var LEVELS = (function() {
         result.push(new ENEMY.Walker(440, 149, false, 440, 640));
         result.push(new ENEMY.Walker(520, 549, false, 520, 760));
 
-        result.push(new ENEMY.Flyer(270, 354, false));
-        result.push(new ENEMY.Flyer(120, 354, false));
-        result.push(new ENEMY.Flyer(180, 129, false));
-        result.push(new ENEMY.Flyer(440, 149, false));
-        result.push(new ENEMY.Flyer(520, 549, false));
+        result.push(new ENEMY.Flyer(270, 354));
+        result.push(new ENEMY.Flyer(120, 354));
+        result.push(new ENEMY.Flyer(180, 129));
+        result.push(new ENEMY.Flyer(440, 149));
+        result.push(new ENEMY.Flyer(520, 549));
             
 
         break;
@@ -191,10 +226,33 @@ var LEVELS = (function() {
         result.push(new ENEMY.Walker(680, 89, false, 680, 800));
         result.push(new ENEMY.Walker(730, 89, false, 680, 800));
 
+        break;
 
+      case 3:
 
+        result.push(new ENEMY.Walker(400, 549, false, 400, 720));
+        result.push(new ENEMY.Walker(450, 549, false, 400, 720));
+        result.push(new ENEMY.Walker(500, 549, false, 400, 720));
+        result.push(new ENEMY.Walker(550, 549, false, 400, 720));
+        result.push(new ENEMY.Walker(600, 549, false, 400, 720));
+        result.push(new ENEMY.Walker(650, 549, false, 400, 720));
+        result.push(new ENEMY.Walker(120, 249, false, 120, 240));
+        result.push(new ENEMY.Walker(170, 249, false, 120, 240));
 
+        result.push(new ENEMY.Turret(38, 100, false, 30));
+        result.push(new ENEMY.Turret(38, 450, false, 30));
+        result.push(new ENEMY.Turret(38, 485, false, 30));
+        result.push(new ENEMY.Turret(339, 400, true, 30));
 
+        result.push(new ENEMY.Turret(739, 200, true, 30));
+        result.push(new ENEMY.Turret(739, 250, true, 30));
+        result.push(new ENEMY.Turret(739, 300, true, 30));
+        result.push(new ENEMY.Turret(739, 350, true, 30));
+        result.push(new ENEMY.Turret(739, 400, true, 30));
+
+        result.push(new ENEMY.Flyer(500, 300));
+        result.push(new ENEMY.Flyer(600, 300));
+        result.push(new ENEMY.Flyer(200, 400));
 
 
 
