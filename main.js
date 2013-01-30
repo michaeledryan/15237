@@ -58,8 +58,11 @@ function loop() {
       }
     }
     if (nextLevel = MEGAMAN.checkFinishedLevel()){
-      currentLevel += nextLevel - 2;
-      loadLevel(currentLevel);
+      if (((currentLevel + nextLevel - 2) > 0) 
+        &&  ((currentLevel + nextLevel - 2) < 4)) {
+        currentLevel += nextLevel - 2;
+        loadLevel(currentLevel);
+      }
     }
   }
 }

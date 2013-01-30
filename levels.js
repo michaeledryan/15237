@@ -26,6 +26,10 @@ var LEVELS = (function() {
       case 3:
         return new Exit(760, 80, 60);
         break;
+
+      default:
+        return new Exit(760, 540, 60);
+        break;
     }
     
   }
@@ -219,6 +223,10 @@ var LEVELS = (function() {
         result.Y = 555;
         break;
       case 3:
+        result.X = 0;
+        result.Y = 555;
+        break;
+      default:
         result.X = 0;
         result.Y = 555;
         break;

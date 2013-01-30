@@ -53,8 +53,6 @@ var MEGAMAN = (function() {
       inExit = false;
   }
 
-
-
   exports.doGame = function() {
     exports.jumpMegaman();
     exports.drawMegaman();
@@ -354,7 +352,7 @@ var MEGAMAN = (function() {
     if (shot > 30)
       chargeShot();
     else if (shot == 0) {
-      PROJECTILE.makeProjectile(mmX + (left ? 0 : frameX), (mmY + (frameY / (jump ? 3 : 2))), left, false, false);
+      PROJECTILE.makeProjectile(mmX + (left ? 0 : frameX), (mmY + (frameY / (jump ? 3 : 2.1))), left, false, false);
       shot += 5;
     }
     else 
@@ -367,12 +365,14 @@ var MEGAMAN = (function() {
     ctx.drawImage(heatlhImage, 0, 0, 13, 51, 10, 10, 13, 51);
     for (var i = 0; i < health; i++)
       ctx.drawImage(heatlhImage, 0, 52, 5, 1, barX, barY - 2*i, 5, 1);
+
     for (var i = 0; i < lives; i++) {
-      ctx.drawImage(image, 375, 427, 16, 17, barX + 10 + 20*i, barY - 30, 16, 17);
+      ctx.drawImage(image, 375, 427, 16, 17, barX + 90 + 20*i, barY - 30, 16, 17);
     }
     ctx.fillStyle = "white";
     ctx.font = "normal 20px monospace";
     ctx.fillText("Level: " + level, barX + 10, 60);
+    ctx.fillText("Lives: " , barX + 10, 30);
     ctx.fillText("Time: " + Math.floor(timer/30), 680, 30);
     ctx.fillText("Score:" + Math.floor(timer/30), 680, 60);
   }
