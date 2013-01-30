@@ -25,34 +25,34 @@ var PLATFORM = (function() {
     };
   }
 
-  exports.Flicker= function(xPos, yPos, width, height, timer) {
+  exports.Flicker= function(xPos, yPos, timer, offset) {
     this.xPos = xPos;
     this.yPos = yPos;
-    this.width = width;
-    this.height = height;
-    this.timer = timer;
+    this.width = 40;
+    this.height = 40;
+    this.timer = timer - offset;
     this.topTimer = timer;
     this.getTopY = function() {
       return yPos;
     };
     this.getBottomY = function() {
-      return yPos + height;
+      return yPos + this.height;
     };
     this.getLeftX = function() {
       return xPos;
     };
     this.getRightX = function() {
-      return xPos + width;
+      return xPos + this.width;
     };
 
     this.resetFlicker = function(){
-    if (this.timer-- === -this.topTimer)
-      this.timer = this.topTimer;
+      if (!PROJECTILE.collisionToObject(MEGAMAN, this)){
+        if (this.timer-- <= -this.topTimer)
+          this.timer = this.topTimer;
+      }
     }
 
   }
-
-  
 
 
 	function drawPlatform(p) {

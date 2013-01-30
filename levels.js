@@ -103,10 +103,10 @@ var LEVELS = (function() {
 
         break;
       case 3:
-        result.push(new PLATFORM.Flicker(100, 560, 80, 40, 20));
-        result.push(new PLATFORM.Flicker(300, 560, 80, 40, 20));
-        result.push(new PLATFORM.Flicker(500, 560, 80, 40, 20));
-        result.push(new PLATFORM.Flicker(720, 500, 40, 40, 20));        
+        result.push(new PLATFORM.Flicker(100, 560, 60, 0));
+        result.push(new PLATFORM.Platform(300, 560, 80, 40, 20));
+        result.push(new PLATFORM.Platform(500, 560, 80, 40, 20));
+        result.push(new PLATFORM.Flicker(720, 500, 60, 5));        
 
         break;
     }
@@ -141,7 +141,12 @@ var LEVELS = (function() {
         result.push(new ENEMY.Walker(440, 149, false, 440, 640));
         result.push(new ENEMY.Walker(520, 549, false, 520, 760));
 
-        
+        result.push(new ENEMY.Flyer(270, 354, false));
+        result.push(new ENEMY.Flyer(120, 354, false));
+        result.push(new ENEMY.Flyer(180, 129, false));
+        result.push(new ENEMY.Flyer(440, 149, false));
+        result.push(new ENEMY.Flyer(520, 549, false));
+            
 
         break;
 

@@ -205,6 +205,11 @@ var ENEMY = (function() {
     
     // Move towards Mega Man
     this.move = function() {
+
+      if (distance(this.xPos + this.width/2, this.yPos + this.height/2, 
+          MEGAMAN.getCenterX(), MEGAMAN.getCenterY()) > 300)
+          return;
+
       var mmY = MEGAMAN.getTopY();
       var mmX = MEGAMAN.getCenterX();
 
@@ -273,6 +278,12 @@ var ENEMY = (function() {
     }
   }
 
+  function distance(x1,y1,x2,y2) {
+    var x = x2 - x1;
+    var y = y2 - y1;
+    var hyp = Math.sqrt(x*x + y*y);
+    return hyp;
+  }
 
 	return exports;
 }());
