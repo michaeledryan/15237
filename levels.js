@@ -273,10 +273,10 @@ var LEVELS = (function() {
         result.push(new ENEMY.Turret(339, 400, true, 30));
 
         result.push(new ENEMY.Turret(739, 200, true, 30));
-        result.push(new ENEMY.Turret(739, 250, true, 30));
-        result.push(new ENEMY.Turret(739, 300, true, 30));
-        result.push(new ENEMY.Turret(739, 350, true, 30));
-        result.push(new ENEMY.Turret(739, 400, true, 30));
+        result.push(new ENEMY.Turret(739, 260, true, 30));
+        result.push(new ENEMY.Turret(739, 320, true, 30));
+        result.push(new ENEMY.Turret(739, 380, true, 30));
+        result.push(new ENEMY.Turret(739, 440, true, 30));
 
         result.push(new ENEMY.Flyer(500, 300));
         result.push(new ENEMY.Flyer(600, 300));
