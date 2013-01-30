@@ -1,8 +1,13 @@
 /*
- * main.js.
- * Main file for Mega Man. Calls the game loop, the functionality of which 
- * is split between several files. Also plays the game music.
- */
+
+Mega Man 237
+
+Josh Gerbasi    jgerbasi
+Michael Ryan    mer1
+Marco Talabacu  mtalabac
+
+*/
+
 const SCREEN_WIDTH  = 800,
       SCREEN_HEIGHT = 600;
 

@@ -1,3 +1,13 @@
+/*
+
+Mega Man 237
+
+Josh Gerbasi    jgerbasi
+Michael Ryan    mer1
+Marco Talabacu  mtalabac
+
+*/
+
 var ENEMY = (function() {
 	var exports = {};
   var firstRun = true;

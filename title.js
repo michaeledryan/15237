@@ -1,4 +1,14 @@
 /*
+
+Mega Man 237
+
+Josh Gerbasi    jgerbasi
+Michael Ryan    mer1
+Marco Talabacu  mtalabac
+
+*/
+
+/*
  * title.js
  *
  * Handles the title screen of the game. Allows user to start or see 

@@ -1,3 +1,13 @@
+/*
+
+Mega Man 237
+
+Josh Gerbasi    jgerbasi
+Michael Ryan    mer1
+Marco Talabacu  mtalabac
+
+*/
+
 var MEGAMAN = (function() {
   var exports = {};
   exports.gameOver = false;
