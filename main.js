@@ -41,7 +41,6 @@ function loop() {
     MEGAMAN.doExit();
     if (MEGAMAN.gameOver) {
       if (lives){
-        //alert("You died! " + --lives + " lives left!");
         loadLevel(currentLevel);
         MEGAMAN.gameOver = false;
         lives--;
@@ -53,14 +52,21 @@ function loop() {
         loadLevel(currentLevel);
         MEGAMAN.gameOver = false;
         lives = 3;
-        TITLE.setTitle();
+        TITLE.setTitle(0);
         return;
       }
     }
     if (nextLevel = MEGAMAN.checkFinishedLevel()){
       if (((currentLevel + nextLevel - 2) > 0) 
-        &&  ((currentLevel + nextLevel - 2) < 4)) {
+        &&  ((currentLevel + nextLevel - 2) < 5)) {
         currentLevel += nextLevel - 2;
+        if (currentLevel === 4) {
+          currentLevel = 1;
+          loadLevel(currentLevel);
+          MEGAMAN.gameOver = false;
+          TITLE.setTitle(MEGAMAN.score);
+          return;
+        }
         loadLevel(currentLevel);
       }
     }

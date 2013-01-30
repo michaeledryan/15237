@@ -15,6 +15,7 @@ var TITLE = (function() {
       inTitle = true, // Whether or not the player is still on the title screen.
       instructionsText = "This is Mega Man! Fight enemies and get to the end of the levels. \n Controls: \n Z: shoot \n X: jump \n Arrow keys: move \n Hold X to charge your shots!",
       citationText = "Sprites, from Mega Man 7, Mega Man 8 and Mega Man X.\n\nTurret enemy and blast:\nhttp://www.sprites-inc.co.uk/files/X/X1/Enemy/old%20(up%20untill%20the%20rest%20are%20re-ripped)/mmm-mmxwallblast.gif\n\nFlying and Walking Enemies:\nhttp://www.spriters-resource.com/snes/mmx/enemies1.png\nBackground:\nhttp://wallpaperbackgrounds.com/Content/wallpapers/video%20game/mega%20man/16803-50973.jpg\n\nTitle Screen:\nhttp://www.bonus-level.com/Bonus_Level_Uploads/2010/11/nesessities_megamanii_title.jpg\nBuster Shots and Health Bar:\nhttp://spriters-resource.com/snes/mmx/weapons.png\n\nMega Man:\nhttp://www.freewebs.com/rinicthefox/A%20Sprite%20Sheet%20of%20Bass,Megaman,Protoman,and%20sk8brder40.PNG\n\nPlatforms:\nhttp://www.vgmaps.com/Atlas/SuperNES/MegaManVII-TurboMan.png\n\nTheme Song:\nhttp://www.anonpartyhard.com/loops/5/low/Megaman%202%20-%20Theme.mp3"
+      titleScore = 0;
 
 
 var canvas = document.getElementById("myCanvas");
@@ -60,8 +61,10 @@ function drawTitle() {
     ctx.fillText("START", 275, 350);
     ctx.fillText("CONTROLS", 275, 450);
     ctx.fillText("CITATIONS", 275, 550);
+    ctx.fillText("Score: " + titleScore, 250, 70);
     drawCursor();
     ctx.fillStyle = "black";
+
 }
 
 // Wrapper function for this file's functionality.
@@ -73,7 +76,8 @@ exports.doTitle = function() {
 
 }
 
-  exports.setTitle = function() {
+  exports.setTitle = function(score) {
+    titleScore = score;
     inTitle = true;
     canvas.addEventListener('keydown', titleKeyDown, false);    
   }

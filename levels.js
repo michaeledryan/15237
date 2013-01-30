@@ -54,10 +54,12 @@ var LEVELS = (function() {
         //     Floaters
         result.push(new PLATFORM.Platform(270, 405, 80, 40));
         result.push(new PLATFORM.Platform(120, 405, 80, 40));
-        result.push(new PLATFORM.Platform(40, 355, 40, 40));
-        result.push(new PLATFORM.Platform(140, 285, 40, 40));
-        result.push(new PLATFORM.Platform(40, 210, 40, 40));
         result.push(new PLATFORM.Platform(180, 180, 160, 40));
+        
+        result.push(new PLATFORM.Flicker(40, 355, 60, 30));
+        result.push(new PLATFORM.Platform(140, 285, 40, 40));
+        result.push(new PLATFORM.Flicker(40, 210, 60, 10));
+        
 
         //*************Divider*********************
         result.push(new PLATFORM.Platform(440, 240, 80, 360));
@@ -68,6 +70,7 @@ var LEVELS = (function() {
         result.push(new PLATFORM.Platform(520, 400, 120, 40));
         result.push(new PLATFORM.Platform(640, 500, 120, 40));
         break;
+
       case 2:
         //***************Border****************
         result.push(new PLATFORM.Platform(0, 0, 800, 80));
@@ -82,14 +85,14 @@ var LEVELS = (function() {
         result.push(new PLATFORM.Platform(720, 500, 40, 40));
 
         //***************Row 2********************
-        result.push(new PLATFORM.Platform(550, 460, 40, 40));
+        result.push(new PLATFORM.Flicker(550, 460, 40, 40));
         result.push(new PLATFORM.Platform(425, 400, 40, 100));
         result.push(new PLATFORM.Platform(300, 340, 40, 160));
 
         //**************Top Half********************
         result.push(new PLATFORM.Platform(40, 300, 200, 40));
         result.push(new PLATFORM.Platform(40, 260, 80, 40));
-        result.push(new PLATFORM.Platform(40, 220, 40, 40));
+        result.push(new PLATFORM.Flicker(40, 220, 40, 40));
         result.push(new PLATFORM.Platform(200, 180, 200, 40));
         result.push(new PLATFORM.Platform(360, 220, 40, 60));
 
@@ -104,7 +107,7 @@ var LEVELS = (function() {
         //End platforms
         result.push(new PLATFORM.Platform(720, 280, 40, 40));
         result.push(new PLATFORM.Platform(550, 220, 100, 40));
-        result.push(new PLATFORM.Platform(510, 210, 40, 40));
+        result.push(new PLATFORM.Flicker(510, 210, 40, 40));
         result.push(new PLATFORM.Platform(470, 90, 40, 120));
         result.push(new PLATFORM.Platform(680, 140, 120, 40));
 
@@ -122,7 +125,8 @@ var LEVELS = (function() {
         result.push(new PLATFORM.Platform(380, 480, 60, 40));
 
         // pit fall
-        
+        break;
+
 
 
         break;
@@ -140,17 +144,19 @@ var LEVELS = (function() {
       case 1:
         //result.push(new ENEMY.Flyer(400, 100));
 
-        result.push(new ENEMY.Turret(419, 449, true, 30));
-        result.push(new ENEMY.Turret(419, 319, true, 30));
-        result.push(new ENEMY.Turret(299, 524, true, 30));
-        result.push(new ENEMY.Turret(419, 249, true, 30));
-        result.push(new ENEMY.Turret(739, 80, true, 30));
-        result.push(new ENEMY.Turret(38, 180, false, 30));
-        result.push(new ENEMY.Turret(518, 252, false, 30));
-        result.push(new ENEMY.Turret(518, 452, false, 30));
-        result.push(new ENEMY.Turret(739, 352, true, 30));
+        result.push(new ENEMY.Turret(299, 524, true, 20));
+        result.push(new ENEMY.Turret(38, 180, false, 0));
+        
+        // Middle Column facing left
+        result.push(new ENEMY.Turret(419, 449, true, -10));
+        result.push(new ENEMY.Turret(419, 319, true, -5));
+        result.push(new ENEMY.Turret(419, 249, true, 0));
 
-
+        // Right side
+        result.push(new ENEMY.Turret(739, 80, true, 0));
+        result.push(new ENEMY.Turret(518, 252, false, 0));
+        result.push(new ENEMY.Turret(518, 452, false, 10));
+        result.push(new ENEMY.Turret(739, 352, true, 0));
 
         result.push(new ENEMY.Walker(270, 354, false, 270, 350));
         result.push(new ENEMY.Walker(120, 354, false, 120, 200));
@@ -168,20 +174,27 @@ var LEVELS = (function() {
         break;
 
       case 2:
-        result.push(new ENEMY.Turret(699, 505, true, 30));
+
+        result.push(new ENEMY.Turret(38, 345, false, 5));
+        result.push(new ENEMY.Turret(38, 376, false, 10));
+        result.push(new ENEMY.Turret(38, 407, false, 15));
+        result.push(new ENEMY.Turret(38, 125, false, 20));
+
+        result.push(new ENEMY.Turret(179, 185, true, 5));
+      
+        result.push(new ENEMY.Turret(238, 305, false, -10));
+        result.push(new ENEMY.Turret(338, 340, false, 10));
+      
+        result.push(new ENEMY.Turret(448, 145, true, 10));
         result.push(new ENEMY.Turret(463, 405, false, 30));
-        result.push(new ENEMY.Turret(338, 340, false, 30));
-        result.push(new ENEMY.Turret(238, 305, false, 30));
-        result.push(new ENEMY.Turret(38, 345, false, 30));
-        result.push(new ENEMY.Turret(38, 376, false, 30));
-        result.push(new ENEMY.Turret(38, 407, false, 30));
-        result.push(new ENEMY.Turret(179, 185, true, 30));
-        result.push(new ENEMY.Turret(38, 125, false, 30));
-        result.push(new ENEMY.Turret(699, 285, true, 30));
-        result.push(new ENEMY.Turret(508, 170, false, 30));
-        result.push(new ENEMY.Turret(508, 135, false, 30));
-        result.push(new ENEMY.Turret(508, 100, false, 30));
-        result.push(new ENEMY.Turret(448, 145, true, 30));
+
+        result.push(new ENEMY.Turret(508, 170, false, 5));
+        result.push(new ENEMY.Turret(508, 135, false, 10));
+        result.push(new ENEMY.Turret(508, 100, false, 20));
+
+        result.push(new ENEMY.Turret(699, 285, true, 0));
+        result.push(new ENEMY.Turret(699, 505, true, 30));
+        
 
 
         result.push(new ENEMY.Walker(180, 549, false, 180, 300));
@@ -195,12 +208,10 @@ var LEVELS = (function() {
         result.push(new ENEMY.Walker(680, 89, false, 680, 800));
         result.push(new ENEMY.Walker(730, 89, false, 680, 800));
 
-
-
-
-
-
-
+        result.push(new ENEMY.Flyer(180, 440, false));
+        result.push(new ENEMY.Flyer(110, 129, false));
+        result.push(new ENEMY.Flyer(650, 100, false));
+        result.push(new ENEMY.Flyer(600, 550, false));
 
         break;
 
