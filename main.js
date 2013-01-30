@@ -38,6 +38,7 @@ function loop() {
     ENEMY.drawEnemies();
     PROJECTILE.moveProjectiles();
     MEGAMAN.drawHealth(lives, currentLevel);
+    MEGAMAN.drawScore();
     MEGAMAN.doExit();
     if (MEGAMAN.gameOver) {
       if (lives){

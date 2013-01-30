@@ -1,6 +1,7 @@
 var MEGAMAN = (function() {
   var exports = {};
   exports.gameOver = false;
+  exports.score = 0;
   var image = new Image();
       image.src = "sprites/mm.png";
   var background = new Image();
@@ -8,7 +9,7 @@ var MEGAMAN = (function() {
   var heatlhImage = new Image();
       heatlhImage.src = "sprites/health.png";
 
-  var exit, atExit = false, jump, up,
+  var exit, atExit = false, jump, up, mmLives,
       top, mmX, mmY, left, shot, keys = {}, 
       shot = 0, charge = 0, moving = false, health = 1, 
       charger = 0, invincible = 0;
@@ -46,8 +47,10 @@ var MEGAMAN = (function() {
   exports.doExit = function(){
     exit.draw();
     if (((exports.getCenterY() > exit.y)) && (exports.getCenterY() < (exit.y + exit.height)) && 
-        ((exports.getCenterX() - exit.x + 40)) < 40 && ((exports.getCenterX() - exit.x) > -10))
-      inExit = true;
+        ((exports.getCenterX() - exit.x + 40)) < 40 && ((exports.getCenterX() - exit.x) > -10)) {
+        calculateScore();
+        inExit = true;
+    }
     else
       inExit = false;
   }
@@ -364,6 +367,7 @@ var MEGAMAN = (function() {
   exports.drawHealth = function(lives, level){
     var barX = 15;
     var barY = 44;
+    mmLives = lives;
     ctx.drawImage(heatlhImage, 0, 0, 13, 51, 10, 10, 13, 51);
     for (var i = 0; i < health; i++)
       ctx.drawImage(heatlhImage, 0, 52, 5, 1, barX, barY - 2*i, 5, 1);
@@ -397,8 +401,20 @@ var MEGAMAN = (function() {
     }
     invincible = 20;
    }
+  }
 
- }
+  function calculateScore() {
+    // reward higher score for more health remaining
+    exports.score += (health * 100)
+    // reward higher score for more lives remaining
+    exports.score += (mmLives * 1000)
+    // reward higher score for more time remaining
+  }
+
+  exports.drawScore = function() {
+    ctx.font = "normal 20px monospace";
+    ctx.fillText("Score : " + exports.score, 500, 35);
+  }
 
 
   return exports;

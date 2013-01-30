@@ -257,6 +257,7 @@ var ENEMY = (function() {
     }
     // Enemy has died, remove from enemyList array
     if(enemy.health <= 0) {
+      MEGAMAN.score += 100;
       exports.enemyList.splice(index, 1);
     }
   }
