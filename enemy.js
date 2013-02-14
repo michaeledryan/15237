@@ -1,3 +1,13 @@
+/*
+
+Mega Man 237
+
+Josh Gerbasi    jgerbasi
+Michael Ryan    mer1
+Marco Talabacu  mtalabac
+
+*/
+
 var ENEMY = (function() {
 	var exports = {};
   var firstRun = true;
@@ -16,40 +26,40 @@ var ENEMY = (function() {
     this.spriteY = left ? 33 : 93;
     this.height = 51;
     this.width = 53;
-    this.health = 30;
+    this.health = 50;
     this.left = left;
     this.timer = 0;
     this.turn = 0;
     this.leftLimit = leftLimit;
     this.rightLimit = rightLimit;
+    this.type = "walker";
 
     this.getTopY = function() {
-          return this.yPos;
+      return this.yPos;
     };
 
     this.getBottomY = function() {
-      return this.yPos + this.height;
+      return this.yPos + this.height + 10;
     };
 
     this.getLeftX = function() {
-      return this.xPos;
+      return this.xPos + this.width / 3;
     };
 
     this.getRightX = function() {
-      return this.xPos + this.width;
+      return this.xPos + 2 * this.width /3;
     };
     
     /*
      * If they aren't at the limit, move them in the proper direction.
      * If they are, tell them to turn.
      */
-
     this.move = function() {
-
+      enemyCollisionToMegaman();
       if (this.left && this.xPos >= leftLimit)
-        this.xPos = (this.xPos - 2 === leftLimit) ? leftLimit : this.xPos - 2;
+        this.xPos = (this.xPos - 4 === leftLimit) ? leftLimit : this.xPos - 4;
       else if (!(this.left) && this.xPos + this.width <= rightLimit)
-        this.xPos = (this.xPos + 2 >= rightLimit) ? rightLimit : this.xPos + 2;
+        this.xPos = (this.xPos + 4 >= rightLimit) ? rightLimit : this.xPos + 4;
       else
         this.turn = (this.turn === 0) ? 1 : this.turn;
     }
@@ -113,7 +123,6 @@ var ENEMY = (function() {
           this.spriteX += 53;
           if (this.spriteX >= 530) 
             this.spriteX = 106;
-//          console.log("afasdf");
           ctx.drawImage(image, this.spriteX, this.spriteY, this.width, this.height, 
                     this.xPos, this.yPos, this.width, this.height);
         }
@@ -134,17 +143,18 @@ var ENEMY = (function() {
     this.health = 30;
     this.left = left;
     this.timer = 0;
+    this.type = "turret";
 
     this.getTopY = function() {
           return this.yPos;
     };
 
     this.getBottomY = function() {
-      return this.yPos + this.height;
+      return this.yPos + this.height - 2;
     };
 
     this.getLeftX = function() {
-      return this.xPos;
+      return this.xPos + 5;
     };
 
     this.getRightX = function() {
@@ -184,6 +194,7 @@ var ENEMY = (function() {
     this.height = 32;
     this.width = 31;
     this.health = 30;
+    this.type = "flyer";
 
     this.getTopY = function() {
       return this.yPos;
@@ -203,20 +214,26 @@ var ENEMY = (function() {
     
     // Move towards Mega Man
     this.move = function() {
+
+      if (distance(this.xPos + this.width/2, this.yPos + this.height/2, 
+          MEGAMAN.getCenterX(), MEGAMAN.getCenterY()) > 300)
+          return;
+
       var mmY = MEGAMAN.getTopY();
       var mmX = MEGAMAN.getCenterX();
 
+      enemyCollisionToMegaman();
         if (mmY > this.yPos) 
           this.yPos = ((this.yPos + 5) > mmY) ? mmY : this.yPos + .5;
         else
           this.yPos = ((this.yPos - 5) < mmY) ? mmY : this.yPos - .5;    
         if (mmX > this.xPos) 
-          this.xPos += 1;
+          this.xPos += .5;
         else
-          this.xPos -= 1;
+          this.xPos -= .5;
     }
 
-        // Animates the helicopter blades.
+    // Animates the helicopter blades.
     this.draw = function() {
       ctx.drawImage(image, this.spriteX, this.spriteY, this.width, this.height, 
                     this.xPos, this.yPos, this.width, this.height);
@@ -228,9 +245,7 @@ var ENEMY = (function() {
   }
 
   exports.setEnemyList = function(newList){
-    console.log(newList);
     exports.enemyList = newList;
-    console.log(exports.enemyList);
   }
 
 	exports.drawEnemies = function() {
@@ -245,14 +260,38 @@ var ENEMY = (function() {
     // Makes sure projectile is from megaman
     if (projectile.enemy === false) {
       // Charged shot does more damage
-      projectile.charged ? enemy.health -= 10 : enemy.health -= 5;
+      projectile.charged ? enemy.health -= 30 : enemy.health -= 10;
     }
     // Enemy has died, remove from enemyList array
     if(enemy.health <= 0) {
+      MEGAMAN.score += 100;
       exports.enemyList.splice(index, 1);
     }
   }
 
+  function enemyCollisionToMegaman() {
+    if ((!MEGAMAN.gameOver) && (exports.enemyList.length > 0)) {
+      var mm = MEGAMAN;
+      for(var i = 0; i < exports.enemyList.length; i++) {
+        enemy = exports.enemyList[i];
+        if (enemy.leftLimit) {
+          if (PROJECTILE.collisionToObject(enemy, mm)) 
+          MEGAMAN.damageMegamanRamming();
+        } 
+        else {
+          if (PROJECTILE.collisionToObject(mm, enemy)) 
+            MEGAMAN.damageMegamanRamming();
+        }
+      }
+    }
+  }
+
+  function distance(x1,y1,x2,y2) {
+    var x = x2 - x1;
+    var y = y2 - y1;
+    var hyp = Math.sqrt(x*x + y*y);
+    return hyp;
+  }
 
 	return exports;
 }());

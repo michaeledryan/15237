@@ -1,6 +1,18 @@
+/*
+
+Mega Man 237
+
+Josh Gerbasi    jgerbasi
+Michael Ryan    mer1
+Marco Talabacu  mtalabac
+
+*/
+
 var MEGAMAN = (function() {
   var exports = {};
   exports.gameOver = false;
+  exports.score = 0;
+      
   var image = new Image();
       image.src = "sprites/mm.png";
   var background = new Image();
@@ -8,31 +20,30 @@ var MEGAMAN = (function() {
   var heatlhImage = new Image();
       heatlhImage.src = "sprites/health.png";
 
-  var jump = 0,
-      up = false,
-      top = 0,
-      mmX, mmY,
-      xpos = 0,
+  var exit, atExit = false, jump, up, mmLives,
+      top, mmX, mmY, left, shot, keys = {}, 
+      shot = 0, charge = 0, moving = false, health = 1, 
+      charger = 0, invincible = 0;
+
+  var exit, jump, up, timer,
+      top, mmX, mmY, left, shot, keys, 
+      shot, charge, moving, health, 
+      charger, invincible;
+
+  var xpos = 0,
       ypos = 200,
-      index = 0,
-      frameX = 50,
-      frameY = 45,
-      jumpHeight = 80,
-      left = false,
-      shot = false,
-      keys = {},
+      index = 0, 
+      jumpHeight = 90,
       vert = 0,
       headVert = 0,
       leftHorz = 0,
-      rightHorz = 0,
-      shot = 0,
-      charge = 0,
-      moving = false,
-      health = 16,
-      charger = 0;
-      keys = {};
+      atExit = false,
+      rightHorz = 0;
+
+      exports.gameOver = false;
       const chargeX = 354, chargeY = 407,
-      chargeFrameX = 16, chargeFrameY = 14;
+      chargeFrameX = 16, chargeFrameY = 14,
+      frameX = 50,frameY = 45;
 
   exports.keyDownListener = function(event) {
     keys[event.keyCode] = true;
@@ -44,15 +55,38 @@ var MEGAMAN = (function() {
       charger = 0;
   }
 
+
+  exports.setExit = function(newExit){
+    exit = newExit;
+  }
+
+
+  exports.doExit = function(){
+    exit.draw();
+    if (((exports.getCenterY() > exit.y)) && (exports.getCenterY() < (exit.y + exit.height)) && 
+        ((exports.getCenterX() - exit.x + 40)) < 40 && ((exports.getCenterX() - exit.x) > -10)) {
+        calculateScore();
+        playWAV();
+        inExit = true;
+    }
+    else
+      inExit = false;
+  }
+
   exports.doGame = function() {
     exports.jumpMegaman();
     exports.drawMegaman();
   }
 
   exports.checkFinishedLevel = function(){
-    if (keys["82"])
-      return true;
-    return false;
+    if (inExit)
+      return 3;
+    else if (keys["82"])
+      return 2;
+    else if (keys["78"])
+      return 3;
+    else if (keys["66"])
+      return 1;
   }
 
 
@@ -61,22 +95,30 @@ var MEGAMAN = (function() {
     mmY = loc.Y;
     jump = 0, up = false, top = 0, left = false, shot = false, health = 16,
     keys = {}, shot = 0, charge = 0, moving = false, charger = 0;
+    invincible = 0; timer = 30000;
   }
 
   function doDraw(){
     ctx.clearRect(0,0, SCREEN_WIDTH,SCREEN_HEIGHT);
     ctx.drawImage(background, 0, 0, 600, 800, 0, 0, 800, 600)
-    ctx.drawImage(image, xpos, ypos, frameX, frameY, mmX, mmY, frameX, frameY);
-    if ( (charge === 300) || (charge > 0 && !(charger++ % 3))){
-      ctx.drawImage(image, chargeX, chargeY + (!!left ? chargeFrameY : 0),
-                    chargeFrameX, chargeFrameY, mmX + (left ? -5 : frameX *3/4),
-                    (mmY + (frameY / 3)) - (!!jump ? 10 : 0), chargeFrameX, chargeFrameY);
+    if (!(invincible % 3)){
+      ctx.drawImage(image, xpos, ypos, frameX, frameY, mmX, mmY, frameX, frameY);
+      if ( (charge === 300) || (charge > 0 && !(charger++ % 3))){
+        ctx.drawImage(image, chargeX, chargeY + (!!left ? chargeFrameY : 0),
+                      chargeFrameX, chargeFrameY, mmX + (left ? -5 : frameX *3/4),
+                      (mmY + (frameY / 3)) - (!!jump ? 10 : 0), chargeFrameX, chargeFrameY);
+      }
     }
-
-
   }
 
   exports.moveMegaMan = function() {
+    timer--;
+
+    if (keys["70"]) {
+      jumpHeight = 10000;
+    }
+    else 
+      jumpHeight = 90;
     // move left
     if (keys["37"]) {
       left = true;
@@ -118,7 +160,7 @@ var MEGAMAN = (function() {
     else {
       if (charge === 300) {
         PROJECTILE.makeProjectile(mmX + (left ? 0 : frameX), 
-                                  (mmY + (frameY / 2)), left, true, false);
+                                  (mmY + (frameY / (jump ? 3 : 2))), left, true, false);
       }
       shot = 0;
       charge = 0;
@@ -127,6 +169,9 @@ var MEGAMAN = (function() {
 
     if (!(keys["37"] || keys["39"]))
       moving = false;
+    if (keys["72"]) {
+      health = 16;
+    }
 }
 
   function drawMegaManMoving(){
@@ -177,6 +222,11 @@ var MEGAMAN = (function() {
 
       doDraw();
     }
+
+    //decrement invincible for megaman 
+    if(invincible !== 0) {
+      invincible--;
+    }
   }
   
   
@@ -224,7 +274,7 @@ var MEGAMAN = (function() {
   }
 
   exports.getBottomY = function() {
-    return mmY + frameY;
+    return mmY + frameY - 2;
   }
 
   exports.getLeftX = function() {
@@ -236,7 +286,7 @@ var MEGAMAN = (function() {
   }
 
   exports.getCenterX = function() {
-    return exports.getLeftX() + ((exports.getRightX() - exports.getLeftX()) / 2);
+    return exports.getLeftX() + frameX/2;
   }
 
   exports.getCenterY = function() {
@@ -248,10 +298,12 @@ var MEGAMAN = (function() {
     if (PLATFORM.platformList !== undefined) {
       for (var i = 0; i < PLATFORM.platformList.length; i++) {
         var p = PLATFORM.platformList[i];
-        if ((exports.getBottomY() - p.getTopY() > -3) && ((exports.getBottomY() - p.getTopY()) < 5)
-            && (exports.getCenterX() - p.getLeftX() >= -11) && (exports.getCenterX() - p.getRightX() < 11)) {
-          vert = p.getTopY();
-          return true;
+        if (p.timer === undefined || (p.timer > 0)) {
+          if ((exports.getBottomY() - p.getTopY() > -3) && ((exports.getBottomY() - p.getTopY()) < 5)
+              && (exports.getCenterX() - p.getLeftX() >= -11) && (exports.getCenterX() - p.getRightX() < 11)) {
+            vert = p.getTopY();
+            return true;
+          }
         }
       }
       jump = 2;
@@ -264,10 +316,12 @@ var MEGAMAN = (function() {
     if (PLATFORM.platformList !== undefined) {
       for (var i = 0; i < PLATFORM.platformList.length; i++) {
         var p = PLATFORM.platformList[i];
-        if ((exports.getTopY() - p.getBottomY() > -3) && ((exports.getTopY() - p.getBottomY()) < 5)
-            && (exports.getCenterX() - p.getLeftX() >= -11) && (exports.getCenterX() - p.getRightX() < 11)) {
-          headVert = p.getBottomY();
-          return true;
+        if (p.timer === undefined || (p.timer > 0)) {
+          if ((exports.getTopY() - p.getBottomY() > -3) && ((exports.getTopY() - p.getBottomY()) < 5)
+              && (exports.getCenterX() - p.getLeftX() >= -11) && (exports.getCenterX() - p.getRightX() < 11)) {
+            headVert = p.getBottomY();
+            return true;
+          }
         }
       }
       return false;
@@ -279,13 +333,15 @@ var MEGAMAN = (function() {
     if (PLATFORM.platformList !== undefined) {
       for (var i = 0; i < PLATFORM.platformList.length; i++) {
         var p = PLATFORM.platformList[i];
-        if ((exports.getRightX() - p.getLeftX() > -16)  && ((exports.getRightX() - p.getLeftX()) < 16)
-            && (((p.getTopY() >= exports.getTopY() && p.getBottomY() <= exports.getBottomY())
-                ||  (p.getBottomY() >= exports.getTopY() && p.getTopY() <= exports.getBottomY())) 
-                || (p.getBottomY() <= exports.getTopY() && p.getTopY() >= exports.getBottomY())
-                || (p.getBottomY() <= exports.getTopY() && p.getTopY() >= exports.getBottomY()) ))  {
-          leftHorz = p.getLeftX();
-          return true;
+        if (p.timer === undefined || (p.timer > 0)){
+          if ((exports.getRightX() - p.getLeftX() > -16)  && ((exports.getRightX() - p.getLeftX()) < 16)
+              && (((p.getTopY() >= exports.getTopY() && p.getBottomY() <= exports.getBottomY())
+                  ||  (p.getBottomY() >= exports.getTopY() && p.getTopY() <= exports.getBottomY())) 
+                  || (p.getBottomY() <= exports.getTopY() && p.getTopY() >= exports.getBottomY())
+                  || (p.getBottomY() <= exports.getTopY() && p.getTopY() >= exports.getBottomY()) ))  {
+            leftHorz = p.getLeftX();
+            return true;
+          }
         }
       }
       return false;
@@ -297,13 +353,15 @@ var MEGAMAN = (function() {
     if (PLATFORM.platformList !== undefined) {
       for (var i = 0; i < PLATFORM.platformList.length; i++) {
         var p = PLATFORM.platformList[i];
-        if ((exports.getLeftX() - p.getRightX() > -16)  && ((exports.getLeftX() - p.getRightX()) < 16)
-            && (((p.getTopY() >= exports.getTopY() && p.getBottomY() <= exports.getBottomY())
-                ||  (p.getBottomY() >= exports.getTopY() && p.getTopY() <= exports.getBottomY())) 
-                || (p.getBottomY() <= exports.getTopY() && p.getTopY() >= exports.getBottomY())
-                || (p.getBottomY() <= exports.getTopY() && p.getTopY() >= exports.getBottomY()) ))  {
-          rightHorz = p.getRightX();
-          return true;
+        if (p.timer === undefined || (p.timer > 0)) {
+          if ((exports.getLeftX() - p.getRightX() > -16)  && ((exports.getLeftX() - p.getRightX()) < 16)
+              && (((p.getTopY() >= exports.getTopY() && p.getBottomY() <= exports.getBottomY())
+                  ||  (p.getBottomY() >= exports.getTopY() && p.getTopY() <= exports.getBottomY())) 
+                  || (p.getBottomY() <= exports.getTopY() && p.getTopY() >= exports.getBottomY())
+                  || (p.getBottomY() <= exports.getTopY() && p.getTopY() >= exports.getBottomY()) ))  {
+            rightHorz = p.getRightX();
+            return true;
+          }
         }
       }
       return false;
@@ -320,32 +378,70 @@ var MEGAMAN = (function() {
     if (shot > 30)
       chargeShot();
     else if (shot == 0) {
-      PROJECTILE.makeProjectile(mmX + (left ? 0 : frameX), (mmY + (frameY / 2)), left, false, false);
+      PROJECTILE.makeProjectile(mmX + (left ? 0 : frameX), (mmY + (frameY / (jump ? 3 : 2.1))), left, false, false);
       shot += 5;
     }
     else 
       shot += 5;
   }
 
-  exports.drawHealth = function(){
+  exports.drawHealth = function(lives, level){
     var barX = 15;
     var barY = 44;
+    mmLives = lives;
     ctx.drawImage(heatlhImage, 0, 0, 13, 51, 10, 10, 13, 51);
     for (var i = 0; i < health; i++)
       ctx.drawImage(heatlhImage, 0, 52, 5, 1, barX, barY - 2*i, 5, 1);
+
+    for (var i = 0; i < lives; i++) {
+      ctx.drawImage(image, 375, 427, 16, 17, barX + 90 + 20*i, barY - 30, 16, 17);
+    }
+    ctx.fillStyle = "white";
+    ctx.font = "normal 20px monospace";
+
+    ctx.fillText("Level: " + level, barX + 10, 60);
+    ctx.fillText("Lives: " , barX + 10, 30);
+    ctx.fillText("Time: " + Math.floor(timer/30), 660, 30);
+    ctx.fillText("Score:" + exports.score, 660, 60);
   }
 
   exports.damageMegaman = function(projectile) {
-    console.log(projectile.enemy);
-    if (projectile.enemy === true) {
-      health -= 5;
-      console.log('Megeman got hit, health: ' + health);
-    }
-    if (health <= 0) {
-      gameOver = true;
+    if (invincible === 0){
+      if (projectile.enemy === true) {
+        health -= 4;
+        invincible = 20;
+      }
+      if (health <= 0) {
+        exports.gameOver = true;
+      }
     }
   }
+  //
+  exports.damageMegamanRamming = function() {
+   // timer logic
+   // invincible gets decremented in drawmegaman() above
+   if(invincible === 0) {
+    health -= 2;
+    if (health <= 0) {
+      exports.gameOver = true;
+    }
+    invincible = 20;
+   }
+  }
 
+  function calculateScore() {
+    // reward higher score for more health remaining
+    exports.score += (health * 100);
+    // reward higher score for more lives remaining
+    exports.score += (mmLives * 500);
+    // reward higher score for more time remaining
+    exports.score += Math.floor(timer/30);
+  }
+
+  // YEAH BUDDAYYYYYY!!!
+  function playWAV() {
+    document.getElementById("wav").play();
+  }
 
   return exports;
 }());
