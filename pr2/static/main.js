@@ -1,22 +1,44 @@
-var canvas, ctx, adding, listings;
+var canvas, ctx, adding;
+var listings = [];
+var image = new Image();
 
 $(document).ready(function() {
   canvas = document.getElementById("myCanvas");
   ctx = canvas.getContext("2d");
+  //ctx.drawImage(image, 0, 0, 496, 339, 0, 0, 496, 339);
+  image.src = "mapBasic.png";
+  image.onload = draw;
+
+  function draw(){               
+    ctx.drawImage(image, 0, 0);
+  }
+
+  //ctx.fillRect( 0, 0, 496, 339);
   canvas.setAttribute('tabindex','0');
   canvas.focus();
   canvas.addEventListener("mousedown", getPosition, false);
 });
 
 
+function redraw() {
+  canvas.width = canvas.width;
+  ctx.drawImage(image, 0, 0);
+}
+
 function addMyEvent(x,y) {
     var eventName = $("#event").val();
     var eventTime = $("#time").val();
     var host = $("#host").val();
     var desc = $("#description").val();
+
+    console.log(eventName);
+    console.log(eventTime);
+    console.log(host);
+    console.log(desc);
+
     if (x !== "" && y !== "" && eventName !== "" && 
         time !== "" && host !== ""){
-      add(x, y, eventName, time, host, desc);
+      add(x, y, eventName, eventTime, host, desc);
       listings.push( 
         {
           x : x, 
@@ -60,18 +82,16 @@ function get() {
     url: "/listings",
     success: function(data) {
       listings = data.listings;
-      refreshDOM();
     }
   });
 }
 
-// Implement the add(desc, author, price) function
 function add(x, y, eventName, time, host, desc) {
   $.ajax({
     type: "post",
     data: {
-      "x" : x, 
-      "y" : y, 
+      "x" : String(x), 
+      "y" : String(y), 
       "eventName" : eventName, 
       "time" : time, 
       "host" : host,
