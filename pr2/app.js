@@ -1,7 +1,7 @@
 // 15-237 Homework 3 - Eebae Server
 
 var express = require("express"); // imports express
-var app = express();        // create a new instance of express
+var app = express();              // create a new instance of express
 
 // imports the fs module (reading and writing to a text file)
 var fs = require("fs");
@@ -10,8 +10,38 @@ var fs = require("fs");
 // body of a request
 app.use(express.bodyParser());
 
-// The global datastore for this example
-var listings;
+// The global datastores for this example
+var techTalks, shows, studying, food, misc, listings;
+
+// gets the appropriate datastore
+function getProperList(list) {
+  if (list === "techTalks")
+    return techTalks;
+  else if (list === "shows")
+    return shows;
+  else if (list === "studying")
+    return studying;
+  else if (list === "food")
+    return food;
+  else if (list === "misc")
+    return misc;
+  else return listings;
+}
+
+function getProperListName(list) {
+  if (list === "techTalks")
+    return "techTalks.txt";
+  else if (list === "shows")
+    return "shows.txt";
+  else if (list === "studying")
+    return "studying.txt";
+  else if (list === "food")
+    return "food.txt";
+  else if (list === "misc")
+    return "misc.txt";
+  else return "listings.txt";
+}
+
 
 // Asynchronously read file contents, then call callbackFn
 function readFile(filename, defaultData, callbackFn) {
@@ -42,6 +72,11 @@ function writeFile(filename, data, callbackFn) {
 app.get("/listings", function(request, response){
   response.send({
     listings: listings,
+    techTalks : techTalks,
+    shows : shows,
+    studying : studying,
+    food : food,
+    misc : misc,
     success: true
   });
 });
@@ -49,7 +84,7 @@ app.get("/listings", function(request, response){
 // get one item
 app.get("/listings/:id", function(request, response){
   var id = request.params.id;
-  var item = listings[id];
+  var item = getProperList(request.params.list)[request.params.id];
   response.send({
     listings: item,
     success: (item !== undefined)
@@ -60,6 +95,7 @@ app.get("/listings/:id", function(request, response){
 app.post("/listings", function(request, response) {
   console.log(request.body);
   var item = {
+      "list" : request.body.list,
       "x" : request.body.x, 
       "y" : request.body.y, 
       "eventName" : request.body.eventName, 
@@ -77,8 +113,9 @@ app.post("/listings", function(request, response) {
       (item.desc !== undefined);
 
   if (successful) {
-    listings.push(item);
-    writeFile("data.txt", JSON.stringify(listings));
+    console.log("success");
+    getProperList(request.body.list).push(item);
+    writeFile(getProperListName(request.body.list) , JSON.stringify(getProperList(request.body.list)));
   } else {
     item = undefined;
   }
@@ -94,19 +131,25 @@ app.put("/listings/:id", function(request, response){
   // change listing at index, to the new listing
   var id = request.params.id;
   console.log(id);
-  var oldItem = listings[id];
-  var item = { "desc": request.body.desc,
-               "author": request.body.author,
-               "date": new Date(),
-               "price": request.body.price,
-               "sold": request.body.sold };
+  var oldItem = getProperList(request.body.list)[id];
+  var item = {
+      "list" : request.body.list,
+      "x" : request.body.x, 
+      "y" : request.body.y, 
+      "eventName" : request.body.eventName, 
+      "time" : request.body.time, 
+      "host" : request.body.host,
+      "desc" : request.body.desc,
+    }
   item.desc = (item.desc !== undefined) ? item.desc : oldItem.desc;
-  item.author = (item.author !== undefined) ? item.author : oldItem.author;
-  item.price = (item.price !== undefined) ? item.price : oldItem.price;
-  item.sold = (item.sold !== undefined) ? JSON.parse(item.sold) : oldItem.sold;
+  item.host = (item.host !== undefined) ? item.host : oldItem.host;
+  item.time = (item.time !== undefined) ? item.time : oldItem.time;
+  item.eventName = (item.eventName !== undefined) ? item.eventName : oldItem.eventName;
+  item.x = (item.x !== undefined) ? item.x : oldItem.x;
+  item.y = (item.y !== undefined) ? item.y : oldItem.y;
 
   // commit the update
-  listings[id] = item;
+  getProperList(item.list)[id] = item;
 
   response.send({
     item: item,
@@ -114,10 +157,19 @@ app.put("/listings/:id", function(request, response){
   });
 });
 
-// delete entire list
+
+// Delete all stored data. This function seems unsafe.
 app.delete("/listings", function(request, response){
+  
+  // Clear all datastores.
   listings = [];
-  writeFile("data.txt", JSON.stringify(listings));
+  misc = [];
+  techTalks = [];
+  shows = [];
+  food = [];
+  studying = [];
+
+  writeFile(getProperListName(request.body.list) , JSON.stringify(getProperList(request.body.list)));
   response.send({
     listings: listings,
     success: true
@@ -127,9 +179,9 @@ app.delete("/listings", function(request, response){
 // delete one item
 app.delete("/listings/:id", function(request, response){
   var id = request.params.id;
-  var old = listings[id];
+  var old = getProperList(request.params.list)[id];
   listings.splice(id, 1);
-  writeFile("data.txt", JSON.stringify(listings));
+  writeFile(getProperListName(request.body.list) , JSON.stringify(getProperList(request.body.list)));
   response.send({
     listings: old,
     success: (old !== undefined)
@@ -144,8 +196,23 @@ app.get("/static/:staticFilename", function (request, response) {
 function initServer() {
   // When we start the server, we must load the stored data
   var defaultList = "[]";
-  readFile("data.txt", defaultList, function(err, data) {
+  readFile("listings.txt", defaultList, function(err, data) {
     listings = JSON.parse(data);
+  });
+  readFile("techTalks.txt", defaultList, function(err, data) {
+    techTalks = JSON.parse(data);
+  });
+  readFile("food.txt", defaultList, function(err, data) {
+    food = JSON.parse(data);
+  });
+  readFile("misc.txt", defaultList, function(err, data) {
+    misc = JSON.parse(data);
+  });
+  readFile("studying.txt", defaultList, function(err, data) {
+    studying = JSON.parse(data);
+  });
+  readFile("shows.txt", defaultList, function(err, data) {
+    shows = JSON.parse(data);
   });
 }
 
