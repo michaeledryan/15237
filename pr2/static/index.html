@@ -7,34 +7,66 @@
 <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
 <body>
-  <h1>CMU Marauder's map</h1>
-  <div>
 
-<canvas id="myCanvas" width="500" height="350">
-</canvas>
+	<header>
+		<h1>CMU Marauder's map</h1>
+	</header>
 
- </div>
- <form id="event-listing" action="javascript:prepareToAdd()">
-  <div class="row">
-  <label for="eventName">What is your event called?</label>
-        <input id="event" name="eventName" type="text"/>
-  </div>
-  <div class="row">
-    <label for="time">When will your event be held?</label>
-        <input id="time" name="time" type="text"/>
-  </div>
-  <div class="row">
-    <label for="host">Who is hosting your event?</label>
-      <input id="host" name="host" type="text"/>
-  </div>
-  <div class="row">
-    <textarea id="description" rows="4" cols="50" placeholder="Describe your event!"></textarea>
-  </div>
-  <div class="row right">
-    <input id="submitButton" name="Submit" type="submit" value="Add Listing"/>
-  </div>
-      </form>
- </form>
+	<div id="wrapper"> 
+		<div class="col1">
+			<h2>Add New Listing</h2>
+			<form id="event-listing" action="javascript:prepareToAdd()">
+				<div class="row">
+				<input id="event" name="eventName" placeholder="event name" type="text"/>
+				</div>
+				
+				<div class="row">
+				<input id="time" name="time" type="date"/>
+				</div>
+  
+				<div class="row">
+				<input id="host" name="host" placeholder="host" type="text"/>
+				</div>
+  
+				<div class="row">
+				<textarea id="description" rows="4" cols="20" placeholder="description"></textarea>
+				</div>
+				
+				<div class="row right">
+				<input id="submitButton" name="Submit" type="submit" value="Add Listing"/>
+				</div>			
+			</form>
+			<hr>
+			<h2>Filter By</h2>
+			<h3>Type of Event</h3>
+			<input type="checkbox" name="eventType" value="talks">talks<br />
+			<input type="checkbox" name="eventType" value="shows">shows<br />
+			<input type="checkbox" name="eventType" value="food">food<br />
+			<h3>Time of Event</h3>
+			<input type="range"  min="0" max="100" />
+			
+		</div> 
+
+		<div class="col2">
+			<h2>Map</h2>
+			<div id ="map">
+				<canvas id="myCanvas" width="500" height="350"></canvas>
+			</div>
+			<h2></h2>
+			<ul>
+				<li>
+					<h3>Title of Post</h3>
+					<h4>host</h4>
+					<p>Date, Time - End Time</p>
+					<p>Description. Lorem Ipsum solor dolit. </p>
+				</li>
+			<ul>
+		</div>
+	</div>
+	
+
+
+
 
 
 </body>

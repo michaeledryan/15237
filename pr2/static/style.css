@@ -1,3 +1,4 @@
+/* reset css */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -43,6 +44,8 @@ table {
 	border-spacing: 0;
 }
 
+/* new styles */
+
 body{
 	font-family: "brandon-grotesque",arial,san-serif;
 	background-image: url('paper_fibers.png');
@@ -50,10 +53,26 @@ body{
 
 }
 
-canvas{
-	margin-left: auto;
-	margin-right: auto;
-}
 #nav{
 	
+}
+
+h1{
+	text-transform: uppercase;
+	letter-spacing: .2em;
+}
+#map{
+	text-align: center;
+}
+#wrapper{
+	width: 900px;
+	margin-top: 15px;
+}
+.col1{
+	float: left;
+	width: 250px;
+}
+
+.col2{
+	float: left;
 }
