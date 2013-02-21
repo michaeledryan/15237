@@ -20,6 +20,15 @@ $(document).ready(function() {
 });
 
 
+function onMouseDown(event){
+		var x = event.pageX - canvas.offsetLeft;
+		var y = event.pageY - canvas.offsetTop;
+		console.log("X"+x+"Y"+y);
+		
+}
+
+
+
 function redraw() {
   canvas.width = canvas.width;
   ctx.drawImage(image, 0, 0);
