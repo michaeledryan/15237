@@ -3,9 +3,6 @@
 // sort listings. DONE
 //
 
-var LISTUTILS = (function() {
-  var exports = {};
-
   // Creates a new item for our listing
   exports.Listing = function(x, y, name, start, end, host, desc, type) {
     this.x = x;
@@ -19,9 +16,11 @@ var LISTUTILS = (function() {
     this.type = type;
   }
 
+/*
   exports.deleteItem = function(item) {
-    listings.(item.dayDate).
+    listings[item.dayDate].
   }
+*/
 
   // Sorts a list of Listings by start time
   function sortByTime(listingRow) {
@@ -38,12 +37,9 @@ var LISTUTILS = (function() {
   }
 
   // Adds new item to our listings.
-  exports.addToListings = function (item) {
-    if (listings.(item.dayDate) === undefined)
-      listings.(item.dayDate) = [];
-    listings.(item.dayDate).push(item);
+  exports.addToListings = function(item, listings) {
+    if (listings[item.dayDate] === undefined)
+      listings[item.dayDate] = [];
+    listings[item.dayDate].push(item);
 
   }
-
-  return exports;
-}());

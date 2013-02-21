@@ -30,6 +30,10 @@ $(document).ready(function() {
 });
 
 
+
+
+
+
 function redraw() {
   canvas.width = canvas.width;
   ctx.drawImage(image, 0, 0);
