@@ -2,6 +2,14 @@ var canvas, ctx, adding;
 var listings = [];
 var image = new Image();
 
+var TypeEnum = {
+      STUDY : 0,
+      FOOD : 1,
+      SHOW : 2,
+      TALK : 3,
+      MISC : 4,
+  }
+
 $(document).ready(function() {
   canvas = document.getElementById("myCanvas");
   ctx = canvas.getContext("2d");
@@ -14,6 +22,10 @@ $(document).ready(function() {
   canvas.setAttribute('tabindex','0');
   canvas.focus();
   canvas.addEventListener("mousedown", getPosition, false);
+
+
+  // Get listing data
+  NODECOM.get();
 
 });
 
@@ -36,7 +48,7 @@ function addMyEvent(x,y) {
 
     if (x !== "" && y !== "" && eventName !== "" && 
         eventTime !== "" && host !== ""){
-      NODECOM.add(x, y, eventTime, eventName, host, desc, "");
+      NODECOM.add(x, y, eventName, eventTime, host, desc, "");
       listings.push( 
         {
           x : x, 
@@ -55,8 +67,7 @@ function prepareToAdd() {
   adding = true;  
 }
 
-function getPosition(event)
-{
+function getPosition(event) {
   var x = event.x;
   var y = event.y;
 
@@ -70,3 +81,14 @@ function getPosition(event)
     adding = false;
   }
 }
+
+function Listing(x, y, name, start, end, host, desc, type) {
+    this.x = x;
+    this.y = y;
+    this.eventName = eventName;
+    this.dayDate = nearestDay(start);
+    this.startDate = start;
+    this.endDate = end;
+    this.host = host;
+    this.desc = desc;
+  }
