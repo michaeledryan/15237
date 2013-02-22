@@ -1,5 +1,3 @@
-// 15-237 Homework 3 - Eebae Server
-
 var express = require("express"); // imports express
 var app = express();              // create a new instance of express
 var Listutils = require("./listutils.js")
@@ -104,7 +102,7 @@ app.put("/listings/:id", function(request, response){
   var id = request.params.id;
   console.log(id);
   var oldItem = getProperList(request.body.list)[id];
-  var item = 
+  var item = {
       "list" : request.body.list,
       "x" : request.body.x, 
       "y" : request.body.y, 
