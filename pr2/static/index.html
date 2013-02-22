@@ -16,18 +16,19 @@
 	<div id="wrapper"> 
 		<div class="col1">
 			<h2>Add New Listing</h2>
+			
 			<form id="event-listing" action="javascript:prepareToAdd()">
 				<div class="row">
 				<input id="event" class="rounded" name="eventName" placeholder="event name" type="text"/>
 				</div>
 				
 				<div class="row">
-				<input id="	time" class="rounded" name="time" type="date"/>
+				<input id="date" class="rounded" name="time" type="date"/>
 				</div>
 				
 				<div class="row">
-				<input id="	time" class="rounded" name="time" type="time"/>
-				<input id="	time" class="rounded" name="time" type="time"/>
+				<input id="timeStart" class="rounded" name="time" type="time"/>
+				<input id="timeEnd" class="rounded" name="time" type="time"/>
 
 				</div>
   
@@ -59,7 +60,8 @@
 			<div id ="map">
 				<canvas id="myCanvas" width="500" height="350"></canvas>
 			</div>
-			<h2></h2>
+			<hr>
+			<h2>Listings</h2>
 			<ul>
 				<li>
 					<h3>Title of Post</h3>
