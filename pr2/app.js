@@ -2,6 +2,7 @@
 
 var express = require("express"); // imports express
 var app = express();              // create a new instance of express
+var Listutils = require("./listutils.js")
 
 // imports the fs module (reading and writing to a text file)
 var fs = require("fs");
@@ -11,36 +12,15 @@ var fs = require("fs");
 app.use(express.bodyParser());
 
 // The global datastores for this example
-var techTalks, shows, studying, food, misc, listings;
+var listings;
 
-// gets the appropriate datastore
-function getProperList(list) {
-  if (list === "techTalks")
-    return techTalks;
-  else if (list === "shows")
-    return shows;
-  else if (list === "studying")
-    return studying;
-  else if (list === "food")
-    return food;
-  else if (list === "misc")
-    return misc;
-  else return listings;
-}
-
-function getProperListName(list) {
-  if (list === "techTalks")
-    return "techTalks.txt";
-  else if (list === "shows")
-    return "shows.txt";
-  else if (list === "studying")
-    return "studying.txt";
-  else if (list === "food")
-    return "food.txt";
-  else if (list === "misc")
-    return "misc.txt";
-  else return "listings.txt";
-}
+var TypeEnum = {
+    STUDY : 0,
+    FOOD : 1,
+    SHOW : 2,
+    TALK : 3,
+    MISC : 4,
+  }
 
 
 // Asynchronously read file contents, then call callbackFn
@@ -68,20 +48,15 @@ function writeFile(filename, data, callbackFn) {
   });
 }
 
-// get all items
+// Get all items
 app.get("/listings", function(request, response){
   response.send({
     listings: listings,
-    techTalks : techTalks,
-    shows : shows,
-    studying : studying,
-    food : food,
-    misc : misc,
     success: true
   });
 });
 
-// get one item
+// Get one item
 app.get("/listings/:id", function(request, response){
   var id = request.params.id;
   var item = getProperList(request.params.list)[request.params.id];
@@ -91,32 +66,28 @@ app.get("/listings/:id", function(request, response){
   });
 });
 
-// create new item
+// Create new item
 app.post("/listings", function(request, response) {
-  console.log(request.body);
-  var item = {
-      "list" : request.body.list,
-      "x" : request.body.x, 
-      "y" : request.body.y, 
-      "eventName" : request.body.eventName, 
-      "time" : request.body.time, 
-      "host" : request.body.host,
-      "desc" : request.body.desc,
-    }
+  
+  var item = request.body.item;
 
+  console.log(item);
   var successful = 
       (item.x !== undefined) &&
       (item.y !== undefined) &&
       (item.eventName !== undefined) &&
       (item.host !== undefined) &&
-      (item.time !== undefined) &&
+      (item.dayDate !== undefined) &&
+      (item.startDate !== undefined) &&
+      (item.endDate !== undefined) &&
       (item.desc !== undefined);
 
   if (successful) {
     console.log("success");
-    getProperList(request.body.list).push(item);
-    writeFile(getProperListName(request.body.list) , JSON.stringify(getProperList(request.body.list)));
+    Listutils.addToListings(item);
+    writeFile("listings.txt" , JSON.stringify(listings));
   } else {
+    console.log("failure");
     item = undefined;
   }
 
@@ -126,13 +97,14 @@ app.post("/listings", function(request, response) {
   });
 });
 
+
 // update one item
 app.put("/listings/:id", function(request, response){
   // change listing at index, to the new listing
   var id = request.params.id;
   console.log(id);
   var oldItem = getProperList(request.body.list)[id];
-  var item = {
+  var item = 
       "list" : request.body.list,
       "x" : request.body.x, 
       "y" : request.body.y, 
@@ -161,27 +133,21 @@ app.put("/listings/:id", function(request, response){
 // Delete all stored data. This function seems unsafe.
 app.delete("/listings", function(request, response){
   
-  // Clear all datastores.
-  listings = [];
-  misc = [];
-  techTalks = [];
-  shows = [];
-  food = [];
-  studying = [];
+  listings = {};
 
-  writeFile(getProperListName(request.body.list) , JSON.stringify(getProperList(request.body.list)));
+  writeFile("listings.txt" , JSON.stringify(listings));
   response.send({
     listings: listings,
     success: true
   });
 });
 
-// delete one item
+// Delete one item
 app.delete("/listings/:id", function(request, response){
   var id = request.params.id;
   var old = getProperList(request.params.list)[id];
   listings.splice(id, 1);
-  writeFile(getProperListName(request.body.list) , JSON.stringify(getProperList(request.body.list)));
+  writeFile("listings.txt" , JSON.stringify(listings));
   response.send({
     listings: old,
     success: (old !== undefined)
@@ -199,23 +165,9 @@ function initServer() {
   readFile("listings.txt", defaultList, function(err, data) {
     listings = JSON.parse(data);
   });
-  readFile("techTalks.txt", defaultList, function(err, data) {
-    techTalks = JSON.parse(data);
-  });
-  readFile("food.txt", defaultList, function(err, data) {
-    food = JSON.parse(data);
-  });
-  readFile("misc.txt", defaultList, function(err, data) {
-    misc = JSON.parse(data);
-  });
-  readFile("studying.txt", defaultList, function(err, data) {
-    studying = JSON.parse(data);
-  });
-  readFile("shows.txt", defaultList, function(err, data) {
-    shows = JSON.parse(data);
-  });
 }
 
 // Finally, initialize the server, then activate the server at port 8889
 initServer();
 app.listen(8889);
+console.log("Listings:" + listings);
