@@ -29,7 +29,21 @@ $(document).ready(function() {
 
 });
 
-
+//TO DO
+function refreshDOM(){
+	if (listings===undefined){
+		return;
+	}
+	var container = $('ul');
+	container.html("");
+	
+	for (var i = 0; i < listings.length; i++) {
+		var li = $('li');
+		var event = listings[i];
+		//li.append(name);
+		container.append(li);
+	}
+}
 
 
 

@@ -26,7 +26,8 @@ exports.add = function(x, y, eventName, startTime, endTime, host, desc) {
       "item" : item
     },
     url: "/listings",
-    success: function(data) { }
+    success: function(data) {
+     }
   });
 }
 
