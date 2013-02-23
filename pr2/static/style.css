@@ -130,7 +130,8 @@ textarea{
 .month{
 	position: absolute;
 	text-align: center;
-	left: 22%;
+	left: 50%;
+	margin-left: -15px;
 	top: 18px;
 }
 .date{
@@ -159,4 +160,12 @@ textarea{
 
 .radio{
 	font-size: 10px;
+}
+
+.listings h3{
+	text-transform: uppercase;
+	font-weight: 300;
+	font-style: normal;
+	letter-spacing: .1em;
+	font-size: 20px;
 }
