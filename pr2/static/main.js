@@ -53,26 +53,40 @@ function redraw() {
   ctx.drawImage(image, 0, 0);
 }
 
+function drawPin(x,y){
+ 	ctx.beginPath();
+ 	ctx.arc(x,y,5,0,2 * Math.PI,false);	
+ 	
+}
+
 function addMyEvent(x,y) {
     var eventName = $("#event").val();
-    var eventTime = $("#time").val();
+    var startTime = $("#timeStart").val();
+    var endTime = $("#timeEnd").val();
+
     var host = $("#host").val();
     var desc = $("#description").val();
+    
+    var type = $("input[name='type']:checked").val();
 
     console.log("name" + eventName);
-    console.log("time" + eventTime);
+    console.log("time" + startTime);
     console.log("host" + host);
     console.log("Desc" + desc);
+    console.log("Type" + type);
 
     if (x !== "" && y !== "" && eventName !== "" && 
-        eventTime !== "" && host !== ""){
-      NODECOM.add(x, y, eventName, eventTime, host, desc, "");
+        startTime !== "" && host !== ""){
+	  
+	  NODECOM.add(x, y, eventName, startTime,endTime, host, desc, type);
+	  drawPin(x,y);
       listings.push( 
         {
           x : x, 
           y : y, 
           eventName : eventName, 
-          time : eventTime, 
+          startTime : startTime,
+          endTime : endTime, 
           host : host,
           desc : desc
         }
@@ -105,8 +119,9 @@ function Listing(x, y, name, start, end, host, desc, type) {
     this.y = y;
     this.eventName = eventName;
     this.dayDate = nearestDay(start);
-    this.startDate = start;
+    this.startTime = start;
     this.endDate = end;
     this.host = host;
     this.desc = desc;
+    this.type = type;
   }
