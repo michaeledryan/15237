@@ -1,5 +1,3 @@
-// 15-237 Homework 3 - Eebae Server
-
 var express = require("express"); // imports express
 var app = express();              // create a new instance of express
 var Listutils = require("./listUtils.js");
@@ -84,7 +82,6 @@ app.post("/listings", function(request, response) {
 
   if (successful) {
     console.log("success");
-    console.log(Listutils);
     Listutils.addToListings(item, listings);
     writeFile("listings.txt" , JSON.stringify(listings));
   } else {
@@ -104,7 +101,11 @@ app.put("/listings/:id", function(request, response){
   // change listing at index, to the new listing
   var item = request.params.id;
   console.log(id);
+<<<<<<< HEAD
   var oldItem = Listutils.get(item);
+=======
+  var oldItem = getProperList(request.body.list)[id];
+>>>>>>> d16077365a91a94327dfec3238247a105a035d37
   var item = {
       "list" : request.body.list,
       "x" : request.body.x, 

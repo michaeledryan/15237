@@ -7,26 +7,22 @@ exports.get = function() {
     type: "get",
     url: "/listings",
     success: function(data) { 
-      techTalks = data.techTalks;
-      shows = data.shows;
-      studying = data.studying;
-      food = data.food;
-      misc = data.misc;
-      listings = data.listings;
+      listings.push(data.listings);
     }
   });
 }
 
 // Adds an event to the server-side datastore.
 exports.add = function(x, y, eventName, startTime, endTime, host, desc, type) {
-  var item = new Listing(x, y, name, startTime, endTime, host, desc, type)
+  var item = new Listing(x, y, eventName, startTime, endTime, host, desc, type)
   $.ajax({
     type: "post", 
     data: {
       "item" : item
     },
     url: "/listings",
-    success: function(data) { }
+    success: function(data) {
+     }
   });
 }
 
