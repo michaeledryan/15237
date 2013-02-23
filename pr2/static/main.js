@@ -1,6 +1,7 @@
 var canvas, ctx, adding;
 var listings = [];
 var image = new Image();
+var earliestDate = new Date();
 
 const TYPEPLACEHOLDER = 0;
 
@@ -58,13 +59,24 @@ function refreshDOM(){
 	var container = $('ul');
 	container.html("");
 	
-	for (var i = 0; i < listings.length; i++) {
-		var li = $('li');
-		var event = listings[i];
-		//li.append(name);
-		container.append(li);
+	for (var item in listings){
+		var li = $("<li>");
+		var name = $('<h4>').html(listings[item].eventName);
+		
+		var dateEvent = $('<h5>').html(listings[item].dayDate);
+		var startDate = $('<p>').html(listings[item].startDate);
+		var endDate = $('<p>').html(listings[item].endDate);
+		
+		var host = $('<p>').html(listings[item].host);
+		var desc = $('<p>').html(listings[item].desc);
 
+	
+
+		li.append(name,dateEvent,startDate,endDate,host,desc);
+		container.append(li);
 	}
+	
+	
 }
 
 
@@ -93,6 +105,10 @@ function addMyEvent(x,y) {
     var desc = $("#description").val();
     var type = $("input[name='type']:checked").val();
 
+    if (startDate.getYear() < earliestDate && startDate.getMonth() < earliestDate.getMonth() && startDate.getDay()< earliestDate.getDay()){
+	    earliestDate = startDate;
+    }
+    
     console.log("name: " + name);
     console.log("time: " + startDate);
     console.log("host: " + host);
@@ -134,6 +150,7 @@ function Listing(x, y, name, start, end, host, desc, type) {
     this.y = y;
     this.eventName = name;
     this.dayDate = nearestDay(start);
+    console.log(this.dayDate);
     this.startDate = start;
     this.endDate = end;
     this.host = host;
