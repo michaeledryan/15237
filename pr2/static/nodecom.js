@@ -8,6 +8,7 @@ exports.get = function() {
     url: "/listings",
     success: function(data) { 
       listings = data.listings;
+      refreshDOM();
     }
   });
 }
@@ -41,7 +42,7 @@ exports.edit = function(x, y, eventName, time, host, desc, list) {
 exports.del = function(item) {
   $.ajax({
     type: "delete",
-    url: "/listings/" + id,
+    url: "/listings/" + item.dayDate,
     success: function(data) {
       //console.log(data);
     }
