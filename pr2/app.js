@@ -10,7 +10,7 @@ var fs = require("fs");
 app.use(express.bodyParser());
 
 // The global datastores for this example
-var listings;
+var listings = {};
 
 var TypeEnum = {
     STUDY : 0,
@@ -83,12 +83,13 @@ app.post("/listings", function(request, response) {
   if (successful) {
     console.log("success");
     Listutils.addToListings(item, listings);
+    console.log(listings);
+    console.log(JSON.stringify(listings));
     writeFile("listings.txt" , JSON.stringify(listings));
   } else {
     console.log("failure");
     item = undefined;
   }
-
   response.send({ 
     item: item,
     success: successful
@@ -101,11 +102,7 @@ app.put("/listings/:id", function(request, response){
   // change listing at index, to the new listing
   var item = request.params.id;
   console.log(id);
-<<<<<<< HEAD
   var oldItem = Listutils.get(item);
-=======
-  var oldItem = getProperList(request.body.list)[id];
->>>>>>> d16077365a91a94327dfec3238247a105a035d37
   var item = {
       "list" : request.body.list,
       "x" : request.body.x, 
@@ -147,12 +144,11 @@ app.delete("/listings", function(request, response){
 // Delete one item
 app.delete("/listings/:id", function(request, response){
   var id = request.params.id;
-  var old = getProperList(request.params.list)[id];
-  listings.splice(id, 1);
+  var item = request.body.item;
+  var success = listUtils.deleteItem(item, listings);
   writeFile("listings.txt" , JSON.stringify(listings));
   response.send({
-    listings: old,
-    success: (old !== undefined)
+    success: success
   });
 });
 
@@ -163,7 +159,7 @@ app.get("/static/:staticFilename", function (request, response) {
 
 function initServer() {
   // When we start the server, we must load the stored data
-  var defaultList = "[]";
+  var defaultList = "{}";
   readFile("listings.txt", defaultList, function(err, data) {
     listings = JSON.parse(data);
   });

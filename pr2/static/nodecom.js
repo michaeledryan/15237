@@ -7,7 +7,7 @@ exports.get = function() {
     type: "get",
     url: "/listings",
     success: function(data) { 
-      listings.push(data.listings);
+      listings = data.listings;
     }
   });
 }
@@ -15,6 +15,7 @@ exports.get = function() {
 // Adds an event to the server-side datastore.
 exports.add = function(x, y, eventName, startTime, endTime, host, desc, type) {
   var item = new Listing(x, y, eventName, startTime, endTime, host, desc, type)
+  console.log("ADDING!");
   $.ajax({
     type: "post", 
     data: {

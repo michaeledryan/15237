@@ -16,11 +16,17 @@
     this.type = type;
   }
 
-/*
-  exports.deleteItem = function(item) {
-    listings[item.dayDate].
+
+  exports.deleteItem = function(item, listings) {
+    var startDate = item.dayDate;
+    for (var i = 0; i < listings[startDate].length; i++) {
+      if (listings[i].startDate === item.startDate) {
+        listings[i].splice(i,1);
+        return;
+      }
+    }
+    return;
   }
-*/
 
   // Sorts a list of Listings by start time
   function sortByTime(listingRow) {
