@@ -2,6 +2,7 @@ var canvas, ctx, adding;
 var listings = [];
 var image = new Image();
 var earliestDate = new Date();
+var testDate;
 
 const TYPEPLACEHOLDER = 0;
 
@@ -29,6 +30,7 @@ $(document).ready(function() {
 
   // Get listing data
   NODECOM.get();
+  refreshDOM();
 
 });
 
@@ -57,28 +59,58 @@ function refreshDOM(){
 		return;
 	}
 	var container = $('ul');
+  var filterTypes = [];
 	container.html("");
 	
-	for (var item in listings){
-		var li = $("<li>");
-		var name = $('<h4>').html(listings[item].eventName);
-		
-		var dateEvent = $('<h5>').html(listings[item].dayDate);
-		var startDate = $('<p>').html(listings[item].startDate);
-		var endDate = $('<p>').html(listings[item].endDate);
-		
-		var host = $('<p>').html(listings[item].host);
-		var desc = $('<p>').html(listings[item].desc);
+  $(":checkbox").each(function() { 
+      if ($(this)[0].checked)
+        filterTypes.push(TypeEnum[$(this).val()]);
+  });
 
-	
+  console.log(filterTypes);
 
-		li.append(name,dateEvent,startDate,endDate,host,desc);
-		container.append(li);
-	}
-	
-	
+  for (var prop in listings) { 
+    for (var event in listings[prop]) { 
+      var item = listings[prop][event];
+
+      if (($.inArray(parseInt(item.type), filterTypes)) > -1) {
+        var startDate = new Date(item.startDate);
+        var month = startDate.toDateString().slice(4, 7);
+        var day = startDate.toDateString().slice(0, 3);
+        var date = startDate.getDate();
+        var year = startDate.getYear();
+        var li = $("<li>");
+    		var name = $('<h4>').html(item.eventName);
+    		var dateEvent = $('<h5>').html(dateToString(item.dayDate));
+    		var startDate = $('<p>').html(dateToTime(item.startDate));
+    		var endDate = $('<p>').html(dateToString(item.endDate));
+    		var host = $('<p>').html(item.host);
+    		var desc = $('<p>').html(item.desc);
+        var type = $('<p>').html(item.type);
+
+    		li.append(name,dateEvent,startDate,endDate,host,desc);
+    		container.append(li);
+      }
+
+    }
+  }	
 }
 
+
+function dateToString(date) {
+  var myDate = new Date(date);
+  return  myDate.toDateString()
+  //return myDate.getDay() + ", " + myDate.getMonth() + 
+   //     " " + myDate.getDate() + ", " + myDate.getFullYear();
+}
+
+function dateToTime(date) {
+  var myDate = new Date(date);
+  return (myDate.getHours() % 13) + ":" + 
+          (myDate.getMinutes() < 10 ? 0 : "") +
+          myDate.getMinutes() + " " +
+        ((myDate.getHours() > 12) ? "PM" : "AM");
+}
 
 function redraw() {
   canvas.width = canvas.width;
@@ -95,7 +127,6 @@ function drawPin(x,y){
   ctx.strokeStyle = 'cadetblue';
   ctx.stroke();
 }
-
 
 function addMyEvent(x,y) {
     var name = $("#event").val();
@@ -118,12 +149,14 @@ function addMyEvent(x,y) {
     if (name !== "" && startDate !== ""
      && endDate !== "" && host !== "") {
       console.log("success!")
-      NODECOM.add(x, y, name, startDate, endDate, host, desc, TYPEPLACEHOLDER);
-      listings.push(new Listing(x, y, name, startDate, endDate, 
-                    host, desc, type));
+      NODECOM.add(x, y, name, startDate, endDate, host, desc, type);
+      //listings.push(new Listing(x, y, name, startDate, endDate, 
+       //             host, desc, type));
+      NODECOM.get();
 	    drawPin(x,y);
     }
-    return false;
+
+  return false;
 }
 
 function prepareToAdd() {
