@@ -121,6 +121,25 @@ textarea{
 	height: 80px;	
 }
 
+.calendar{
+	height: 71px;
+	width: 50px;
+	background-image: url('calendar.png');
+	position: relative;
+}
+.month{
+	position: absolute;
+	text-align: center;
+	left: 22%;
+	top: 18px;
+}
+.date{
+	position: absolute;
+	left: 30%;
+	bottom: 10px;
+	font-weight: bold;
+	font-size: 20px;
+}
 
 #submitButton{
 	font-size: 14px;

@@ -62,7 +62,6 @@ function refreshDOM(){
 	for (var item in listings){
 		var li = $("<li>");
 		var name = $('<h4>').html(listings[item].eventName);
-		
 		var dateEvent = $('<h5>').html(listings[item].dayDate);
 		var startDate = $('<p>').html(listings[item].startDate);
 		var endDate = $('<p>').html(listings[item].endDate);
