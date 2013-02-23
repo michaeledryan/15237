@@ -2,7 +2,7 @@
 
 var express = require("express"); // imports express
 var app = express();              // create a new instance of express
-var Listutils = require("./listutils.js")
+var Listutils = require("./listUtils.js");
 
 // imports the fs module (reading and writing to a text file)
 var fs = require("fs");
@@ -84,7 +84,8 @@ app.post("/listings", function(request, response) {
 
   if (successful) {
     console.log("success");
-    Listutils.addToListings(item);
+    console.log(Listutils);
+    Listutils.addToListings(item, listings);
     writeFile("listings.txt" , JSON.stringify(listings));
   } else {
     console.log("failure");
@@ -97,14 +98,14 @@ app.post("/listings", function(request, response) {
   });
 });
 
-
+/*
 // update one item
 app.put("/listings/:id", function(request, response){
   // change listing at index, to the new listing
-  var id = request.params.id;
+  var item = request.params.id;
   console.log(id);
-  var oldItem = getProperList(request.body.list)[id];
-  var item = 
+  var oldItem = Listutils.get(item);
+  var item = {
       "list" : request.body.list,
       "x" : request.body.x, 
       "y" : request.body.y, 
@@ -128,7 +129,7 @@ app.put("/listings/:id", function(request, response){
     success: true
   });
 });
-
+*/
 
 // Delete all stored data. This function seems unsafe.
 app.delete("/listings", function(request, response){

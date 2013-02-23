@@ -2,6 +2,8 @@ var canvas, ctx, adding;
 var listings = [];
 var image = new Image();
 
+const TYPEPLACEHOLDER = 0;
+
 var TypeEnum = {
       STUDY : 0,
       FOOD : 1,
@@ -40,30 +42,23 @@ function redraw() {
 }
 
 function addMyEvent(x,y) {
-    var eventName = $("#event").val();
-    var eventTime = $("#time").val();
+    var name = $("#event").val();
+    var startDate = new Date($("#date").val() + " " + $("#timeStart").val());
+    var endDate = new Date($("#date").val() + " " + $("#timeEnd").val());
     var host = $("#host").val();
     var desc = $("#description").val();
 
-    console.log("name" + eventName);
-    console.log("time" + eventTime);
+    console.log("name" + name);
+    console.log("time" + startDate);
     console.log("host" + host);
     console.log("Desc" + desc);
 
-    if (x !== "" && y !== "" && eventName !== "" && 
-        eventTime !== "" && host !== ""){
-      NODECOM.add(x, y, eventName, eventTime, host, desc, "");
-      listings.push( 
-        {
-          x : x, 
-          y : y, 
-          eventName : eventName, 
-          time : eventTime, 
-          host : host,
-          desc : desc
-        }
-      );
+    if (name !== "" && startDate !== "" && endDate !== "" && host !== "") {
+      NODECOM.add(x, y, name, startDate, endDate, host, desc, TYPEPLACEHOLDER);
+      listings.push(new Listing(x, y, name, startDate, endDate, 
+                    host, desc, TYPEPLACEHOLDER));
     }
+
     return false;
 }
 
@@ -89,10 +84,17 @@ function getPosition(event) {
 function Listing(x, y, name, start, end, host, desc, type) {
     this.x = x;
     this.y = y;
-    this.eventName = eventName;
+    this.eventName = name;
     this.dayDate = nearestDay(start);
     this.startDate = start;
     this.endDate = end;
-    this.host = host;
+      this.host = host;
     this.desc = desc;
+  }
+
+   // Rounds a Date to the nearest day
+  function nearestDay(exactDate) {
+      return new Date(exactDate.getFullYear(), 
+                      exactDate.getMonth(), 
+                      exactDate.getDate());
   }

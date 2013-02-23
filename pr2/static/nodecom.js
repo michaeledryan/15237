@@ -18,8 +18,8 @@ exports.get = function() {
 }
 
 // Adds an event to the server-side datastore.
-exports.add = function(x, y, eventName, startTime, endTime, host, desc) {
-  var item = new Listing(x, y, name, start, end, host, desc, type)
+exports.add = function(x, y, eventName, startTime, endTime, host, desc, type) {
+  var item = new Listing(x, y, name, startTime, endTime, host, desc, type)
   $.ajax({
     type: "post", 
     data: {
