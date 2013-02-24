@@ -48,7 +48,8 @@ table {
 
 body{
 	font-family: "brandon-grotesque",arial,san-serif;
-	background-color: #c7c7c7;
+	background-color: #9f8b60;
+	color: white;
 
 }
 
@@ -58,11 +59,13 @@ body{
 
 h1{
 	text-transform: uppercase;
-	letter-spacing: .2em;
+	letter-spacing: .3em;
+	font-weight: 700;
 }
 
-h2{
-	color:#5be1ff;
+h2{	
+	font-family: 'adelle',serif;
+	color: #8ca2a8;
 }
 #map{
 	text-align: center;
@@ -85,6 +88,7 @@ h2{
 	background-color: rgba(225,225,225,0.5);
 	margin: 5px;
 	padding: 15px;
+	width: 600px;
 }
 
 #event-listing{
@@ -122,6 +126,7 @@ textarea{
 }
 
 .calendar{
+	margin-left: -1px;
 	height: 71px;
 	width: 50px;
 	background-image: url('calendar.png');
@@ -140,9 +145,11 @@ textarea{
 	bottom: 10px;
 	font-weight: bold;
 	font-size: 20px;
+	color: black;
 }
 
 #submitButton{
+	font-family: 'brandon-grotesque',arial,san-serif;
 	font-size: 14px;
 	color: #8EB254;
 	padding: 10px 20px;
@@ -162,10 +169,40 @@ textarea{
 	font-size: 10px;
 }
 
-.listings h3{
+.right h3{
+	font-family: 'brandon-grotesque',arial,san-serif;
 	text-transform: uppercase;
 	font-weight: 300;
 	font-style: normal;
 	letter-spacing: .1em;
 	font-size: 20px;
+}
+
+li{
+	padding: 10px 0px;
+	width: 480px;
+	margin: 5px;
+ }
+ 
+.left{
+	width: 80px;
+	float: left;
+	clear: left;
+}
+.right{
+	color: #6d6a6a;
+	width: 400px;
+	float: left;
+	font-family: 'adelle',serif;
+	line-height: 1.25;
+	clear: right;
+
+}
+
+.captionHead{
+	font-weight: 500;
+}
+.caption{
+	font-size: 9px;
+	color: black;
 }

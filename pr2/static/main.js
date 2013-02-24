@@ -53,6 +53,11 @@ $(document).ready(function() {
 
   Also, how is that slider going to work?
  */
+ 
+ 
+ 
+ 
+
 function refreshDOM(){
 	if (listings === undefined){
 		return;
@@ -85,17 +90,37 @@ function refreshDOM(){
         var date = startDate.getDate();
         var year = startDate.getYear();
         var li = $("<li>");
-    		var name = $('<h4>').html(item.eventName);
-    		var dateEvent = $('<h5>').html(dateToString(item.dayDate));
-    		var startDate = $('<p>').html(dateToTime(item.startDate));
-    		var endDate = $('<p>').html(dateToString(item.endDate));
-    		var host = $('<p>').html(item.host);
-    		var desc = $('<p>').html(item.desc);
-        var type = $('<p>').html(item.type);
+        var leftCol = $("<div>").addClass('left');
+        var rightCol = $("<div>").addClass('right');
+        
+    		var calendar = $('<div>').addClass('calendar');
+    		
+    		var calmonth = $('<div>').addClass('month');
+    		var caldate = $('<div>').addClass('date');
+    		calmonth.html(month);
+    		caldate.html(date);
+    		calendar.append(calmonth,caldate);
+    	
+    	var labelTime = $('<p>').html("Time");
+    	var labelHost = $('<p>').html("Host");
+    	labelTime.addClass('captionHead');
+    	labelHost.addClass('captionHead')
+    	var time = $('<p>').html(dateToTime(item.startDate));
+    	time.addClass('caption');
+    	var host = $('<p>').html(item.host);
+    	host.addClass('caption');
+    	leftCol.append(calendar,labelTime,time,labelHost,host);
+    	var endDate = $('<p>').html(dateToString(item.endDate));
 
-    		li.append(name,dateEvent,startDate,endDate,host,desc);
-    		container.append(li);
-      }
+    	var name = $('<h3>').html(item.eventName);
+    	var desc = $('<p>').html(item.desc);
+        var type = $('<p>').html(item.type);
+        
+        rightCol.append(name,desc);
+    	li.append(leftCol,rightCol);
+    	container.append(li);
+   
+      } 
 
     }
   }	
