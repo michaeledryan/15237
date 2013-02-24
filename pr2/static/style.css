@@ -26,12 +26,9 @@ footer, header, hgroup, menu, nav, section {
 }
 
 .switchCursor {
-	cursor:url(http://www.seancannon.com/_test/sniper-scope.cur) 24 24,default;
+	cursor: crosshair;
 }
 
-.noCursor {
-	cursor:none;
-}
 
 body {
 	line-height: 1;
