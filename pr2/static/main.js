@@ -3,11 +3,19 @@ var listings = [];
 var pinsOnMap = [];
 var image = new Image();
 var earliestDate = new Date();
-var testDate;
 
-const TYPEPLACEHOLDER = 0;
+const SECPERDAY = 3600 * 24;
+const SECPERWEEK = SECPERDAY * 7;
+const SECPERMONTH = SECPERDAY * 31; 
 
-var TypeEnum = {
+const dateEnum = {
+  DAY : 0,
+  WEEK : 1,
+  MONTH: 2,
+  ALL : 3
+}
+
+const TypeEnum = {
       STUDY : 0,
       FOOD : 1,
       SHOW : 2,
@@ -32,7 +40,14 @@ $(document).ready(function() {
 
   // Get listing data
   NODECOM.get();
+
+  $(':checkbox').change(refreshDOM);
+  $("input[name='filterTime']").change(refreshDOM)
+  $("#filterDate").val(new Date().toISOString().slice(0,10));
+  $("#date").val(new Date().toISOString().slice(0,10));
+
 });
+
 
 //TO DO
 /* 
@@ -55,7 +70,36 @@ $(document).ready(function() {
   Also, how is that slider going to work?
  */
  
+
  
+ /*
+  Checks to see whether or not a given event is within the current
+  range specified by the user.
+  */
+function filterByDate(date) {
+  var dateFilter = $("input[name='filterTime']:checked").val();
+  var selectedDate = new Date($("#filterDate").val() + " 00:00");
+
+  switch(parseInt(dateFilter)) {
+    case dateEnum.DAY:
+      return ((date - selectedDate >= 0) && 
+              (date - selectedDate <= SECPERDAY));
+      break;
+    case dateEnum.WEEK:
+      return ((date - selectedDate >= 0) && 
+              (date - selectedDate <= SECPERWEEK));
+      break;
+    case dateEnum.MONTH:
+      return ((date - selectedDate >= 0) && 
+              (date - selectedDate <= SECPERMONTH));
+      break;
+    case dateEnum.ALL:
+      return true;
+      break;
+  }
+
+}
+
  
  
 
@@ -75,56 +119,59 @@ function refreshDOM(){
 
   pinsOnMap = [];
 
-  //redraw();
+  redraw();
 
   for (var prop in listings) { 
-    for (var event in listings[prop]) { 
-      var item = listings[prop][event];
+    if (filterByDate(new Date(prop))) {
+      for (var event in listings[prop]) { 
 
-      pinsOnMap.push(item);
-      drawPin(item.x, item.y, false);
+        var item = listings[prop][event];
 
-      if (($.inArray(parseInt(item.type), filterTypes)) > -1) {
-        var startDate = new Date(item.startDate);
-        var month = startDate.toDateString().slice(4, 7);
-        var day = startDate.toDateString().slice(0, 3);
-        var date = startDate.getDate();
-        var year = startDate.getYear();
-        var li = $("<li>");
-        var leftCol = $("<div>").addClass('left');
-        var rightCol = $("<div>").addClass('right');
+        if (($.inArray(parseInt(item.type), filterTypes)) > -1) {
+
+          pinsOnMap.push(item);
+          drawPin(item.x, item.y, false);
+          var startDate = new Date(item.startDate);
+          var month = startDate.toDateString().slice(4, 7);
+          var day = startDate.toDateString().slice(0, 3);
+          var date = startDate.getDate();
+          var year = startDate.getYear();
+          var li = $("<li>");
+          var leftCol = $("<div>").addClass('left');
+          var rightCol = $("<div>").addClass('right');
+          
+          var calendar = $('<div>').addClass('calendar');
+          
+          var calmonth = $('<div>').addClass('month');
+          var caldate = $('<div>').addClass('date');
+          calmonth.html(month);
+          caldate.html(date);
+          calendar.append(calmonth,caldate);
         
-    		var calendar = $('<div>').addClass('calendar');
-    		
-    		var calmonth = $('<div>').addClass('month');
-    		var caldate = $('<div>').addClass('date');
-    		calmonth.html(month);
-    		caldate.html(date);
-    		calendar.append(calmonth,caldate);
-    	
-    	var labelTime = $('<p>').html("Time");
-    	var labelHost = $('<p>').html("Host");
-    	labelTime.addClass('captionHead');
-    	labelHost.addClass('captionHead')
-    	var time = $('<p>').html(dateToTime(item.startDate));
-    	time.addClass('caption');
-    	var host = $('<p>').html(item.host);
-    	host.addClass('caption');
-    	leftCol.append(calendar,labelTime,time,labelHost,host);
-    	var endDate = $('<p>').html(dateToString(item.endDate));
+          var labelTime = $('<p>').html("Time");
+          var labelHost = $('<p>').html("Host");
+          labelTime.addClass('captionHead');
+          labelHost.addClass('captionHead')
+          var time = $('<p>').html(dateToTime(item.startDate));
+          time.addClass('caption');
+          var host = $('<p>').html(item.host);
+          host.addClass('caption');
+          leftCol.append(calendar,labelTime,time,labelHost,host);
+          var endDate = $('<p>').html(dateToString(item.endDate));
 
-    	var name = $('<h3>').html(item.eventName);
-    	var desc = $('<p>').html(item.desc);
-        var type = $('<p>').html(item.type);
-        
-        rightCol.append(name,desc);
-    	li.append(leftCol,rightCol);
-    	container.append(li);
+          var name = $('<h3>').html(item.eventName);
+          var desc = $('<p>').html(item.desc);
+          var type = $('<p>').html(item.type);
+          
+          rightCol.append(name,desc);
+          li.append(leftCol,rightCol);
+          container.append(li);
+        } 
    
       } 
 
     }
-  }	
+  } 
 }
 
 
@@ -232,7 +279,6 @@ function hoverMouse(event) {
   }
 
   for (var i in closeEvents) {
-    console.log("close");
     drawPin(closeEvents[i].x, closeEvents[i].y, true);
   }
 
