@@ -1,9 +1,4 @@
-// add to listings. 
-// get from listings.  
-// sort listings. DONE
-//
-
-  // Creates a new item for our listing
+// Creates a new item for our listing
   exports.Listing = function(x, y, name, start, end, host, desc, type) {
     this.x = x;
     this.y = y;
