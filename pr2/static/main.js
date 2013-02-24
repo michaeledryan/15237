@@ -243,6 +243,7 @@ function addMyEvent(x,y) {
 function prepareToAdd() {
   adding = true;  
   $("canvas").toggleClass('switchCursor');
+  $(".alert").css({"visibility": "visible"});
 }
 
 function getPosition(event) {
@@ -257,6 +258,8 @@ function getPosition(event) {
     addMyEvent(x,y);
 
     adding = false;
+      $(".alert").css({"visibility": "hidden"});
+
   }
 
   else 

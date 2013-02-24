@@ -59,6 +59,21 @@ body{
 
 }
 
+
+.alert{
+	background-color: #ace2e3;
+	padding: 10px;
+	width: 200px;
+	height: 20px;
+	border-radius: 5px;
+	position: absolute;
+	margin: 5px;
+	right:15px;
+	visibility: hidden;
+	
+}
+
+
 #nav{
 	
 }
@@ -72,9 +87,11 @@ h1{
 h2{	
 	font-family: 'adelle',serif;
 	color: #8ca2a8;
+	padding-bottom: 5px;
 }
 
 #map{
+	padding-top: 10px;
 	text-align: center;
 	background-image: url('mapVector-03.svg');
 	background-repeat: no-repeat;
@@ -103,6 +120,7 @@ h2{
 	margin: 5px;
 	padding: 15px;
 	width: 600px;
+	position: relative;
 }
 
 .col3{
