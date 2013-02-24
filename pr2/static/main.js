@@ -1,5 +1,6 @@
 var canvas, ctx, adding;
 var listings = [];
+var pinsOnMap = [];
 var image = new Image();
 var earliestDate = new Date();
 var testDate;
@@ -26,7 +27,7 @@ $(document).ready(function() {
   canvas.setAttribute('tabindex','0');
   canvas.focus();
   canvas.addEventListener("mousedown", getPosition, false);
-
+  canvas.addEventListener("mousemove", hoverMouse, false)
 
   // Get listing data
   NODECOM.get();
@@ -66,9 +67,16 @@ function refreshDOM(){
 
   console.log(filterTypes);
 
+  pinsOnMap = [];
+
+  //redraw();
+
   for (var prop in listings) { 
     for (var event in listings[prop]) { 
       var item = listings[prop][event];
+
+      pinsOnMap.push(item);
+      drawPin(item.x, item.y, false);
 
       if (($.inArray(parseInt(item.type), filterTypes)) > -1) {
         var startDate = new Date(item.startDate);
@@ -115,13 +123,11 @@ function redraw() {
 }
 
 
-function drawPin(x,y){
-  console.log("drawing!");
-  redraw();
+function drawPin(x, y, hovering){
  	ctx.beginPath();
  	ctx.arc(x,y,5,0,2 * Math.PI,false);	
   ctx.lineWidth = 15;
-  ctx.strokeStyle = 'cadetblue';
+  ctx.strokeStyle = hovering ? 'lightblue' : 'cadetblue';
   ctx.stroke();
 }
 
@@ -150,7 +156,6 @@ function addMyEvent(x,y) {
       //listings.push(new Listing(x, y, name, startDate, endDate, 
        //             host, desc, type));
       NODECOM.get();
-	    drawPin(x,y);
     }
 
   return false;
@@ -165,7 +170,7 @@ function getPosition(event) {
   var y = event.y;
 
   x -= canvas.offsetLeft;
-  y -= canvas.offsetTop;
+  y -= (canvas.offsetTop + 1);
 
   if (adding) {
 
@@ -173,6 +178,40 @@ function getPosition(event) {
 
     adding = false;
   }
+  else hoverMouse(event);
+}
+
+function distance(x1, x2, y1, y2) {
+  var x = x1 - x2;
+  var y = y1 - y2;
+  return Math.sqrt(x*x + y*y);
+}
+
+
+function hoverMouse(event) {
+  var x = event.x;
+  var y = event.y;
+
+  x -= canvas.offsetLeft;
+  y -= canvas.offsetTop;
+
+  var closeEvents = [];
+  for (var i = 0; i < pinsOnMap.length; i++) {
+    //console.log(distance(pinsOnMap[i].x, x, pinsOnMap[i].y, y));
+    if (distance(pinsOnMap[i].x, x, 
+        pinsOnMap[i].y, y) < 15)
+      closeEvents.push(pinsOnMap[i]);
+    else
+      drawPin(pinsOnMap[i].x, pinsOnMap[i].y, false);
+  }
+
+  for (var i in closeEvents) {
+    console.log("close");
+    drawPin(closeEvents[i].x, closeEvents[i].y, true);
+  }
+
+  closeEvents = [];
+
 }
 
 function Listing(x, y, name, start, end, host, desc, type) {
