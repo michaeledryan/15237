@@ -30,8 +30,6 @@ $(document).ready(function() {
 
   // Get listing data
   NODECOM.get();
-  refreshDOM();
-
 });
 
 //TO DO
