@@ -152,7 +152,8 @@ function populateList(item, container) {
   var caldate = $('<div>').addClass('date');
   var labelTime = $('<p>').html("Time");
   var labelHost = $('<p>').html("Host");
-  var time = $('<p>').html(dateToTime(item.startDate));
+  var time = $('<p>').html(dateToTime(item.startDate) + 
+              " - " + dateToTime(item.endDate));
   var host = $('<p>').html(item.host);
   var endDate = $('<p>').html(dateToString(item.endDate));
   var name = $('<h3>').html(item.eventName);
