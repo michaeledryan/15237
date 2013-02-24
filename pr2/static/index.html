@@ -27,8 +27,8 @@
 				</div>
 				
 				<div class="row">
-				<input id="timeStart" class="rounded" name="time" type="time"/>
-				<input id="timeEnd" class="rounded" name="time" type="time"/>
+				<input id="timeStart" class="rounded" name="time" type="time" value="10:00"/>
+				<input id="timeEnd" class="rounded" name="time" type="time" value="13:00"/>
 				</div>
   
 				<div class="row">
@@ -49,20 +49,32 @@
 
 				
 				<div class="row right">
-				<input id="submitButton" name="Submit" type="submit" value="Add Listing"/>
+				<input id="submitButton" name="Submit" type="submit" value="Add to map!"/>
 				</div>			
 				
 							</form>
 			<hr>
 			<h2>Filter By</h2>
 			<h3>Type of Event</h3>
-			<input type="checkbox" name="eventType" checked="true" value="STUDY">shows<br />
+			<input type="checkbox" name="eventType" checked="true" value="STUDY">shows<br/>
 			<input type="checkbox" name="eventType" checked="true" value="FOOD">food<br/>
 			<input type="checkbox" name="eventType" checked="true" value="SHOW">show<br/>
 			<input type="checkbox" name="eventType" checked="true" value="TALK">talks<br />
 			<input type="checkbox" name="eventType" checked="true" value="MISC">misc.<br/>
 			<h3>Time of Event</h3>
-			<input type="range"  min="0" max="100" />
+
+			<div>
+			<input id="filterDate" class="rounded" name="time" type="date"/>
+			</div>
+
+			<div class="row">
+					<input type="radio" name="filterTime" value="0"><span class="radio">Daily</span>
+					<input type="radio" name="filterTime" value="1"><span class="radio">Weekly</span>
+					<input type="radio" name="filterTime" value="2"><span class="radio">Monthy</span>
+					<input type="radio" name="filterTime" value="3" checked="checked"><span class="radio">All Time</span>
+			</div>
+
+			<!--input type="date"  min="0" max="100" /-->
 			
 		</div> 
 
