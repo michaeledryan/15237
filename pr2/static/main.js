@@ -45,6 +45,8 @@ $(document).ready(function() {
   $("#filterDate").val(new Date().toISOString().slice(0,10));
   $("#date").val(new Date().toISOString().slice(0,10));
 
+
+
 });
 
 
@@ -71,10 +73,11 @@ $(document).ready(function() {
  
 
  
- /*
+/*
   Checks to see whether or not a given event is within the current
   range specified by the user.
-  */
+ */
+
 function filterByDate(date) {
   var dateFilter = $("input[name='filterTime']:checked").val();
   var selectedDate = new Date($("#filterDate").val() + " 00:00");
@@ -204,37 +207,47 @@ function drawPin(x, y, hovering){
 }
 
 function addMyEvent(x,y) {
-    var name = $("#event").val();
-    var startDate = new Date($("#date").val() + " " + $("#timeStart").val());
-    var endDate = new Date($("#date").val() + " " + $("#timeEnd").val());
-    var host = $("#host").val();
-    var desc = $("#description").val();
-    var type = $("input[name='type']:checked").val();
+  var name = $("#event").val();
+  var startDate = new Date($("#date").val() + " " + $("#timeStart").val());
+  var endDate = new Date($("#date").val() + " " + $("#timeEnd").val());
+  var host = $("#host").val();
+  var desc = $("#description").val();
+  var type = $("input[name='type']:checked").val();
 
-    if (startDate.getYear() < earliestDate && startDate.getMonth() < earliestDate.getMonth() && startDate.getDay()< earliestDate.getDay()){
-	    earliestDate = startDate;
-    }
-    
-    console.log("name: " + name);
-    console.log("time: " + startDate);
-    console.log("host: " + host);
-    console.log("Desc: " + desc);
-    console.log("Type: " + type);
 
-    if (name !== "" && startDate !== ""
-     && endDate !== "" && host !== "") {
-      console.log("success!")
-      NODECOM.add(x, y, name, startDate, endDate, host, desc, type);
-      //listings.push(new Listing(x, y, name, startDate, endDate, 
-       //             host, desc, type));
-      NODECOM.get();
-    }
+  //$("canvas").toggleClass('noCursor');
+  //$("canvas").toggleClass('noCursor');
+  $("canvas").toggleClass('switchCursor');
+  window.scrollBy( 1, 1 );
+  window.scrollBy( -1, -1 );
+
+  if (startDate.getYear() < earliestDate && 
+      startDate.getMonth() < earliestDate.getMonth() && 
+      startDate.getDay()< earliestDate.getDay()){
+    earliestDate = startDate;
+  }
+  
+  console.log("name: " + name);
+  console.log("time: " + startDate);
+  console.log("host: " + host);
+  console.log("Desc: " + desc);
+  console.log("Type: " + type);
+
+  if (name !== "" && startDate !== ""
+   && endDate !== "" && host !== "") {
+    console.log("success!")
+    NODECOM.add(x, y, name, startDate, endDate, host, desc, type);
+    //listings.push(new Listing(x, y, name, startDate, endDate, 
+     //             host, desc, type));
+    NODECOM.get();
+  }
 
   return false;
 }
 
 function prepareToAdd() {
   adding = true;  
+  $("canvas").toggleClass('switchCursor');
 }
 
 function getPosition(event) {

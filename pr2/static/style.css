@@ -24,6 +24,15 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+
+.switchCursor {
+	cursor:url(http://www.seancannon.com/_test/sniper-scope.cur) 24 24,default;
+}
+
+.noCursor {
+	cursor:none;
+}
+
 body {
 	line-height: 1;
 	padding: 15px;
@@ -207,3 +216,4 @@ li{
 	font-size: 9px;
 	color: black;
 }
+
