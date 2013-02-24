@@ -69,6 +69,7 @@ h2{
 }
 #map{
 	text-align: center;
+	background-image: url('mapVector-03.svg')
 }
 #wrapper{
 	width: 900px;
