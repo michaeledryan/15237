@@ -26,13 +26,7 @@ const TypeEnum = {
 $(document).ready(function() {
   canvas = document.getElementById("myCanvas");
   ctx = canvas.getContext("2d");
-  image.src = "mapBasic.png";
-  image.onload = draw;
 
-  function draw(){               
-    //ctx.drawImage(image, 0, 0,569,492);
-    //ctx.drawImage(image, 0, 0, 2366, 2049, 0, 0, 2366/3, 2049/3)
-  }
   canvas.setAttribute('tabindex','0');
   canvas.focus();
   canvas.addEventListener("mousedown", getPosition, false);
@@ -110,9 +104,7 @@ function refreshDOM(){
 	if (listings === undefined){
 		return;
 	}
-	var container = $('ul');
   var filterTypes = [];
-	container.html("");
   $(":checkbox").each(function() { 
       if ($(this)[0].checked)
         filterTypes.push(TypeEnum[$(this).val()]);
@@ -124,6 +116,9 @@ function refreshDOM(){
 
   redraw();
 
+	var container = $('ul.listings');
+	container.html("");
+
   for (var prop in listings) { 
     if (filterByDate(new Date(prop))) {
       for (var event in listings[prop]) { 
@@ -134,55 +129,55 @@ function refreshDOM(){
 
           pinsOnMap.push(item);
           drawPin(item.x, item.y, false);
-          var startDate = new Date(item.startDate);
-          var month = startDate.toDateString().slice(4, 7);
-          var day = startDate.toDateString().slice(0, 3);
-          var date = startDate.getDate();
-          var year = startDate.getYear();
-          var li = $("<li>");
-          var leftCol = $("<div>").addClass('left');
-          var rightCol = $("<div>").addClass('right');
-          
-          var calendar = $('<div>').addClass('calendar');
-          
-          var calmonth = $('<div>').addClass('month');
-          var caldate = $('<div>').addClass('date');
-          calmonth.html(month);
-          caldate.html(date);
-          calendar.append(calmonth,caldate);
-        
-          var labelTime = $('<p>').html("Time");
-          var labelHost = $('<p>').html("Host");
-          labelTime.addClass('captionHead');
-          labelHost.addClass('captionHead')
-          var time = $('<p>').html(dateToTime(item.startDate));
-          time.addClass('caption');
-          var host = $('<p>').html(item.host);
-          host.addClass('caption');
-          leftCol.append(calendar,labelTime,time,labelHost,host);
-          var endDate = $('<p>').html(dateToString(item.endDate));
 
-          var name = $('<h3>').html(item.eventName);
-          var desc = $('<p>').html(item.desc);
-          var type = $('<p>').html(item.type);
-          
-          rightCol.append(name,desc);
-          li.append(leftCol,rightCol);
-          container.append(li);
+          populateList(item, container);
         } 
-   
       } 
-
     }
   } 
+}
+
+
+function populateList(item, container) {
+  var startDate = new Date(item.startDate);
+  var month = startDate.toDateString().slice(4, 7);
+  var day = startDate.toDateString().slice(0, 3);
+  var date = startDate.getDate();
+  var year = startDate.getYear();
+  var li = $("<li>");
+  var leftCol = $("<div>").addClass('left');
+  var rightCol = $("<div>").addClass('right');
+  var calendar = $('<div>').addClass('calendar');
+  var calmonth = $('<div>').addClass('month');
+  var caldate = $('<div>').addClass('date');
+  var labelTime = $('<p>').html("Time");
+  var labelHost = $('<p>').html("Host");
+  var time = $('<p>').html(dateToTime(item.startDate));
+  var host = $('<p>').html(item.host);
+  var endDate = $('<p>').html(dateToString(item.endDate));
+  var name = $('<h3>').html(item.eventName);
+  var desc = $('<p>').html(item.desc);
+  var type = $('<p>').html(item.type);
+
+  calmonth.html(month);
+  caldate.html(date);
+  calendar.append(calmonth,caldate);
+  labelTime.addClass('captionHead');
+  labelHost.addClass('captionHead')
+  time.addClass('caption');
+  host.addClass('caption');
+  leftCol.append(calendar,labelTime,time,labelHost,host);
+  
+  rightCol.append(name,desc);
+  li.append(leftCol,rightCol);
+  container.append(li);
+
 }
 
 
 function dateToString(date) {
   var myDate = new Date(date);
   return  myDate.toDateString()
-  //return myDate.getDay() + ", " + myDate.getMonth() + 
-   //     " " + myDate.getDate() + ", " + myDate.getFullYear();
 }
 
 function dateToTime(date) {
@@ -195,15 +190,16 @@ function dateToTime(date) {
 
 function redraw() {
   canvas.width = canvas.width;
-  ctx.drawImage(image, 0, 0);
 }
 
 
 function drawPin(x, y, hovering){
  	ctx.beginPath();
- 	ctx.arc(x,y,5,0,2 * Math.PI,false);	
-  ctx.lineWidth = 15;
-  ctx.strokeStyle = hovering ? 'lightblue' : 'cadetblue';
+ 	ctx.arc(x,y, 6, 0,2 * Math.PI,false);	
+  ctx.fillStyle = 'lightgrey';
+  ctx.fill();
+  ctx.lineWidth = 7;
+  ctx.strokeStyle = hovering ? 'tomato' : 'crimson';
   ctx.stroke();
 }
 
@@ -215,9 +211,6 @@ function addMyEvent(x,y) {
   var desc = $("#description").val();
   var type = $("input[name='type']:checked").val();
 
-
-  //$("canvas").toggleClass('noCursor');
-  //$("canvas").toggleClass('noCursor');
   $("canvas").toggleClass('switchCursor');
   window.scrollBy( 1, 1 );
   window.scrollBy( -1, -1 );
@@ -264,8 +257,30 @@ function getPosition(event) {
 
     adding = false;
   }
-  else hoverMouse(event);
+
+  else 
+    clickListings(x, y);
 }
+
+function clickListings(x, y) {
+  var closeEvents = [];
+  for (var i = 0; i < pinsOnMap.length; i++) {
+    //console.log(distance(pinsOnMap[i].x, x, pinsOnMap[i].y, y));
+    if (distance(pinsOnMap[i].x, x, 
+        pinsOnMap[i].y, y) < 15)
+      closeEvents.push(pinsOnMap[i]);
+  }
+
+  var container = $('ul.sideListings');
+  container.html("");
+
+  for (var i in closeEvents) {
+    populateList(closeEvents[i], container);
+  }
+  closeEvents = [];
+
+}
+
 
 function distance(x1, x2, y1, y2) {
   var x = x1 - x2;
