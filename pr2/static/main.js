@@ -30,7 +30,8 @@ $(document).ready(function() {
   image.onload = draw;
 
   function draw(){               
-    ctx.drawImage(image, 0, 0);
+    //ctx.drawImage(image, 0, 0,569,492);
+    //ctx.drawImage(image, 0, 0, 2366, 2049, 0, 0, 2366/3, 2049/3)
   }
   canvas.setAttribute('tabindex','0');
   canvas.focus();
@@ -251,8 +252,8 @@ function prepareToAdd() {
 }
 
 function getPosition(event) {
-  var x = event.x;
-  var y = event.y;
+  var x = event.pageX;
+  var y = event.pageY;
 
   x -= canvas.offsetLeft;
   y -= (canvas.offsetTop + 1);
@@ -274,8 +275,8 @@ function distance(x1, x2, y1, y2) {
 
 
 function hoverMouse(event) {
-  var x = event.x;
-  var y = event.y;
+  var x = event.pageX;
+  var y = event.pageY;
 
   x -= canvas.offsetLeft;
   y -= canvas.offsetTop;
