@@ -40,8 +40,6 @@ $(document).ready(function() {
   $("#filterDate").val(new Date().toISOString().slice(0,10));
   $("#date").val(new Date().toISOString().slice(0,10));
 
-
-
 });
 
 
@@ -128,6 +126,8 @@ function refreshDOM(){
         if (($.inArray(parseInt(item.type), filterTypes)) > -1) {
 
           pinsOnMap.push(item);
+          console.log("x: " + item.x);
+          console.log("y: " + item.y);
           drawPin(item.x, item.y, false);
 
           populateList(item, container);
@@ -250,8 +250,16 @@ function getPosition(event) {
   var x = event.pageX;
   var y = event.pageY;
 
+  console.log("Before subtracting offset x: " + x);
+  console.log("Before subtracting offset y: " + y);
+
+
   x -= canvas.offsetLeft;
   y -= (canvas.offsetTop + 1);
+
+  console.log("Afer subtracting offset x: " + x);
+  console.log("Afer subtracting offset y: " + y);
+
 
   if (adding) {
 
