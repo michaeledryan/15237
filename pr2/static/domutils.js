@@ -142,6 +142,7 @@ exports.populateSideList = function(item,container) {
   var day = startDate.toDateString().slice(0, 3);
   var date = startDate.getDate();
   var year = startDate.getYear();
+  var type = $('<p>').html(TypeArray[item.type]);
  
   // Generate HTML. 
   var li = $("<li>");
@@ -155,7 +156,7 @@ exports.populateSideList = function(item,container) {
   date.addClass("captionHead")
   time.addClass("caption");
   
-  li.append(name,host,date,time,$("<hr>"),desc);
+  li.append(name, host, date, time, type, $("<hr>"), desc);
   container.append(li);
   
 }
