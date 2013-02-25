@@ -1,7 +1,9 @@
 var NODECOM = (function() {
   var exports = {};
 
-// Implement the get() function
+/*
+ Gets all the events that have been added.
+ */
 exports.get = function() {
   $.ajax({
     type: "get",
@@ -13,10 +15,10 @@ exports.get = function() {
   });
 }
 
-// Adds an event to the server-side datastore.
-exports.add = function(x, y, eventName, startTime, endTime, host, desc, type) {
-  var item = new Listing(x, y, eventName, startTime, endTime, host, desc, type)
-  console.log("ADDING!");
+/* 
+  Adds one event to the server-side datastore.
+ */
+exports.add = function(item) {
   $.ajax({
     type: "post", 
     data: {
@@ -28,27 +30,25 @@ exports.add = function(x, y, eventName, startTime, endTime, host, desc, type) {
   });
 }
 
-exports.edit = function(x, y, eventName, time, host, desc, list) {
-  $.ajax({
-    type: "put",
-    data: {list : list, desc: desc, author: author, price: price, sold: sold},
-    url: "/listings/" + id,
-    success: function(data) {
 
-    }
-  });
-}
-
+/*
+ Deletes an item in the server-side datastore.
+ */
 exports.del = function(item) {
   $.ajax({
     type: "delete",
+    data: {
+      item: item,
+    },
     url: "/listings/" + item.dayDate,
     success: function(data) {
-      //console.log(data);
     }
   });
 }
 
+/* 
+  Deletes the entire server-side datastore.
+ */
 exports.delAll = function() {
   $.ajax({
     type: "delete",

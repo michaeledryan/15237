@@ -25,9 +25,6 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 
-.switchCursor {
-	cursor: crosshair;
-}
 
 
 body {
@@ -99,6 +96,10 @@ h2{
 	background-repeat: no-repeat;
 	background-position: center;
 	margin: auto;
+}
+
+.switchCursor {
+	cursor: crosshair;
 }
 
 #wrapper{
@@ -269,8 +270,17 @@ textarea{
 	font-weight: 500;
 	color: #314E57;
 }
+
 .caption{
 	font-size: 9px;
 	color: black;
 }
 
+.delButton {
+	float: right;
+	color: crimson;
+	background-color: rgba(25,25,25,0.2);
+	border-radius: 5px;
+	padding: 4px;
+	font-family: 'brandon-grotesque',arial,san-serif;
+}

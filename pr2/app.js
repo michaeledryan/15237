@@ -83,8 +83,6 @@ app.post("/listings", function(request, response) {
   if (successful) {
     console.log("success");
     Listutils.addToListings(item, listings);
-    console.log(listings);
-    console.log(JSON.stringify(listings));
     writeFile("listings.txt" , JSON.stringify(listings));
   } else {
     console.log("failure");
@@ -145,7 +143,8 @@ app.delete("/listings", function(request, response){
 app.delete("/listings/:id", function(request, response){
   var id = request.params.id;
   var item = request.body.item;
-  var success = listUtils.deleteItem(item, listings);
+  console.log(item);
+  var success = Listutils.deleteItem(item, listings);
   writeFile("listings.txt" , JSON.stringify(listings));
   response.send({
     success: success

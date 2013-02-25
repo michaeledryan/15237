@@ -4,10 +4,12 @@ var pinsOnMap = [];
 var image = new Image();
 var earliestDate = new Date();
 
+// Used to calculate time ranges
 const SECPERDAY = 3600 * 24;
 const SECPERWEEK = SECPERDAY * 7;
 const SECPERMONTH = SECPERDAY * 31; 
 
+// For date radio buttons
 const dateEnum = {
   DAY : 0,
   WEEK : 1,
@@ -15,6 +17,7 @@ const dateEnum = {
   ALL : 3
 }
 
+// For type radio buttons
 const TypeEnum = {
       STUDY : 0,
       FOOD : 1,
@@ -23,10 +26,27 @@ const TypeEnum = {
       MISC : 4,
   }
 
+// Invers of TypeEnum
+const TypeArray = ["Study", "Food", "Show", "Talk", "Misc."]
+
+/*
+  Sets up the canvas with proper listeners and
+  initializes DOM elements with default data and listeners.
+ */
 $(document).ready(function() {
+
+  var localDate = new Date().toLocaleDateString();
+  var dateStrArray = localDate.split("/");
+  var localDateString = dateStrArray[2] + "-"  + 
+                        ((dateStrArray[0].length === 1) ? "0" : "") 
+                        + dateStrArray[0] + "-" + 
+                        ((dateStrArray[1].length === 1) ? "0" : "") +
+                        dateStrArray[1];
+
+
+  // Canvas setup
   canvas = document.getElementById("myCanvas");
   ctx = canvas.getContext("2d");
-
   canvas.setAttribute('tabindex','0');
   canvas.focus();
   canvas.addEventListener("mousedown", getPosition, false);
@@ -35,42 +55,20 @@ $(document).ready(function() {
   // Get listing data
   NODECOM.get();
 
+  // Set up DOM objects
   $(':checkbox').change(refreshDOM);
   $("input[name='filterTime']").change(refreshDOM)
-  $("#filterDate").val(new Date().toISOString().slice(0,10));
-  $("#date").val(new Date().toISOString().slice(0,10));
+  $("#filterDate").val(localDateString);
+  $("#date").val(localDateString);
 
 });
 
-
-//TO DO
-/* 
-  So listings on both sides is a mapping of dates to arrays of events
-  that happen on those dates.
-  So we need to pick specific dates, and iterate through them
-  in whatever way we want. Then we can populate the DOM with items
-  in the list. I assume adding stuff to canvas can be done in a similar
-  way. We probably also need more complicated event listening...
-
-  Let's have a flag set so that if you aren't in "Add Listing" mode,
-  when you mouse over a pin you get the info. If you ARE in add listing mode,
-  Maybe the pins disappear and then you can add your own and see clearly?
-
-  I will try to work on this as soon as I can. If I can get basic listing
-  traversal down, populating the dom shouldn't be that bad.
-
-  Then we get to work on filtering, which is a whole other load of fun!
-
-  Also, how is that slider going to work?
- */
- 
 
  
 /*
   Checks to see whether or not a given event is within the current
   range specified by the user.
  */
-
 function filterByDate(date) {
   var dateFilter = $("input[name='filterTime']:checked").val();
   var selectedDate = new Date($("#filterDate").val() + " 00:00");
@@ -95,9 +93,13 @@ function filterByDate(date) {
 
 }
 
- 
- 
-
+/*
+  Refreshes the DOM. Does several things:
+  Checks to see what events the current user wants to see.
+  Clears the canvas and empties the event list at the bottom of the page.
+  Iterates through listings, drawing pins on the map populating the event
+  list with events that the user has not filtered out.
+ */
 function refreshDOM(){
 	if (listings === undefined){
 		return;
@@ -107,27 +109,24 @@ function refreshDOM(){
       if ($(this)[0].checked)
         filterTypes.push(TypeEnum[$(this).val()]);
   });
-
-  console.log(filterTypes);
-
+  
   pinsOnMap = [];
 
-  redraw();
+  canvas.width = canvas.width;
 
 	var container = $('ul.listings');
 	container.html("");
 
   for (var prop in listings) { 
     if (filterByDate(new Date(prop))) {
-      for (var event in listings[prop]) { 
+      for (var event in listings[prop]) {
 
         var item = listings[prop][event];
 
         if (($.inArray(parseInt(item.type), filterTypes)) > -1) {
 
           pinsOnMap.push(item);
-          console.log("x: " + item.x);
-          console.log("y: " + item.y);
+          
           drawPin(item.x, item.y, false);
 
           populateList(item, container);
@@ -138,15 +137,15 @@ function refreshDOM(){
 }
 
 
+/*
+  Given an item and container, adds a new listing to the container.
+ */
 function populateList(item, container) {
+  // Get relevate attributes from the item
   var startDate = new Date(item.startDate);
   var month = startDate.toDateString().slice(4, 7);
-  var day = startDate.toDateString().slice(0, 3);
   var date = startDate.getDate();
-  var year = startDate.getYear();
-  
   var li = $("<li>");
-  var block = $("<div>").addClass("block");
   var leftCol = $("<div>").addClass('left');
   var rightCol = $("<div>").addClass('right');
   var calendar = $('<div>').addClass('calendar');
@@ -155,12 +154,20 @@ function populateList(item, container) {
   var labelTime = $('<p>').html("Time");
   var labelHost = $('<p>').html("Host");
   var time = $('<p>').html(dateToTime(item.startDate) + 
-              " - " + dateToTime(item.endDate));
+              " - <br>" + dateToTime(item.endDate));
   var host = $('<p>').html(item.host);
-  var endDate = $('<p>').html(dateToString(item.endDate));
   var name = $('<h3>').html(item.eventName);
   var desc = $('<p>').html(item.desc);
-  var type = $('<p>').html(item.type);
+
+  //Should we show the type of event?
+  var type = $('<p>').html(TypeArray[item.type]);
+
+  var del = $("<div>").addClass("delButton");
+  del.html("delete this listing");
+  del.click(function() {
+    NODECOM.del(item);
+    NODECOM.get();
+  });
 
   calmonth.html(month);
   caldate.html(date);
@@ -170,9 +177,9 @@ function populateList(item, container) {
   time.addClass('caption');
   host.addClass('caption');
   leftCol.append(calendar,labelTime,time,labelHost,host);
-  rightCol.append(name,desc);
-  block.append(leftCol,rightCol);
-  li.append(block);
+  
+  rightCol.append(name,desc,type,del);
+  li.append(leftCol,rightCol);
   container.append(li);
 
 }
@@ -207,28 +214,33 @@ var startDate = new Date(item.startDate);
 
 function dateToString(date) {
   var myDate = new Date(date);
-  return  myDate.toDateString()
-}
-
-function dateToTime(date) {
-  var myDate = new Date(date);
-  return (myDate.getHours() % 13) + ":" + 
+  return (myDate.toLocaleTimeString().split(":")[0]) + ":" + 
           (myDate.getMinutes() < 10 ? 0 : "") +
           myDate.getMinutes() + " " +
         ((myDate.getHours() > 12) ? "PM" : "AM");
 }
 
-function redraw() {
-  canvas.width = canvas.width;
+/*
+  Helper function. Gets a well-formatted time string
+  from a given Date object.
+*/
+function dateToTime(date) {
+  var myDate = new Date(date);
+  return (myDate.toLocaleTimeString().split(":")[0]) + ":" + 
+          (myDate.getMinutes() < 10 ? 0 : "") +
+          myDate.getMinutes() + " " +
+        ((myDate.getHours() > 12) ? "PM" : "AM");
 }
 
-
+/*
+  Draws a pin on the map at the given coordinates.
+ */
 function drawPin(x, y, hovering){
  	ctx.beginPath();
- 	ctx.arc(x,y, 6, 0,2 * Math.PI,false);	
-  ctx.fillStyle = 'lightgrey';
+ 	ctx.arc(x, y, 3, 0, 2 * Math.PI,false);	
+  ctx.fillStyle = hovering ? 'white' : 'lightgrey';
   ctx.fill();
-  ctx.lineWidth = 7;
+  ctx.lineWidth = 3;
   ctx.strokeStyle = hovering ? 'tomato' : 'crimson';
   ctx.stroke();
 }
@@ -242,8 +254,6 @@ function addMyEvent(x,y) {
   var type = $("input[name='type']:checked").val();
 
   $("canvas").toggleClass('switchCursor');
-  window.scrollBy( 1, 1 );
-  window.scrollBy( -1, -1 );
 
   if (startDate.getYear() < earliestDate && 
       startDate.getMonth() < earliestDate.getMonth() && 
@@ -251,18 +261,11 @@ function addMyEvent(x,y) {
     earliestDate = startDate;
   }
   
-  console.log("name: " + name);
-  console.log("time: " + startDate);
-  console.log("host: " + host);
-  console.log("Desc: " + desc);
-  console.log("Type: " + type);
-
   if (name !== "" && startDate !== ""
    && endDate !== "" && host !== "") {
     console.log("success!")
-    NODECOM.add(x, y, name, startDate, endDate, host, desc, type);
-    //listings.push(new Listing(x, y, name, startDate, endDate, 
-     //             host, desc, type));
+    NODECOM.add(new Listing(x, y, name, startDate, endDate, 
+                 host, desc, type));
     NODECOM.get();
   }
 
@@ -305,10 +308,12 @@ function getPosition(event) {
 
 function clickListings(x, y) {
   var closeEvents = [];
+
+  // Iterate through the pins on the map, selecting close ones.
   for (var i = 0; i < pinsOnMap.length; i++) {
-    //console.log(distance(pinsOnMap[i].x, x, pinsOnMap[i].y, y));
+    
     if (distance(pinsOnMap[i].x, x, 
-        pinsOnMap[i].y, y) < 15)
+        pinsOnMap[i].y, y) < 9)
       closeEvents.push(pinsOnMap[i]);
   }
 
@@ -316,21 +321,28 @@ function clickListings(x, y) {
   container.html("");
   
 
+  // Add nearby events to the listng on the side.
   for (var i in closeEvents) {
     populateSideList(closeEvents[i], container);
   }
-  closeEvents = [];
+
+  //closeEvents = [];
 
 }
 
-
+/*
+  Helper function. Pythagorean Theorem.
+ */
 function distance(x1, x2, y1, y2) {
   var x = x1 - x2;
   var y = y1 - y2;
   return Math.sqrt(x*x + y*y);
 }
 
-
+/*
+  Listener for mouseMove on the canvas. Redraws close by icons 
+  in a different color
+ */
 function hoverMouse(event) {
   var x = event.pageX;
   var y = event.pageY;
@@ -339,23 +351,29 @@ function hoverMouse(event) {
   y -= canvas.offsetTop;
 
   var closeEvents = [];
+
+  // Iterate through the pins on the map, selecting close ones.
   for (var i = 0; i < pinsOnMap.length; i++) {
-    //console.log(distance(pinsOnMap[i].x, x, pinsOnMap[i].y, y));
     if (distance(pinsOnMap[i].x, x, 
-        pinsOnMap[i].y, y) < 15)
+        pinsOnMap[i].y, y) < 9)
       closeEvents.push(pinsOnMap[i]);
     else
       drawPin(pinsOnMap[i].x, pinsOnMap[i].y, false);
   }
 
+  // Draw nearby pins differently.
   for (var i in closeEvents) {
     drawPin(closeEvents[i].x, closeEvents[i].y, true);
   }
 
-  closeEvents = [];
-
+  //closeEvents = [];
 }
 
+
+/*
+  Constructor for a Listing object, which stores information
+  about a given event.
+ */
 function Listing(x, y, name, start, end, host, desc, type) {
     this.x = x;
     this.y = y;
@@ -370,9 +388,9 @@ function Listing(x, y, name, start, end, host, desc, type) {
   }
 
 
-   // Rounds a Date to the nearest day
-  function nearestDay(exactDate) {
-      return new Date(exactDate.getFullYear(), 
-                      exactDate.getMonth(), 
-                      exactDate.getDate());
-  }
+// Rounds a Date to the nearest day
+function nearestDay(exactDate) {
+    return new Date(exactDate.getFullYear(), 
+                    exactDate.getMonth(), 
+                    exactDate.getDate());
+}
