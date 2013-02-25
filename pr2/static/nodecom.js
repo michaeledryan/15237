@@ -10,7 +10,7 @@ exports.get = function() {
     url: "/listings",
     success: function(data) { 
       listings = data.listings;
-      refreshDOM();
+      DOMUTILS.refreshDOM();
     }
   });
 }

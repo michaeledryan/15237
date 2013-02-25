@@ -281,6 +281,7 @@ label{
 .study{
 	background-color: #99927A;
 }
+
 .food{
 	background-color: #CCAC3D;
 }
@@ -288,9 +289,11 @@ label{
 .show{
 	background-color: #FFBD66;
 }
+
 .talk{
 	background-color: #CCFAFF;
 }
+
 .misc{
 	background-color: #3DCCB3;
 }
@@ -313,4 +316,9 @@ label{
 	border-radius: 5px;
 	padding: 4px;
 	font-family: 'brandon-grotesque',arial,san-serif;
+}
+
+.error {
+	color: crimson;
+	display: none;
 }

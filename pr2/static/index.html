@@ -3,6 +3,7 @@
 <script src="jquery-1.9.0.js"></script>
 <script src="main.js"> </script>
 <script src="nodecom.js"> </script>
+<script src="domutils.js"> </script>
 <link rel="stylesheet" href="style.css" type="text/css" media="screen">
 <script type="text/javascript" src="//use.typekit.net/lxa5ysv.js"></script>
 <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
@@ -49,7 +50,7 @@
 						<input type="radio" name="type" value="4"><span class="radio">Miscellaneous</span>
 					</div>
 
-				
+					<p class="error">Please fill all fields before adding an event!</p>
 					<div class="row">
 						<input id="submitButton" name="Submit" type="submit" value="Add to map!"/>
 					</div>			
@@ -95,7 +96,7 @@
 		</div>
 
 		<div class="col3">
-			<h2>Selected</h2>
+			<h2>Selected:</h2>
 			
 			<ul class="sideListings">
 				<li>Click on the pins to see more.</li>
