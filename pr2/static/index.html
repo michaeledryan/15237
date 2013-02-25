@@ -11,6 +11,7 @@
 
 	<header>
 		<h1>CMU Marauder's map</h1>
+		<p>Find things near you!</p>
 	</header>
 
 	<div id="wrapper"> 
@@ -39,7 +40,7 @@
 					<div class="row">
 						<textarea id="description" rows="4" cols="20" placeholder="description"></textarea>
 					</div>
-				
+					<p class="captionHead">Type of Event</p>
 					<div class="row">
 						<input type="radio" name="type" value="0"><span class="radio">Study</span>
 						<input type="radio" name="type" value="1"><span class="radio">Food</span><br />
@@ -58,16 +59,16 @@
 			<div class="roundedBox">
 				<h2>Filter By</h2>
 				<hr>
-				<h3>Type of Event</h3>
-				<input type="checkbox" name="eventType" checked="true" value="STUDY">Study<br/>
-				<input type="checkbox" name="eventType" checked="true" value="FOOD">Food<br/>
-				<input type="checkbox" name="eventType" checked="true" value="SHOW">Show<br/>
-				<input type="checkbox" name="eventType" checked="true" value="TALK">Talk<br />
-				<input type="checkbox" name="eventType" checked="true" value="MISC">Misc<br/>
-				<h3>Time of Event</h3>
-			
-				<input id="filterDate" class="rounded" name="time" type="date"/>
+				<p class="captionHead">Type of Event</p>
+				<input type="checkbox" name="eventType" checked="true" value="STUDY"><label class="study">Study</label><br/>
+				<input type="checkbox" name="eventType" checked="true" value="FOOD"><label class="food">Food</label><br/>
+				<input type="checkbox" name="eventType" checked="true" value="SHOW"><label class="show">Show</label><br/>
+				<input type="checkbox" name="eventType" checked="true" value="TALK"><label class="talk">Talk</label><br />
+				<input type="checkbox" name="eventType" checked="true" value="MISC"><label class="misc">Misc</label><br/>
+				<p class="captionHead">Happening around</p>
 
+				<input id="filterDate" class="rounded" name="time" type="date"/>
+				<p class="captionHead">Time</p>
 				<div class="row">
 					<input type="radio" name="filterTime" value="0"><span class="radio">Daily</span>
 					<input type="radio" name="filterTime" value="1"><span class="radio">Weekly</span><br />
@@ -90,31 +91,6 @@
 			<h2>Listings</h2>
 			
 			<ul class="listings">
-				<li>
-					<div class="left">
-						<div class="calendar"><div class="month">JAN</div><div class="date">31</div></div>
-						<p class="captionHead">Time</p>
-						<p class="caption">11:00 AM - 12:00PM</p>
-						<p class="captionHead">Host</p>
-						<p class="caption">Dian</p>
-					</div>
-					<div class="right">
-						<h3>CMU MOSAIC Sex and Gender Conference</h3>
-
-						<p> 
-						Registration will be up and running is up and running. Registration is available to anyone and completely free!
-http://www.studentaffairs.cmu.edu/student-life/gender/mosaic/
-
-The MOSAIC Facebook page for more info:
-https://www.facebook.com/cmuMOSAIC
-
-Each year, students across all academic disciplines come together for MOSAIC, a community-wide gender conference held on Carnegie Mellon's campus. The objective of MOSAIC is to offer provocative sessions aimed at exploring gender construction in unconventional ways. Sessions are led by faculty, staff and students of Carnegie Mellon, as well as invited guest speakers.
-
-This year's MOSAIC theme "The Naked Truth" enables us to take a revealing look at sex, gender, and sexuality through a variety of discussions, each offering the hard-hitting truth about social and cultural realities. Sessions will include a monologue performance on domestic violence, discussion on the lived experience of a black trans man, displays of student art on gender and sexuality, as well as a keynote address focused on the college hook-up culture.
-						</p>
-						
-					</div>
-				</li>
 			<ul>
 		</div>
 

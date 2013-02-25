@@ -27,7 +27,7 @@ const TypeEnum = {
   }
 
 // Invers of TypeEnum
-const TypeArray = ["Study", "Food", "Show", "Talk", "Misc."]
+const TypeArray = ["study", "food", "show", "talk", "misc"]
 
 /*
   Sets up the canvas with proper listeners and
@@ -146,6 +146,7 @@ function populateList(item, container) {
   var month = startDate.toDateString().slice(4, 7);
   var date = startDate.getDate();
   var li = $("<li>");
+  li.addClass(TypeArray[item.type]);
   var leftCol = $("<div>").addClass('left');
   var rightCol = $("<div>").addClass('right');
   var calendar = $('<div>').addClass('calendar');
@@ -158,7 +159,7 @@ function populateList(item, container) {
   var host = $('<p>').html(item.host);
   var name = $('<h3>').html(item.eventName);
   var desc = $('<p>').html(item.desc);
-
+  var block = $('<div>').addClass('block');
   //Should we show the type of event?
   var type = $('<p>').html(TypeArray[item.type]);
 
@@ -179,7 +180,8 @@ function populateList(item, container) {
   leftCol.append(calendar,labelTime,time,labelHost,host);
   
   rightCol.append(name,desc,type,del);
-  li.append(leftCol,rightCol);
+  block.append(leftCol,rightCol);
+  li.append(block);
   container.append(li);
 
 }
