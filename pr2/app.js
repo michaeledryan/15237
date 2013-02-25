@@ -83,8 +83,6 @@ app.post("/listings", function(request, response) {
   if (successful) {
     console.log("success");
     Listutils.addToListings(item, listings);
-    console.log(listings);
-    console.log(JSON.stringify(listings));
     writeFile("listings.txt" , JSON.stringify(listings));
   } else {
     console.log("failure");
