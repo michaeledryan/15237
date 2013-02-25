@@ -37,6 +37,9 @@ exports.add = function(item) {
 exports.del = function(item) {
   $.ajax({
     type: "delete",
+    data: {
+      item: item,
+    },
     url: "/listings/" + item.dayDate,
     success: function(data) {
     }

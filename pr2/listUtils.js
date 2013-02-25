@@ -20,8 +20,9 @@ exports.Listing = function(x, y, name, start, end, host, desc, type) {
 exports.deleteItem = function(item, listings) {
   var startDate = item.dayDate;
   for (var i = 0; i < listings[startDate].length; i++) {
-    if (itemEquals(listings[i], item)) {
-      listings[i].splice(i,1);
+    console.log(listings[startDate][i])
+    if (itemEquals(listings[startDate][i], item)) {
+      listings[startDate].splice(i,1);
       return;
     }
   }

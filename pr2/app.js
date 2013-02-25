@@ -143,7 +143,8 @@ app.delete("/listings", function(request, response){
 app.delete("/listings/:id", function(request, response){
   var id = request.params.id;
   var item = request.body.item;
-  var success = listUtils.deleteItem(item, listings);
+  console.log(item);
+  var success = Listutils.deleteItem(item, listings);
   writeFile("listings.txt" , JSON.stringify(listings));
   response.send({
     success: success

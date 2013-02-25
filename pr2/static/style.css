@@ -245,8 +245,17 @@ li{
 .captionHead{
 	font-weight: 500;
 }
+
 .caption{
 	font-size: 9px;
 	color: black;
 }
 
+.delButton {
+	float: right;
+	color: crimson;
+	background-color: rgba(25,25,25,0.2);
+	border-radius: 5px;
+	padding: 4px;
+	font-family: 'brandon-grotesque',arial,san-serif;
+}

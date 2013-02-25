@@ -154,13 +154,20 @@ function populateList(item, container) {
   var labelTime = $('<p>').html("Time");
   var labelHost = $('<p>').html("Host");
   var time = $('<p>').html(dateToTime(item.startDate) + 
-              " - " + dateToTime(item.endDate));
+              " - <br>" + dateToTime(item.endDate));
   var host = $('<p>').html(item.host);
   var name = $('<h3>').html(item.eventName);
   var desc = $('<p>').html(item.desc);
 
   //Should we show the type of event?
   var type = $('<p>').html(TypeArray[item.type]);
+
+  var del = $("<div>").addClass("delButton");
+  del.html("delete this listing");
+  del.click(function() {
+    NODECOM.del(item);
+    NODECOM.get();
+  });
 
   calmonth.html(month);
   caldate.html(date);
@@ -171,7 +178,7 @@ function populateList(item, container) {
   host.addClass('caption');
   leftCol.append(calendar,labelTime,time,labelHost,host);
   
-  rightCol.append(name,desc,type);
+  rightCol.append(name,desc,type,del);
   li.append(leftCol,rightCol);
   container.append(li);
 }
@@ -182,7 +189,7 @@ function populateList(item, container) {
 */
 function dateToTime(date) {
   var myDate = new Date(date);
-  return (myDate.getHours() % 13) + ":" + 
+  return (myDate.toLocaleTimeString().split(":")[0]) + ":" + 
           (myDate.getMinutes() < 10 ? 0 : "") +
           myDate.getMinutes() + " " +
         ((myDate.getHours() > 12) ? "PM" : "AM");
@@ -193,7 +200,7 @@ function dateToTime(date) {
  */
 function drawPin(x, y, hovering){
  	ctx.beginPath();
- 	ctx.arc(x,y, 3, 0,2 * Math.PI,false);	
+ 	ctx.arc(x, y, 3, 0, 2 * Math.PI,false);	
   ctx.fillStyle = hovering ? 'white' : 'lightgrey';
   ctx.fill();
   ctx.lineWidth = 3;
@@ -210,8 +217,6 @@ function addMyEvent(x,y) {
   var type = $("input[name='type']:checked").val();
 
   $("canvas").toggleClass('switchCursor');
-  window.scrollBy( 1, 1 );
-  window.scrollBy( -1, -1 );
 
   if (startDate.getYear() < earliestDate && 
       startDate.getMonth() < earliestDate.getMonth() && 
@@ -219,12 +224,6 @@ function addMyEvent(x,y) {
     earliestDate = startDate;
   }
   
-  console.log("name: " + name);
-  console.log("time: " + startDate);
-  console.log("host: " + host);
-  console.log("Desc: " + desc);
-  console.log("Type: " + type);
-
   if (name !== "" && startDate !== ""
    && endDate !== "" && host !== "") {
     console.log("success!")
