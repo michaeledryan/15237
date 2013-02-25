@@ -144,7 +144,9 @@ function populateList(item, container) {
   var day = startDate.toDateString().slice(0, 3);
   var date = startDate.getDate();
   var year = startDate.getYear();
+  
   var li = $("<li>");
+  var block = $("<div>").addClass("block");
   var leftCol = $("<div>").addClass('left');
   var rightCol = $("<div>").addClass('right');
   var calendar = $('<div>').addClass('calendar');
@@ -168,11 +170,38 @@ function populateList(item, container) {
   time.addClass('caption');
   host.addClass('caption');
   leftCol.append(calendar,labelTime,time,labelHost,host);
-  
   rightCol.append(name,desc);
-  li.append(leftCol,rightCol);
+  block.append(leftCol,rightCol);
+  li.append(block);
   container.append(li);
 
+}
+
+function populateSideList(item,container){
+
+var startDate = new Date(item.startDate);
+  var month = startDate.toDateString().slice(4, 7);
+  var day = startDate.toDateString().slice(0, 3);
+  var date = startDate.getDate();
+  var year = startDate.getYear();
+  
+  var li = $("<li>");
+  var name = $('<h3>').html(item.eventName);
+  var host = $('<p>').html("hosted by: "+item.host);
+
+  var date = $('<p>').html(month+" "+date);
+  date.addClass("captionHead")
+  var time = $('<p>').html(dateToTime(item.startDate) + 
+              " - " + dateToTime(item.endDate)); 
+  time.addClass("caption");
+
+  var desc = $('<p>').html(item.desc);
+  
+  li.append(name,host,date,time,$("<hr>"),desc);
+  container.append(li);
+  
+
+	
 }
 
 
@@ -285,9 +314,10 @@ function clickListings(x, y) {
 
   var container = $('ul.sideListings');
   container.html("");
+  
 
   for (var i in closeEvents) {
-    populateList(closeEvents[i], container);
+    populateSideList(closeEvents[i], container);
   }
   closeEvents = [];
 

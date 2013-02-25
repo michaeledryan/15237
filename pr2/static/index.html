@@ -15,67 +15,67 @@
 
 	<div id="wrapper"> 
 		<div class="col1">
-			<h2>Add New Listing</h2>
+			<div class="roundedBox">
+				<h2>Add New Listing</h2>
 			
-			<form id="event-listing" action="javascript:prepareToAdd()">
-				<div class="row">
-				<input id="event" class="rounded" name="eventName" placeholder="event name" type="text"/>
-				</div>
+				<form id="event-listing" action="javascript:prepareToAdd()">
+					<div class="row">
+						<input id="event" class="rounded" name="eventName" placeholder="event name" type="text"/>
+					</div>
 				
-				<div class="row">
-				<input id="date" class="rounded" name="time" type="date"/>
-				</div>
+					<div class="row">
+						<input id="date" class="rounded" name="time" type="date"/>
+					</div>
 				
-				<div class="row">
-				<input id="timeStart" class="rounded" name="time" type="time" value="10:00"/>
-				<input id="timeEnd" class="rounded" name="time" type="time" value="13:00"/>
-				</div>
+					<div class="row">
+						<input id="timeStart" class="rounded" name="time" type="time" value="10:00"/>
+						<input id="timeEnd" class="rounded" name="time" type="time" value="13:00"/>
+					</div>
   
-				<div class="row">
-				<input id="host" class="rounded" name="host" placeholder="host" type="text"/>
-				</div>
+					<div class="row">
+						<input id="host" class="rounded" name="host" placeholder="host" type="text"/>
+					</div>
   
-				<div class="row">
-				<textarea id="description" rows="4" cols="20" placeholder="description"></textarea>
-				</div>
+					<div class="row">
+						<textarea id="description" rows="4" cols="20" placeholder="description"></textarea>
+					</div>
 				
-				<div class="row">
-					<input type="radio" name="type" value="0"><span class="radio">Study</span>
-					<input type="radio" name="type" value="1"><span class="radio">Food</span>
-					<input type="radio" name="type" value="2"><span class="radio">Show</span>
-					<input type="radio" name="type" value="3"><span class="radio">Talk</span>
-					<input type="radio" name="type" value="4"><span class="radio">Misc</span>
-				</div>
+					<div class="row">
+						<input type="radio" name="type" value="0"><span class="radio">Study</span>
+						<input type="radio" name="type" value="1"><span class="radio">Food</span>
+						<input type="radio" name="type" value="2"><span class="radio">Show</span><br />
+						<input type="radio" name="type" value="3"><span class="radio">Talk</span>
+						<input type="radio" name="type" value="4"><span class="radio">Miscellaneous</span>
+					</div>
 
 				
-				<div class="row right">
-				<input id="submitButton" name="Submit" type="submit" value="Add to map!"/>
-				</div>			
+					<div class="row">
+						<input id="submitButton" name="Submit" type="submit" value="Add to map!"/>
+					</div>			
 				
-							</form>
-			<hr>
-			<h2>Filter By</h2>
-			<h3>Type of Event</h3>
-			<input type="checkbox" name="eventType" checked="true" value="STUDY">studying<br/>
-			<input type="checkbox" name="eventType" checked="true" value="FOOD">food<br/>
-			<input type="checkbox" name="eventType" checked="true" value="SHOW">show<br/>
-			<input type="checkbox" name="eventType" checked="true" value="TALK">talks<br />
-			<input type="checkbox" name="eventType" checked="true" value="MISC">misc.<br/>
-			<h3>Time of Event</h3>
-
-			<div>
-			<input id="filterDate" class="rounded" name="time" type="date"/>
+				</form>
 			</div>
+			<div class="roundedBox">
+				<h2>Filter By</h2>
+				<hr>
+				<h3>Type of Event</h3>
+				<input type="checkbox" name="eventType" checked="true" value="STUDY">Study<br/>
+				<input type="checkbox" name="eventType" checked="true" value="FOOD">Food<br/>
+				<input type="checkbox" name="eventType" checked="true" value="SHOW">Show<br/>
+				<input type="checkbox" name="eventType" checked="true" value="TALK">Talk<br />
+				<input type="checkbox" name="eventType" checked="true" value="MISC">Misc<br/>
+				<h3>Time of Event</h3>
+			
+				<input id="filterDate" class="rounded" name="time" type="date"/>
 
-			<div class="row">
+				<div class="row">
 					<input type="radio" name="filterTime" value="0"><span class="radio">Daily</span>
-					<input type="radio" name="filterTime" value="1"><span class="radio">Weekly</span>
+					<input type="radio" name="filterTime" value="1"><span class="radio">Weekly</span><br />
 					<input type="radio" name="filterTime" value="2"><span class="radio">Monthy</span>
 					<input type="radio" name="filterTime" value="3" checked="checked"><span class="radio">All Time</span>
-			</div>
+				</div>
 
-			<!--input type="date"  min="0" max="100" /-->
-			
+			</div>			
 		</div> 
 
 		<div class="col2">
@@ -119,9 +119,10 @@ This year's MOSAIC theme "The Naked Truth" enables us to take a revealing look a
 		</div>
 
 		<div class="col3">
-<h2>Listings</h2>
+			<h2>Selected</h2>
 			
 			<ul class="sideListings">
+				<li>Click on the pins to see more.</li>
 			<ul>
 
 

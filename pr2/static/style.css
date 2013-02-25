@@ -81,13 +81,14 @@ body{
 
 h1{
 	text-transform: uppercase;
+	font-size: 42px;
 	letter-spacing: .3em;
 	font-weight: 700;
 }
 
 h2{	
 	font-family: 'adelle',serif;
-	color: #8ca2a8;
+	color: #314E57;
 	padding-bottom: 5px;
 }
 
@@ -109,37 +110,35 @@ h2{
 .col1{
 	float: left;
 	width: 175px;
-	padding: 15px;
-	background-color: rgba(25,25,25,0.2);
-	border-radius: 10px;
 	margin: 5px;
+	color: #211E19;
+
 }
 
 .col2{
 	float: left;
-	background-color: rgba(225,225,225,0.5);
+	background-color: rgba(225,225,225,0.6);
 	margin: 5px;
-	padding: 15px;
+	padding:  15px;
 	width: 600px;
 	/*position: relative;*/
 }
 
 .col3{
-	float: right;
+	float: left;
 	background-color: rgba(225,225,225,0.5);
 	margin: 5px;
 	padding: 15px;
-	width: 300px;	
+	width: 250px;	
 }
 
 #event-listing{
 	padding: 10px 0px;
-
 	
 }
 
 input.rounded, textarea{
-	background-color: #ffffff;
+	background-color: rgba(255,255,255,.65);
 	border: 1px solid #ccc;
 		-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
 		-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
@@ -160,6 +159,15 @@ input.rounded, textarea{
 		-moz-border-radius: 4px;
 	border-radius: 4px;
 	vertical-align: middle; 
+}
+
+.roundedBox{
+	background-color: white;
+	padding: 15px;
+	border-radius: 10px;
+	margin-bottom: 20px;
+
+	
 }
 
 textarea{
@@ -192,10 +200,10 @@ textarea{
 #submitButton{
 	font-family: 'brandon-grotesque',arial,san-serif;
 	font-size: 14px;
-	color: #8EB254;
+	color: white;
 	padding: 10px 20px;
-	width: 43.75%;
-	background-color: #D5FF92;
+	width: 100%;
+	background-color: #5AA076;
 		-moz-border-radius: 4px;
 		-webkit-border-radius: 4px;
 	border-radius: 4px;
@@ -203,15 +211,16 @@ textarea{
 }
 
 #submitButton:hover{
-	background-color: #ff6699;
+	background-color: #5a9391;
 	color: white;	
 }
 
 .radio{
-	font-size: 10px;
+	font-size: 12px;
+	color: #211E19;
 }
 
-.right h3{
+.right h3, .sideListings h3{
 	font-family: 'brandon-grotesque',arial,san-serif;
 	text-transform: uppercase;
 	font-weight: 300;
@@ -219,10 +228,18 @@ textarea{
 	letter-spacing: .1em;
 	font-size: 20px;
 }
+.sideListings li{
+	background-color: white;
+	color: #211E19;
+	padding: 5px;
+}
 
-li{
-	padding: 10px 0px;
-	width: 480px;
+.listings li{
+	background-color: white;
+	display: inline-block;
+	position: relative;
+	padding: 10px 10px;
+	width: 570px;
 	margin: 5px;
  }
  
@@ -233,7 +250,7 @@ li{
 }
 .right{
 	color: #6d6a6a;
-	width: 400px;
+	width: 450px;
 	float: left;
 	font-family: 'adelle',serif;
 	line-height: 1.25;
@@ -241,8 +258,16 @@ li{
 
 }
 
+/*.block{
+	width: 500px;
+	background-color: gray;
+	padding: 30px;
+}*/
+
 .captionHead{
+	margin-top: 4px;
 	font-weight: 500;
+	color: #314E57;
 }
 .caption{
 	font-size: 9px;
