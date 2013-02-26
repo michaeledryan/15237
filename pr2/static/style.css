@@ -176,6 +176,7 @@ label{
 	padding: 15px;
 	background-color: white;
 	display: inline-block;
+	font-size: 15px;
 }
 
 .left{
@@ -185,7 +186,7 @@ label{
 }
 .right{
 	color: #6d6a6a;
-	width: 450px;
+	width: 480px;
 	float: left;
 	font-family: 'adelle',serif;
 	line-height: 1.5;
@@ -197,7 +198,7 @@ label{
 .listings li{
 	display: inline-block;
 	position: relative;
-	width: 570px;
+	width: 600px;
 	margin: 5px;
  }
  
@@ -287,7 +288,11 @@ h2{
 
 #event-listing{
 	padding: 10px 0px;
-	
+
+}
+
+.listings{
+	font-size: 0px;
 }
 	/* styles for the type */
 
