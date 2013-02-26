@@ -1,0 +1,15 @@
+User workflows
+
+See what kind of events are going on by mousing around the map.
+
+Click on some map events and see what happens.
+
+Play around with filters, especially time (lower left).
+
+Try deleting an event.
+
+Add a new event: Use the left-hand side. Try to use real data, like a Facebook event that you've been invited to.
+
+Check out the map's interaction with your new event.
+
+Do what you feel inclined to!
