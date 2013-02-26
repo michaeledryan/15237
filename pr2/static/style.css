@@ -52,6 +52,9 @@ body{
 	color: white;
 
 }
+header{
+	color:gray;
+}
 
 #wrapper{
 	width: 1200;
@@ -70,7 +73,7 @@ body{
 /* used as containers for new listings and filter box */
 .roundedBox{
 	background-color: white;
-	padding: 15px;
+	padding: 10px;
 	border-radius: 6px;
 	margin-bottom: 20px;
 }
@@ -92,7 +95,8 @@ body{
 
 #submitButton:hover{
 	background-color: #5a9391;
-	color: white;	
+	color: white;
+	cursor: pointer;	
 }
 
 .radio{
@@ -227,11 +231,18 @@ label{
 
 .delButton {
 	float: right;
-	color: crimson;
-	background-color: rgba(25,25,25,0.2);
+	color: white;
+	background-color: #D28073;
 	border-radius: 5px;
-	padding: 4px;
+	padding: 5px;
 	font-family: 'brandon-grotesque',arial,san-serif;
+}
+
+.delButton:hover{
+	background-color: #FF333B;
+	cursor: pointer;
+
+	
 }
 /************** side listings **************/
 .col3{
@@ -239,7 +250,7 @@ label{
 	background-color: rgba(225,225,225,0.5);
 	margin: 5px;
 	padding: 15px;
-	width: 250px;	
+	width: 350px;	
 }
 
 .right h3, .sideListings h3{
