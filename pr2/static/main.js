@@ -53,6 +53,7 @@ $(document).ready(function() {
   // Canvas setup
   canvas = document.getElementById("myCanvas");
   ctx = canvas.getContext("2d");
+  ctx.font = "10pt Brandon Grotesque";
   canvas.setAttribute('tabindex','0');
   canvas.focus();
   canvas.addEventListener("mousedown", clickMouse, false);
@@ -106,7 +107,7 @@ function prepareToAdd() {
 
   if ((name !== "") && (startDate !== "")
       && (endDate !== "") && (host !== "")
-      && (desc !== "")) {
+      && (desc !== "") && (type !== undefined)) {
     adding = true;  
     $("canvas").toggleClass('switchCursor');
     $("#submitButton").val("Wait! I made a typo.");
@@ -137,12 +138,21 @@ function addMyEvent(x,y) {
 
   if ((name !== "") && (startDate !== "")
       && (endDate !== "") && (host !== "")
-      && (desc !== "")) {
+      && (desc !== "") && (type !== undefined)) {
+
     $("#submitButton").val("Add to map!");
-    $(".alert").css({"visibility": "hidden"});
+    $(":input[value="+ TypeArray[parseInt(type)].toUpperCase() + "]")
+          .prop("checked", true);
     NODECOM.add(new Listing(x, y, name, startDate, endDate, 
                  host, desc, type));
     NODECOM.get();
+    $(".alert").html("Your event has been added!");
+
+    setTimeout(function() {
+      $(".alert").html("Click on the map to set a pin.");
+      $(".alert").css({"visibility": "hidden"});
+    }, 3000)
+    
   }
 
   else
@@ -220,20 +230,20 @@ function hoverMouse(event) {
   for (var i = 0; i < pinsOnMap.length; i++) {
     item = pinsOnMap[i];
     if (distance(item.x, x, 
-        item.y, y) < 9)
+        item.y, y) < 8)
       closeEvents.push(item);
     else
       drawPin(item.x, item.y, parseInt(item.type), false);
   }
 
-  // Draw nearby pins differently.
   for (var i in closeEvents) {
     item = closeEvents[i];
     drawPin(item.x, item.y, parseInt(item.type), true);
-    ctx.font = "10pt Arial";
-    drawTitleRect(item);
   }
 
+  if (closeEvents.length > 0)
+    drawTooltipRect(closeEvents);
+  
 }
 
 
@@ -255,19 +265,42 @@ function max(x, y) {
   return (x < y) ? y : x;
 }
 
-function drawTitleRect(item) {
-    var width = ctx.measureText(item.eventName).width + 10;
-    var startingX = max(2, min(item.x, CANWIDTH - width - 2));
-    var startingY = max(min(item.y - 15, CANHEIGHT - 17), 2);
-    ctx.beginPath();
-    ctx.rect( startingX, startingY, width, 20);
-    ctx.fillStyle = 'rgba(200, 200, 200, 0.5)';
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = 'black';
-    ctx.fill();
-    ctx.stroke();
-    ctx.fillStyle = 'blue';
-    ctx.fillText("  " + item.eventName, startingX, startingY + 15);
+/*
+  Draws the tooltip display for an item on the map.
+  Requires that closeEvents not be empty, which is ensured
+  by the caller.
+ */ 
+function drawTooltipRect(closeEvents) {
+  var item;
+  var len = closeEvents.length;
+  var startingX = 2;
+  var startingY = max(min(closeEvents[0].y - 15, 
+                  CANHEIGHT - 20 * len), 2);
+  var width = 0;
+  
+  for (var i = 0; ((i < len) && (i < CANHEIGHT/20)); i++) {
+    item = closeEvents[i];
+    width = max(width, (ctx.measureText(item.eventName).width + 4));
+    startingX = max(startingX,item.x);
+  };
+
+  startingX = max(2, min(startingX, 
+                CANWIDTH - width - 2));
+  ctx.beginPath();
+  ctx.rect(startingX, startingY, width, 
+           14.3 * min(len, CANHEIGHT/20));
+  ctx.fillStyle = 'rgba(50, 50, 50, 0.7)';
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = 'black';
+  ctx.fill();
+  ctx.stroke();
+
+  for (var i = 0; ((i < len) && i < (CANHEIGHT/20)); i++) {
+    item = closeEvents[i];
+    ctx.fillStyle = getPinColor(parseInt(item.type));
+    ctx.fillText("  " + item.eventName, 
+      startingX - 2, startingY + 14 * (i + 1) - 3);
+  };
 
 }
 
@@ -282,7 +315,6 @@ function Listing(x, y, name, start, end, host, desc, type) {
     this.y = y;
     this.eventName = name;
     this.dayDate = nearestDay(start);
-    console.log(this.dayDate);
     this.startDate = start;
     this.endDate = end;
     this.host = host;
