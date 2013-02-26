@@ -1,8 +1,12 @@
+//====================================//
+//Variables and constants             //
+//====================================//
+
 var canvas, ctx, adding;
 var listings = [];
 var pinsOnMap = [];
-var image = new Image();
-var earliestDate = new Date();
+var sideListings = [];
+var itemToBeAdded;
 
 // Used to calculate time ranges
 const SECPERDAY = 3600 * 24;
@@ -44,27 +48,276 @@ $(document).ready(function() {
                         dateStrArray[1];
 
 
+
   // Canvas setup
   canvas = document.getElementById("myCanvas");
   ctx = canvas.getContext("2d");
   canvas.setAttribute('tabindex','0');
   canvas.focus();
-  canvas.addEventListener("mousedown", getPosition, false);
+  canvas.addEventListener("mousedown", clickMouse, false);
   canvas.addEventListener("mousemove", hoverMouse, false)
 
-  // Get listing data
+  // Get listing datarefre
   NODECOM.get();
 
   // Set up DOM objects
-  $(':checkbox').change(refreshDOM);
-  $("input[name='filterTime']").change(refreshDOM)
+  $(':checkbox').change(DOMUTILS.refreshDOM);
+  $("input[name='filterTime']").change(DOMUTILS.refreshDOM)
   $("#filterDate").val(localDateString);
   $("#date").val(localDateString);
 
 });
 
-
  
+/*
+  Draws a pin on the map at the given coordinates.
+ */
+function drawPin(x, y, type, hovering){
+  ctx.beginPath();
+  ctx.arc(x, y, 3, 0, 2 * Math.PI,false); 
+  ctx.fillStyle = hovering ? 'white' : 'lightgrey';
+  ctx.fill();
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = getPinColor(type, hovering);
+  ctx.stroke();
+}
+
+/* 
+  Announces that we're attempting to add to the map.
+  Pops up the alert by the map and switches the cursor
+  on the canvas.
+ */
+function prepareToAdd() {
+  var name = $("#event").val();
+  var startDate = new Date($("#date").val() + " " + $("#timeStart").val());
+  var endDate = new Date($("#date").val() + " " + $("#timeEnd").val());
+  var host = $("#host").val();
+  var desc = $("#description").val();
+  var type = $("input[name='type']:checked").val();
+
+  if (adding) {
+    adding = false;
+    $("#submitButton").val("Add to map!");
+    $(".alert").css({"visibility": "hidden"});
+    $("canvas").toggleClass('switchCursor');
+    return;
+  }
+
+  if ((name !== "") && (startDate !== "")
+      && (endDate !== "") && (host !== "")
+      && (desc !== "")) {
+    adding = true;  
+    $("canvas").toggleClass('switchCursor');
+    $("#submitButton").val("Wait! I made a typo.");
+    $(".alert").css({"visibility": "visible"});
+    $(".error").css({"display": "none"});
+  }
+
+  else {
+    $(".error").css({"display": "inline"});
+  }
+
+}
+
+/*
+  Adds an event to the server-side store, then refreshes the current
+  client's listings.
+ */
+function addMyEvent(x,y) {
+  var name = $("#event").val();
+  var startDate = new Date($("#date").val() + " " + $("#timeStart").val());
+  var endDate = new Date($("#date").val() + " " + $("#timeEnd").val());
+  var host = $("#host").val();
+  var desc = $("#description").val();
+  var type = $("input[name='type']:checked").val();
+
+  $("canvas").toggleClass('switchCursor');
+
+
+  if ((name !== "") && (startDate !== "")
+      && (endDate !== "") && (host !== "")
+      && (desc !== "")) {
+    $("#submitButton").val("Add to map!");
+    $(".alert").css({"visibility": "hidden"});
+    NODECOM.add(new Listing(x, y, name, startDate, endDate, 
+                 host, desc, type));
+    NODECOM.get();
+  }
+
+  else
+    $(".error").css({"display": "inline"});}
+
+/*
+  Listener for a mouseDown on the canvas.
+  If we're currently adding an event, adds it to the server-side
+  datastore. Otherwise, calls selectListings.
+ */
+function clickMouse(event) {
+  var x = event.pageX;
+  var y = event.pageY;
+
+  x -= canvas.offsetLeft;
+  y -= (canvas.offsetTop + 1);
+
+  if (adding) {
+    addMyEvent(x,y);
+    adding = false;
+  }
+
+  else 
+    selectListings(x, y);
+}
+
+/*
+  Called when the user clicks on the map but is not adding a new 
+  event. Populates the right-hand sidebar with the selected events. 
+  Shows multiple events if you click on overlapping pins.
+ */
+function selectListings(x, y) {
+  var closeEvents = [];
+  var container = $('ul.sideListings');
+  sideListings = [];
+
+  // Iterate through the pins on the map, selecting close ones.
+  for (var i = 0; i < pinsOnMap.length; i++) {
+    
+    if (distance(pinsOnMap[i].x, x, 
+        pinsOnMap[i].y, y) < 9)
+      closeEvents.push(pinsOnMap[i]);
+  }
+
+  container.html("");
+
+  // Add nearby events to the listng on the side.
+  for (var i in closeEvents) {
+    DOMUTILS.populateSideList(closeEvents[i], container);
+    sideListings.push(closeEvents[i]);
+  }
+
+  if (sideListings.length === 0)
+    container.html("None.");
+
+
+}
+
+/*
+  Listener for mouseMove on the canvas. Redraws close by icons 
+  in a different color
+ */
+function hoverMouse(event) {
+  var x = event.pageX;
+  var y = event.pageY;
+  var closeEvents = [];
+
+  x -= canvas.offsetLeft;
+  y -= canvas.offsetTop;
+
+
+  // Iterate through the pins on the map, selecting close ones.
+  for (var i = 0; i < pinsOnMap.length; i++) {
+    if (distance(pinsOnMap[i].x, x, 
+        pinsOnMap[i].y, y) < 9)
+      closeEvents.push(pinsOnMap[i]);
+    else
+      drawPin(pinsOnMap[i].x, pinsOnMap[i].y, parseInt(pinsOnMap[i].type), false);
+  }
+
+  // Draw nearby pins differently.
+  for (var i in closeEvents) {
+    drawPin(closeEvents[i].x, closeEvents[i].y, parseInt(closeEvents[i].type), true);
+  }
+}
+
+
+//====================================//
+//Begin helper functions              //
+//====================================//
+
+
+/*
+  Constructor for a Listing object, which stores information
+  about a given event.
+ */
+function Listing(x, y, name, start, end, host, desc, type) {
+    this.x = x;
+    this.y = y;
+    this.eventName = name;
+    this.dayDate = nearestDay(start);
+    console.log(this.dayDate);
+    this.startDate = start;
+    this.endDate = end;
+    this.host = host;
+    this.desc = desc;
+    this.type = type;
+  }
+
+
+/*
+ Rounds a Date to the nearest day
+ */
+function nearestDay(exactDate) {
+    return new Date(exactDate.getFullYear(), 
+                    exactDate.getMonth(), 
+                    exactDate.getDate());
+}
+
+
+/*
+  Helper function. Pythagorean Theorem.
+ */
+function distance(x1, x2, y1, y2) {
+  var x = x1 - x2;
+  var y = y1 - y2;
+  return Math.sqrt(x*x + y*y);
+}
+
+/*
+ Gets a date string in a hand-rolled format from a vanilla JS 
+ date string.
+ */
+function dateToString(date) {
+  var myDate = new Date(date);
+  return (myDate.toLocaleTimeString().split(":")[0]) + ":" + 
+          (myDate.getMinutes() < 10 ? 0 : "") +
+          myDate.getMinutes() + " " +
+        ((myDate.getHours() > 12) ? "PM" : "AM");
+}
+
+/*
+  Helper function. Gets a well-formatted time string
+  from a given Date object.
+*/
+function dateToTime(date) {
+  var myDate = new Date(date);
+  return (myDate.toLocaleTimeString().split(":")[0]) + ":" + 
+          (myDate.getMinutes() < 10 ? 0 : "") +
+          myDate.getMinutes() + " " +
+        ((myDate.getHours() > 12) ? "PM" : "AM");
+}
+
+/*
+  Given an event type and a boolean, returns specific pin colors.
+ */
+function getPinColor(type, hovering) {
+  switch(type) {
+    case 0:
+      return hovering ? "rgb(153, 146, 115)" : "rgb(153, 146, 122)";
+      break;
+    case 1:
+      return hovering ? "rgb(204, 175, 51)" : "rgb(204, 172, 61)";
+      break;
+    case 2:
+      return hovering ? "rgb(255, 190, 89)" : "rgb(255, 189, 102)";
+      break;
+    case 3:
+      return hovering ? "rgb(153, 236, 255)" : "rgb(166, 246, 255)";
+      break;
+    case 4:
+      return hovering ? "rgb(51, 204, 191)" : "rgb(61, 204, 178)";
+      break;
+  }
+}
+
 /*
   Checks to see whether or not a given event is within the current
   range specified by the user.
@@ -90,309 +343,4 @@ function filterByDate(date) {
       return true;
       break;
   }
-
-}
-
-/*
-  Refreshes the DOM. Does several things:
-  Checks to see what events the current user wants to see.
-  Clears the canvas and empties the event list at the bottom of the page.
-  Iterates through listings, drawing pins on the map populating the event
-  list with events that the user has not filtered out.
- */
-function refreshDOM(){
-	if (listings === undefined){
-		return;
-	}
-  var filterTypes = [];
-  $(":checkbox").each(function() { 
-      if ($(this)[0].checked)
-        filterTypes.push(TypeEnum[$(this).val()]);
-  });
-  
-  pinsOnMap = [];
-
-  canvas.width = canvas.width;
-
-	var container = $('ul.listings');
-	container.html("");
-
-  for (var prop in listings) { 
-    if (filterByDate(new Date(prop))) {
-      for (var event in listings[prop]) {
-
-        var item = listings[prop][event];
-
-        if (($.inArray(parseInt(item.type), filterTypes)) > -1) {
-
-          pinsOnMap.push(item);
-          
-          drawPin(item.x, item.y, false);
-
-          populateList(item, container);
-        } 
-      } 
-    }
-  } 
-}
-
-
-/*
-  Given an item and container, adds a new listing to the container.
- */
-function populateList(item, container) {
-  // Get relevate attributes from the item
-  var startDate = new Date(item.startDate);
-  var month = startDate.toDateString().slice(4, 7);
-  var date = startDate.getDate();
-  var li = $("<li>");
-  li.addClass(TypeArray[item.type]);
-  var leftCol = $("<div>").addClass('left');
-  var rightCol = $("<div>").addClass('right');
-  var calendar = $('<div>').addClass('calendar');
-  var calmonth = $('<div>').addClass('month');
-  var caldate = $('<div>').addClass('date');
-  var labelTime = $('<p>').html("Time");
-  var labelHost = $('<p>').html("Host");
-  var time = $('<p>').html(dateToTime(item.startDate) + 
-              " - <br>" + dateToTime(item.endDate));
-  var host = $('<p>').html(item.host);
-  var name = $('<h3>').html(item.eventName);
-  var desc = $('<p>').html(item.desc);
-  var block = $('<div>').addClass('block');
-  //Should we show the type of event?
-  var type = $('<p>').html(TypeArray[item.type]);
-
-  var del = $("<div>").addClass("delButton");
-  del.html("delete this listing");
-  del.click(function() {
-    NODECOM.del(item);
-    NODECOM.get();
-  });
-
-  calmonth.html(month);
-  caldate.html(date);
-  calendar.append(calmonth,caldate);
-  labelTime.addClass('captionHead');
-  labelHost.addClass('captionHead')
-  time.addClass('caption');
-  host.addClass('caption');
-  leftCol.append(calendar,labelTime,time,labelHost,host);
-  
-  rightCol.append(name,desc,type,del);
-  block.append(leftCol,rightCol);
-  li.append(block);
-  container.append(li);
-
-}
-
-function populateSideList(item,container){
-
-var startDate = new Date(item.startDate);
-  var month = startDate.toDateString().slice(4, 7);
-  var day = startDate.toDateString().slice(0, 3);
-  var date = startDate.getDate();
-  var year = startDate.getYear();
-  
-  var li = $("<li>");
-  var name = $('<h3>').html(item.eventName);
-  var host = $('<p>').html("hosted by: "+item.host);
-
-  var date = $('<p>').html(month+" "+date);
-  date.addClass("captionHead")
-  var time = $('<p>').html(dateToTime(item.startDate) + 
-              " - " + dateToTime(item.endDate)); 
-  time.addClass("caption");
-
-  var desc = $('<p>').html(item.desc);
-  
-  li.append(name,host,date,time,$("<hr>"),desc);
-  container.append(li);
-  
-
-	
-}
-
-
-function dateToString(date) {
-  var myDate = new Date(date);
-  return (myDate.toLocaleTimeString().split(":")[0]) + ":" + 
-          (myDate.getMinutes() < 10 ? 0 : "") +
-          myDate.getMinutes() + " " +
-        ((myDate.getHours() > 12) ? "PM" : "AM");
-}
-
-/*
-  Helper function. Gets a well-formatted time string
-  from a given Date object.
-*/
-function dateToTime(date) {
-  var myDate = new Date(date);
-  return (myDate.toLocaleTimeString().split(":")[0]) + ":" + 
-          (myDate.getMinutes() < 10 ? 0 : "") +
-          myDate.getMinutes() + " " +
-        ((myDate.getHours() > 12) ? "PM" : "AM");
-}
-
-/*
-  Draws a pin on the map at the given coordinates.
- */
-function drawPin(x, y, hovering){
- 	ctx.beginPath();
- 	ctx.arc(x, y, 3, 0, 2 * Math.PI,false);	
-  ctx.fillStyle = hovering ? 'white' : 'lightgrey';
-  ctx.fill();
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = hovering ? 'tomato' : 'crimson';
-  ctx.stroke();
-}
-
-function addMyEvent(x,y) {
-  var name = $("#event").val();
-  var startDate = new Date($("#date").val() + " " + $("#timeStart").val());
-  var endDate = new Date($("#date").val() + " " + $("#timeEnd").val());
-  var host = $("#host").val();
-  var desc = $("#description").val();
-  var type = $("input[name='type']:checked").val();
-
-  $("canvas").toggleClass('switchCursor');
-
-  if (startDate.getYear() < earliestDate && 
-      startDate.getMonth() < earliestDate.getMonth() && 
-      startDate.getDay()< earliestDate.getDay()){
-    earliestDate = startDate;
-  }
-  
-  if (name !== "" && startDate !== ""
-   && endDate !== "" && host !== "") {
-    console.log("success!")
-    NODECOM.add(new Listing(x, y, name, startDate, endDate, 
-                 host, desc, type));
-    NODECOM.get();
-  }
-
-  return false;
-}
-
-function prepareToAdd() {
-  adding = true;  
-  $("canvas").toggleClass('switchCursor');
-  $(".alert").css({"visibility": "visible"});
-}
-
-function getPosition(event) {
-  var x = event.pageX;
-  var y = event.pageY;
-
-  console.log("Before subtracting offset x: " + x);
-  console.log("Before subtracting offset y: " + y);
-
-
-  x -= canvas.offsetLeft;
-  y -= (canvas.offsetTop + 1);
-
-  console.log("Afer subtracting offset x: " + x);
-  console.log("Afer subtracting offset y: " + y);
-
-
-  if (adding) {
-
-    addMyEvent(x,y);
-
-    adding = false;
-      $(".alert").css({"visibility": "hidden"});
-
-  }
-
-  else 
-    clickListings(x, y);
-}
-
-function clickListings(x, y) {
-  var closeEvents = [];
-
-  // Iterate through the pins on the map, selecting close ones.
-  for (var i = 0; i < pinsOnMap.length; i++) {
-    
-    if (distance(pinsOnMap[i].x, x, 
-        pinsOnMap[i].y, y) < 9)
-      closeEvents.push(pinsOnMap[i]);
-  }
-
-  var container = $('ul.sideListings');
-  container.html("");
-  
-
-  // Add nearby events to the listng on the side.
-  for (var i in closeEvents) {
-    populateSideList(closeEvents[i], container);
-  }
-
-  //closeEvents = [];
-
-}
-
-/*
-  Helper function. Pythagorean Theorem.
- */
-function distance(x1, x2, y1, y2) {
-  var x = x1 - x2;
-  var y = y1 - y2;
-  return Math.sqrt(x*x + y*y);
-}
-
-/*
-  Listener for mouseMove on the canvas. Redraws close by icons 
-  in a different color
- */
-function hoverMouse(event) {
-  var x = event.pageX;
-  var y = event.pageY;
-
-  x -= canvas.offsetLeft;
-  y -= canvas.offsetTop;
-
-  var closeEvents = [];
-
-  // Iterate through the pins on the map, selecting close ones.
-  for (var i = 0; i < pinsOnMap.length; i++) {
-    if (distance(pinsOnMap[i].x, x, 
-        pinsOnMap[i].y, y) < 9)
-      closeEvents.push(pinsOnMap[i]);
-    else
-      drawPin(pinsOnMap[i].x, pinsOnMap[i].y, false);
-  }
-
-  // Draw nearby pins differently.
-  for (var i in closeEvents) {
-    drawPin(closeEvents[i].x, closeEvents[i].y, true);
-  }
-
-  //closeEvents = [];
-}
-
-
-/*
-  Constructor for a Listing object, which stores information
-  about a given event.
- */
-function Listing(x, y, name, start, end, host, desc, type) {
-    this.x = x;
-    this.y = y;
-    this.eventName = name;
-    this.dayDate = nearestDay(start);
-    console.log(this.dayDate);
-    this.startDate = start;
-    this.endDate = end;
-    this.host = host;
-    this.desc = desc;
-    this.type = type;
-  }
-
-
-// Rounds a Date to the nearest day
-function nearestDay(exactDate) {
-    return new Date(exactDate.getFullYear(), 
-                    exactDate.getMonth(), 
-                    exactDate.getDate());
 }

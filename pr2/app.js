@@ -69,7 +69,6 @@ app.post("/listings", function(request, response) {
   
   var item = request.body.item;
 
-  console.log(item);
   var successful = 
       (item.x !== undefined) &&
       (item.y !== undefined) &&
@@ -81,11 +80,12 @@ app.post("/listings", function(request, response) {
       (item.desc !== undefined);
 
   if (successful) {
-    console.log("success");
     Listutils.addToListings(item, listings);
     writeFile("listings.txt" , JSON.stringify(listings));
-  } else {
-    console.log("failure");
+  } 
+
+  else {
+
     item = undefined;
   }
   response.send({ 
@@ -94,38 +94,6 @@ app.post("/listings", function(request, response) {
   });
 });
 
-/*
-// update one item
-app.put("/listings/:id", function(request, response){
-  // change listing at index, to the new listing
-  var item = request.params.id;
-  console.log(id);
-  var oldItem = Listutils.get(item);
-  var item = {
-      "list" : request.body.list,
-      "x" : request.body.x, 
-      "y" : request.body.y, 
-      "eventName" : request.body.eventName, 
-      "time" : request.body.time, 
-      "host" : request.body.host,
-      "desc" : request.body.desc,
-    }
-  item.desc = (item.desc !== undefined) ? item.desc : oldItem.desc;
-  item.host = (item.host !== undefined) ? item.host : oldItem.host;
-  item.time = (item.time !== undefined) ? item.time : oldItem.time;
-  item.eventName = (item.eventName !== undefined) ? item.eventName : oldItem.eventName;
-  item.x = (item.x !== undefined) ? item.x : oldItem.x;
-  item.y = (item.y !== undefined) ? item.y : oldItem.y;
-
-  // commit the update
-  getProperList(item.list)[id] = item;
-
-  response.send({
-    item: item,
-    success: true
-  });
-});
-*/
 
 // Delete all stored data. This function seems unsafe.
 app.delete("/listings", function(request, response){
@@ -143,7 +111,6 @@ app.delete("/listings", function(request, response){
 app.delete("/listings/:id", function(request, response){
   var id = request.params.id;
   var item = request.body.item;
-  console.log(item);
   var success = Listutils.deleteItem(item, listings);
   writeFile("listings.txt" , JSON.stringify(listings));
   response.send({
@@ -167,4 +134,3 @@ function initServer() {
 // Finally, initialize the server, then activate the server at port 8889
 initServer();
 app.listen(8889);
-console.log("Listings:" + listings);
