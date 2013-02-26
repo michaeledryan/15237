@@ -12,6 +12,7 @@ var itemToBeAdded;
 const SECPERDAY = 3600 * 24;
 const SECPERWEEK = SECPERDAY * 7;
 const SECPERMONTH = SECPERDAY * 31; 
+const CANWIDTH = 568, CANHEIGHT = 492;
 
 // For date radio buttons
 const dateEnum = {
@@ -208,30 +209,68 @@ function hoverMouse(event) {
   var x = event.pageX;
   var y = event.pageY;
   var closeEvents = [];
+  var item;
 
   x -= canvas.offsetLeft;
   y -= canvas.offsetTop;
 
+  canvas.width = canvas.width;
 
   // Iterate through the pins on the map, selecting close ones.
   for (var i = 0; i < pinsOnMap.length; i++) {
-    if (distance(pinsOnMap[i].x, x, 
-        pinsOnMap[i].y, y) < 9)
-      closeEvents.push(pinsOnMap[i]);
+    item = pinsOnMap[i];
+    if (distance(item.x, x, 
+        item.y, y) < 9)
+      closeEvents.push(item);
     else
-      drawPin(pinsOnMap[i].x, pinsOnMap[i].y, parseInt(pinsOnMap[i].type), false);
+      drawPin(item.x, item.y, parseInt(item.type), false);
   }
 
   // Draw nearby pins differently.
   for (var i in closeEvents) {
-    drawPin(closeEvents[i].x, closeEvents[i].y, parseInt(closeEvents[i].type), true);
+    item = closeEvents[i];
+    drawPin(item.x, item.y, parseInt(item.type), true);
+    ctx.font = "10pt Arial";
+    drawTitleRect(item);
   }
+
 }
 
 
 //====================================//
 //Begin helper functions              //
 //====================================//
+
+/*
+  Returns the min of two numbers.
+ */
+function min(x, y) {
+  return (x > y) ? y : x;
+}
+
+/*
+  Returns the max of two numbers.
+ */
+function max(x, y) {
+  return (x < y) ? y : x;
+}
+
+function drawTitleRect(item) {
+    var width = ctx.measureText(item.eventName).width + 10;
+    var startingX = max(2, min(item.x, CANWIDTH - width - 2));
+    var startingY = max(min(item.y - 15, CANHEIGHT - 17), 2);
+    ctx.beginPath();
+    ctx.rect( startingX, startingY, width, 20);
+    ctx.fillStyle = 'rgba(200, 200, 200, 0.5)';
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'black';
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = 'blue';
+    ctx.fillText("  " + item.eventName, startingX, startingY + 15);
+
+}
+
 
 
 /*
