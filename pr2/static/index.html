@@ -16,7 +16,16 @@
 			<p>Find things near you!</p>
 		</header>
 	
-		<div id="wrapper"> 
+		<div id="mapRow"> 
+		
+			<div class="col2">
+				<div class="alert">Click on the map to set a pin.</div>
+				<div id ="map">
+					<canvas id="myCanvas" width="800" height="620"></canvas>
+				</div>
+				<hr>
+			</div>
+				
 			<div class="col1">
 				<div class="roundedBox">
 					<h2>Add New Listing</h2>		
@@ -26,6 +35,7 @@
 						</div>
 					
 						<div class="row">
+							<input id="host" class="rounded" name="host" placeholder="host" type="text"/>			
 							<input id="date" class="rounded" name="time" type="date"/>
 						</div>
 					
@@ -35,21 +45,18 @@
 						</div>
 	  
 						<div class="row">
-							<input id="host" class="rounded" name="host" placeholder="host" type="text"/>
 						</div>
 	  
 						<div class="row">
-							<textarea id="description" rows="4" cols="20" placeholder="description"></textarea>
+							<textarea id="description" placeholder="description"></textarea>
 						</div>
 						
 						<p class="captionHead">Type of Event</p>
 						<div class="row">
 							<input type="radio" name="type" value="0"><span class="radio">Study</span>
 							<input type="radio" name="type" value="1"><span class="radio">Food</span>
-							<br />
 							<input type="radio" name="type" value="2"><span class="radio">Show</span>
 							<input type="radio" name="type" value="3"><span class="radio">Talk</span>
-							<br />
 							<input type="radio" name="type" value="4"><span class="radio">Miscellaneous</span>
 						</div>
 	
@@ -61,51 +68,37 @@
 					</form>
 				</div>
 				
-				<div class="roundedBox">
-					<h2>Filter By</h2>
-					<hr>
-					<p class="captionHead">Type of Event</p>
-					<input type="checkbox" name="eventType" checked="true" value="STUDY"><label class="study">Study</label><br/>
-					<input type="checkbox" name="eventType" checked="true" value="FOOD"><label class="food">Food</label><br/>
-					<input type="checkbox" name="eventType" checked="true" value="SHOW"><label class="show">Show</label><br/>
-					<input type="checkbox" name="eventType" checked="true" value="TALK"><label class="talk">Talk</label><br />
-					<input type="checkbox" name="eventType" checked="true" value="MISC"><label class="misc">Misc</label><br/>
-					
-					<p class="captionHead">Happening around</p>
-					<input id="filterDate" class="rounded" name="time" type="date"/>
-					
-					<p class="captionHead">Timeframe</p>
-
-						<input type="radio" name="filterTime" value="0"><span class="radio">Today</span>
-						<input type="radio" name="filterTime" value="1"><span class="radio">+7 days</span><br />
-						<input type="radio" name="filterTime" value="2"><span class="radio">+30 days</span>
-						<input type="radio" name="filterTime" value="3" checked="checked"><span class="radio">All Time</span>
-					</div>
-				</div>			
-			</div> 
-	
-			<div class="col2">
-				<h2>Map</h2>
-				<div class="alert">Click on the map to set a pin.</div>
-				<div id ="map">
-					<canvas id="myCanvas" width="568" height="492"></canvas>
-				</div>
-				<hr>
-				
-				<h2>Listings</h2>		
-				<ul class="listings">
-				</ul>
-			</div>
-	
-			<div class="col3">
 				<h2>Selected:</h2>	
 				<ul class="sideListings">
 					<li>Click on the pins to see more.</li>
 				</ul>
+				
+							
+			</div> 
+		<div id="listingsRow">
+			<div class="col2">
+						<div class="roundedBox">
+					<p class="captionHead">Filter by: Type of Event</p>
+					<input type="checkbox" name="eventType" checked="true" value="STUDY"><label class="study">Study</label>
+					<input type="checkbox" name="eventType" checked="true" value="FOOD"><label class="food">Food</label>
+					<input type="checkbox" name="eventType" checked="true" value="SHOW"><label class="show">Show</label>
+					<input type="checkbox" name="eventType" checked="true" value="TALK"><label class="talk">Talk</label>
+					<input type="checkbox" name="eventType" checked="true" value="MISC"><label class="misc">Misc</label>
+					
+					<p class="captionHead">Filter by: Happening around</p>
+					<input id="filterDate" class="rounded" name="time" type="date"/>
+						<input type="radio" name="filterTime" value="0"><span class="radio">Only</span>
+						<input type="radio" name="filterTime" value="1"><span class="radio">+7 days</span>
+						<input type="radio" name="filterTime" value="2"><span class="radio">+30 days</span>
+						<input type="radio" name="filterTime" value="3" checked="checked"><span class="radio">All Time</span>
+				</div>
+			<h2>Listings</h2>		
+				<ul class="listings">
+				</ul>
 			</div>
-	
-		</div>
 
+			</div>
+		</div>
 	</body>
 </html>
 
