@@ -2,7 +2,7 @@
   Constructor for a Listing object, which stores information
   about a given event.
  */
-exports.Listing = function(x, y, name, start, end, host, desc, type) {
+exports.Listing = function(x, y, name, start, end, host, desc, location, type) {
   this.x = x;
   this.y = y;
   this.eventName = eventName;
@@ -12,6 +12,7 @@ exports.Listing = function(x, y, name, start, end, host, desc, type) {
   this.host = host;
   this.desc = desc;
   this.type = type;
+  this.location = location;
 }
 
 /*
@@ -40,6 +41,7 @@ function itemEquals(item1, item2) {
   (item1.endDate === item2.endDate) &&
   (item1.host === item2.host) &&
   (item1.desc === item2.desc) &&
+  (item1.location === item2.location) &&
   (item1.type === item2.type);
 }
 

@@ -97,6 +97,7 @@ exports.populateList = function(item, container) {
   var name = $('<h3>').html(item.eventName);
   var desc = $('<p>').html(item.desc);
   var block = $('<div>').addClass('block');
+  var location = $('<h4>').html(item.location);
   var type = $('<p>').html(TypeArray[item.type]);
 
   var del = $("<div>").addClass("delButton");
@@ -127,7 +128,7 @@ exports.populateList = function(item, container) {
   host.addClass('caption');
 
   leftCol.append(calendar,labelTime,time,labelHost,host, type);
-  rightCol.append(name,desc,del);
+  rightCol.append(name,location,desc,del);
   block.append(leftCol,rightCol);
   li.append(block);
   container.append(li);
@@ -153,12 +154,13 @@ exports.populateSideList = function(item,container) {
   var date = $('<p>').html(month + " " + date);
   var time = $('<p>').html(dateToTime(item.startDate) + 
               " - " + dateToTime(item.endDate)); 
+  var location = $('<h4>').html(item.location);
   var desc = $('<p>').html(item.desc);
 
   date.addClass("captionHead");
   time.addClass("caption");
   
-  li.append(name, host, date, time, $("<hr>"), desc);
+  li.append(name, host, date, time, $("<hr>"), location, desc);
   container.append(li);
   
 }
