@@ -98,7 +98,7 @@ exports.populateList = function(item, container) {
   var desc = $('<p>').html(item.desc);
   var block = $('<div>').addClass('block');
   var location = $('<h4>').html(item.location);
-  var type = $('<p>').html(TypeArray[item.type]);
+  var type = $('<label>').html(TypeArray[item.type]);
 
   var del = $("<div>").addClass("delButton");
 
@@ -122,8 +122,7 @@ exports.populateList = function(item, container) {
   labelTime.addClass('captionHead');
   labelHost.addClass('captionHead')
   
-  type.css({ "color" : getPinColor(parseInt(item.type),
-                           false)});
+  type.addClass(TypeArray[item.type]);
   time.addClass('caption');
   host.addClass('caption');
 

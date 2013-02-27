@@ -58,6 +58,9 @@ header{
 	margin: 5px 10px;
 	width: 800px;
 }
+.col1 .roundedBox{
+	background-color: white;
+}
 
 /* map related styling */
 #map{
@@ -92,8 +95,12 @@ header{
 	cursor: crosshair;
 }
 
+.addBox{
+	background-color: rgba(55,255,239,.2);	
+}
 .displayAdd {
 	display: none;
+	cursor: pointer;
 }
 
 .block{
@@ -176,10 +183,10 @@ header{
 }
 /* used as containers for new listings and filter box */
 .roundedBox{
-	background-color: white;
 	padding: 10px;
 	border-radius: 6px;
 	margin-bottom: 20px;
+	position: relative;
 }
 
 /* form add listing*/
@@ -246,6 +253,8 @@ input[type="checkbox"]{
 label{
 	padding: 2px 10px;
 	border-radius: 3px;
+	display: inline-block;
+	margin-top: 4px;
 }
 
 /************** side listings **************/
@@ -279,16 +288,25 @@ h1{
 
 h2{	
 	font-family: 'adelle',serif;
+	font-size: 25px;
 	color: #314E57;
 }
 
 h4{
-	font-family: 'brandon-grotesque', serif;
+	font-family: 'brandon-grotesque', san-serif;
 	color: #314E57;
 }
 
+.chevronExpand{
+	font-family: 'brandon-grotesque', san-serif;
+	position: absolute;
+	right: 15px;
+	top: 10px;
+	font-size: 50px;
+}
+
 .captionHead{
-	margin-bottom: 15px;
+	margin: 6px 0px;
 	font-weight: 500;
 	color: #314E57;
 }
@@ -299,7 +317,10 @@ h4{
 }
 
 #event-listing{
-	padding: 10px 0px;
+	margin: 5px;
+	padding: 15px;
+	border-radius: 5px;
+	background-color: white;
 
 }
 

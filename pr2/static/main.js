@@ -68,7 +68,14 @@ $(document).ready(function() {
   $("#filterDate").change(DOMUTILS.refreshDOM);
   $("#date").val(localDateString);
   $("#addNew").click(function(){
-    $("#event-listing").toggleClass("displayAdd");
+  
+  $("#event-listing").toggleClass("displayAdd");
+  if ($(".displayAdd").css("display")=="none"){
+	  $(".chevronExpand").html("&#x2C6;");
+  }
+  else {
+	  $(".chevronExpand").html("&#x2C7;");
+  }
   });
 
   //$("#event-listing").click(prepareToAdd);
@@ -163,7 +170,7 @@ function addMyEvent(x,y) {
   var type = $("input[name='type']:checked").val();
 
   $("canvas").toggleClass('switchCursor');
-
+index.html
 
   if ((name !== "") && (startDate !== "")
       && (endDate !== "") && (host !== "")
@@ -180,7 +187,7 @@ function addMyEvent(x,y) {
     setTimeout(function() {
       $(".alert").html("Click on the map to set a pin.");
       $(".alert").css({"visibility": "hidden"});
-    }, 3000)
+    }, 5000)
 
     $("#event").val("");
     $("#host").val("");
