@@ -67,16 +67,9 @@ $(document).ready(function() {
   $("#filterDate").val(localDateString);
   $("#filterDate").change(DOMUTILS.refreshDOM);
   $("#date").val(localDateString);
-  $("#addNew").click(function(){
-  
-  $("#event-listing").toggleClass("displayAdd");
-  if ($(".displayAdd").css("display")=="none"){
-	  $(".chevronExpand").html("&#x2C6;");
-  }
-  else {
-	  $(".chevronExpand").html("&#x2C7;");
-  }
-  });
+  $("#addNew").click(toggleExpandedAdd);
+
+  $(".chevronExpand").click(toggleExpandedAdd);
 
   //$("#event-listing").click(prepareToAdd);
 
@@ -100,9 +93,6 @@ $(document).ready(function() {
 
 
 });
-
- 
-
 
 /*
   Draws a pin on the map at the given coordinates.
@@ -170,7 +160,6 @@ function addMyEvent(x,y) {
   var type = $("input[name='type']:checked").val();
 
   $("canvas").toggleClass('switchCursor');
-index.html
 
   if ((name !== "") && (startDate !== "")
       && (endDate !== "") && (host !== "")
@@ -474,3 +463,17 @@ function flipCheckBox(value) {
     else
       checkbox.prop("checked", true);
  }
+
+/*
+  Opens up the "Add new Event" menu.
+ */
+function toggleExpandedAdd() {
+  $("#event-listing").toggleClass("displayAdd");
+
+  if ($(".displayAdd").css("display")=="none")
+    $(".chevronExpand").html("&#x2C6;");
+  
+  else 
+    $(".chevronExpand").html("&#x2C7;");
+  
+}

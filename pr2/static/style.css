@@ -175,7 +175,7 @@ header{
 /************** rightmost container **************/
 /* contains add listing box and filter box */
 .col2{
-	float: left;
+	float: right;
 	width: 300px;
 	margin: 5px;
 	color: #211E19;
