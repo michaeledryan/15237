@@ -12,7 +12,7 @@ var itemToBeAdded;
 const SECPERDAY = 3600 * 24 * 1000;
 const SECPERWEEK = SECPERDAY * 7;
 const SECPERMONTH = SECPERDAY * 31; 
-const CANWIDTH = 568, CANHEIGHT = 492;
+const CANWIDTH = 800, CANHEIGHT = 620;
 
 // For date radio buttons
 const dateEnum = {
@@ -49,7 +49,6 @@ $(document).ready(function() {
                         dateStrArray[1];
 
 
-
   // Canvas setup
   canvas = document.getElementById("myCanvas");
   ctx = canvas.getContext("2d");
@@ -66,15 +65,38 @@ $(document).ready(function() {
   $(':checkbox').change(DOMUTILS.refreshDOM);
   $("input[name='filterTime']").change(DOMUTILS.refreshDOM)
   $("#filterDate").val(localDateString);
+  $("#filterDate").change(DOMUTILS.refreshDOM);
   $("#date").val(localDateString);
   $("#addNew").click(function(){
     $("#event-listing").toggleClass("displayAdd");
+  });
+
+  //$("#event-listing").click(prepareToAdd);
+
+
+  // Make type labels clickable.
+  $(".study").click(function() {
+    flipCheckBox("STUDY");
+  });
+  $(".food").click(function() {
+    flipCheckBox("FOOD");
+  });
+  $(".show").click(function() {
+    flipCheckBox("SHOW");
+  });
+  $(".talk").click(function() {
+    flipCheckBox("TALK");
+  });
+  $(".misc").click(function() {
+    flipCheckBox("MISC");
   });
 
 
 });
 
  
+
+
 /*
   Draws a pin on the map at the given coordinates.
  */
@@ -153,7 +175,6 @@ function addMyEvent(x,y) {
           .prop("checked", true);
     NODECOM.add(new Listing(x, y, name, startDate, endDate, 
                  host, desc, location, type));
-    NODECOM.get();
     $(".alert").html("Your event has been added!");
 
     setTimeout(function() {
@@ -164,7 +185,10 @@ function addMyEvent(x,y) {
     $("#event").val("");
     $("#host").val("");
     $("#description").val(""); 
+    $("#location").val("");
     $("input[name='type']:checked").prop('checked',false);   
+    
+    NODECOM.get();
   }
 
   else
@@ -235,6 +259,7 @@ function hoverMouse(event) {
   var closeEvents = [];
   var item;
 
+
   x -= canvas.offsetLeft;
   y -= canvas.offsetTop;
 
@@ -289,13 +314,14 @@ function drawTooltipRect(closeEvents) {
   var len = closeEvents.length;
   var startingX = 2;
   var startingY = max(min(closeEvents[0].y - 15, 
-                  CANHEIGHT - 20 * len), 2);
+                  CANHEIGHT - 15 * len), 2);
   var width = 0;
   
   for (var i = 0; ((i < len) && (i < CANHEIGHT/20)); i++) {
     item = closeEvents[i];
-    width = max(width, (ctx.measureText(item.eventName).width + 4));
+    width = max(width, (ctx.measureText(item.eventName).width + 8));
     startingX = max(startingX,item.x);
+
   };
 
   startingX = max(2, min(startingX, 
@@ -430,3 +456,14 @@ function filterByDate(date) {
       break;
   }
 }
+
+/*
+  Flips a checkboc DOM element with the given value.
+ */
+function flipCheckBox(value) {
+    var checkbox = $("input[value=" + value +"]");
+    if (checkbox.prop("checked"))
+      checkbox.prop("checked", false);
+    else
+      checkbox.prop("checked", true);
+ }

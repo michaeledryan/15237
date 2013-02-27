@@ -1,15 +1,12 @@
-var express = require("express"); // imports express
-var app = express();              // create a new instance of express
+var express = require("express"); 
+var app = express();              
 var Listutils = require("./listUtils.js");
 
-// imports the fs module (reading and writing to a text file)
 var fs = require("fs");
 
-// the bodyParser middleware allows us to parse the
-// body of a request
 app.use(express.bodyParser());
 
-// The global datastores for this example
+// Datastore!
 var listings = {};
 
 var TypeEnum = {
@@ -20,8 +17,9 @@ var TypeEnum = {
     MISC : 4,
   }
 
-
-// Asynchronously read file contents, then call callbackFn
+/*
+  Asynchronously read file contents, then call callbackFn.
+ */
 function readFile(filename, defaultData, callbackFn) {
   fs.readFile(filename, function(err, data) {
     if (err) {
@@ -34,7 +32,9 @@ function readFile(filename, defaultData, callbackFn) {
   });
 }
 
-// Asynchronously write file contents, then call callbackFn
+/*
+  Asynchronously write file contents, then call callbackFn.
+ */
 function writeFile(filename, data, callbackFn) {
   fs.writeFile(filename, data, function(err) {
     if (err) {
@@ -46,7 +46,9 @@ function writeFile(filename, data, callbackFn) {
   });
 }
 
-// Get all items
+/*
+ Gets all items.
+ */
 app.get("/listings", function(request, response){
   response.send({
     listings: listings,
@@ -54,7 +56,9 @@ app.get("/listings", function(request, response){
   });
 });
 
-// Get one item
+/* 
+  Gets one item.
+ */
 app.get("/listings/:id", function(request, response){
   var id = request.params.id;
   var item = getProperList(request.params.list)[request.params.id];
@@ -64,7 +68,9 @@ app.get("/listings/:id", function(request, response){
   });
 });
 
-// Create new item
+/*
+ Creates a new item.
+ */
 app.post("/listings", function(request, response) {
   
   var item = request.body.item;
@@ -88,6 +94,7 @@ app.post("/listings", function(request, response) {
 
     item = undefined;
   }
+
   response.send({ 
     item: item,
     success: successful
@@ -95,7 +102,9 @@ app.post("/listings", function(request, response) {
 });
 
 
-// Delete all stored data. This function seems unsafe.
+/*
+   Delete all stored data. This function seems unsafe.
+ */
 app.delete("/listings", function(request, response){
   
   listings = {};
@@ -107,7 +116,9 @@ app.delete("/listings", function(request, response){
   });
 });
 
-// Delete one item
+/*
+  Deletes one item.
+ */
 app.delete("/listings/:id", function(request, response){
   var id = request.params.id;
   var item = request.body.item;
@@ -118,19 +129,24 @@ app.delete("/listings/:id", function(request, response){
   });
 });
 
-// This is for serving files in the static directory
+
+/*
+ Serves files in the static directory.
+ */
 app.get("/static/:staticFilename", function (request, response) {
     response.sendfile("static/" + request.params.staticFilename);
 });
 
+/*
+  Loads stored data.
+ */
 function initServer() {
-  // When we start the server, we must load the stored data
   var defaultList = "{}";
   readFile("listings.txt", defaultList, function(err, data) {
     listings = JSON.parse(data);
   });
 }
 
-// Finally, initialize the server, then activate the server at port 8889
+// Finally, initialize the server and listen on port 8889.
 initServer();
 app.listen(8889);
