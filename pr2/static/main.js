@@ -110,7 +110,7 @@ function prepareToAdd() {
       && (desc !== "") && (type !== undefined)) {
     adding = true;  
     $("canvas").toggleClass('switchCursor');
-    $("#submitButton").val("Wait! I made a typo.");
+    $("#submitButton").val("Cancel.");
     $(".alert").css({"visibility": "visible"});
     $(".error").css({"display": "none"});
   }
@@ -152,11 +152,16 @@ function addMyEvent(x,y) {
       $(".alert").html("Click on the map to set a pin.");
       $(".alert").css({"visibility": "hidden"});
     }, 3000)
-    
   }
 
   else
-    $(".error").css({"display": "inline"});}
+    $(".error").css({"display": "inline"});
+    
+    $("#event").val("");
+    $("#host").val("");
+    $("#description").val("");
+    $("input[name='type']:checked").prop('checked',false);
+  }
 
 /*
   Listener for a mouseDown on the canvas.
@@ -370,21 +375,21 @@ function dateToTime(date) {
   Given an event type and a boolean, returns specific pin colors.
  */
 function getPinColor(type, hovering) {
-  switch(type) {
-    case 0:
-      return hovering ? "rgb(153, 146, 115)" : "rgb(153, 146, 122)";
+  switch(type) {		//hover color			//regular color
+    case 0: //study			
+      return hovering ? "rgb(33, 214, 207)" : "rgb(24, 153, 148)";
       break;
-    case 1:
-      return hovering ? "rgb(204, 175, 51)" : "rgb(204, 172, 61)";
+    case 1: //food
+      return hovering ? "rgb(255,118,226)"  : "rgb(211, 98, 187)";
       break;
-    case 2:
-      return hovering ? "rgb(255, 190, 89)" : "rgb(255, 189, 102)";
+    case 2: //show
+      return hovering ? "rgb(255, 190, 89)"  : "rgb(255, 189, 102)";
       break;
-    case 3:
-      return hovering ? "rgb(153, 236, 255)" : "rgb(166, 246, 255)";
+    case 3: //talk
+      return hovering ? "rgb(191,204,75)"	 : "rgb(150, 160, 59)";
       break;
-    case 4:
-      return hovering ? "rgb(51, 204, 191)" : "rgb(61, 204, 178)";
+    case 4: //misc
+      return hovering ? "rgb(64,185,255)"	 : "rgb(54, 155, 214)";
       break;
   }
 }
