@@ -9,7 +9,7 @@ var sideListings = [];
 var itemToBeAdded;
 
 // Used to calculate time ranges
-const SECPERDAY = 3600 * 24;
+const SECPERDAY = 3600 * 24 * 1000;
 const SECPERWEEK = SECPERDAY * 7;
 const SECPERMONTH = SECPERDAY * 31; 
 const CANWIDTH = 568, CANHEIGHT = 492;
@@ -152,11 +152,15 @@ function addMyEvent(x,y) {
       $(".alert").html("Click on the map to set a pin.");
       $(".alert").css({"visibility": "hidden"});
     }, 3000)
-    
+
+    $("#event").val("");
+    $("#host").val("");
+    $("#description").val("");    
   }
 
   else
-    $(".error").css({"display": "inline"});}
+    $(".error").css({"display": "inline"});
+}
 
 /*
   Listener for a mouseDown on the canvas.

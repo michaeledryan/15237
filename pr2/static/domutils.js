@@ -76,7 +76,7 @@ exports.refreshDOM = function(){
 /*
   Function for populating the main list of events at the bottom
   ofthe page. Parses the item into appropriate HTML elements,
-  then add it to the specified container.
+  then add it to the specifie container.
  */
 exports.populateList = function(item, container) {
   // Get relevant attributes from the item
@@ -120,11 +120,14 @@ exports.populateList = function(item, container) {
   calendar.append(calmonth,caldate);
   labelTime.addClass('captionHead');
   labelHost.addClass('captionHead')
+  
+  type.css({ "color" : getPinColor(parseInt(item.type),
+                           false)});
   time.addClass('caption');
   host.addClass('caption');
-  leftCol.append(calendar,labelTime,time,labelHost,host);
-  
-  rightCol.append(name,desc,type,del);
+
+  leftCol.append(calendar,labelTime,time,labelHost,host, type);
+  rightCol.append(name,desc,del);
   block.append(leftCol,rightCol);
   li.append(block);
   container.append(li);
@@ -142,7 +145,6 @@ exports.populateSideList = function(item,container) {
   var day = startDate.toDateString().slice(0, 3);
   var date = startDate.getDate();
   var year = startDate.getYear();
-  var type = $('<p>').html(TypeArray[item.type]);
  
   // Generate HTML. 
   var li = $("<li>");
@@ -153,10 +155,10 @@ exports.populateSideList = function(item,container) {
               " - " + dateToTime(item.endDate)); 
   var desc = $('<p>').html(item.desc);
 
-  date.addClass("captionHead")
+  date.addClass("captionHead");
   time.addClass("caption");
   
-  li.append(name, host, date, time, type, $("<hr>"), desc);
+  li.append(name, host, date, time, $("<hr>"), desc);
   container.append(li);
   
 }
