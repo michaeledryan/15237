@@ -61,11 +61,14 @@ header{
 	margin-top: 15px;
 }
 
+#mapRow, #listingRow{
+	width: 1140px;
+}
 /************** leftmost container **************/
 /* contains add listing box and filter box */
 .col1{
 	float: left;
-	width: 175px;
+	width: 300px;
 	margin: 5px;
 	color: #211E19;
 
@@ -103,14 +106,16 @@ header{
 	font-size: 12px;
 	color: #211E19;
 }
-
+#filterDate{
+ 	width: 30%;	
+}
 input.rounded, textarea{
 	background-color: rgba(255,255,255,.65);
 	border: 1px solid #ccc;
 		-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
 		-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
 	font-family: "brandon-grotesque",arial,san-serif;
-	width: 140px;
+	width: 90%;
 	height: 20px;
 	padding: 4px 6px;
 	margin-bottom: 10px;
@@ -123,8 +128,16 @@ input.rounded, textarea{
 	vertical-align: middle; 
 }
 
+#host, #date{
+	width: 40%
+}
+
+#timeStart, #timeEnd{
+	width: 85px;
+}
+
 textarea{
-	height: 80px;	
+	height: 60px;	
 }
 
 /* filtering input */
@@ -136,12 +149,15 @@ label{
 	border-radius: 3px;
 }
 
+#listingsCol{
+	width: 800px;
+}
+
 /* middle container, contains map and the listings */
 .col2{
 	float: left;
-	margin: 5px;
-	padding:  15px;
-	width: 600px;
+	margin: 5px 10px;
+	width: 800px;
 }
 
 /* map related styling */
@@ -184,13 +200,13 @@ label{
 }
 
 .left{
-	width: 80px;
+	width: 120px;
 	float: left;
 	clear: left;
 }
 .right{
 	color: #6d6a6a;
-	width: 480px;
+	width: 630px;
 	float: left;
 	font-family: 'adelle',serif;
 	line-height: 1.5;
@@ -202,7 +218,7 @@ label{
 .listings li{
 	display: inline-block;
 	position: relative;
-	width: 600px;
+	width: 800px;
 	margin: 5px;
  }
  
@@ -287,7 +303,7 @@ h2{
 }
 
 .captionHead{
-	margin: 8px 0px;
+	margin-bottom: 15px;
 	font-weight: 500;
 	color: #314E57;
 }
