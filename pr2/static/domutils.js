@@ -76,7 +76,7 @@ exports.refreshDOM = function(){
 /*
   Function for populating the main list of events at the bottom
   ofthe page. Parses the item into appropriate HTML elements,
-  then add it to the specified container.
+  then add it to the specifie container.
  */
 exports.populateList = function(item, container) {
   // Get relevant attributes from the item
@@ -97,6 +97,7 @@ exports.populateList = function(item, container) {
   var name = $('<h3>').html(item.eventName);
   var desc = $('<p>').html(item.desc);
   var block = $('<div>').addClass('block');
+  var location = $('<h4>').html(item.location);
   var type = $('<p>').html(TypeArray[item.type]);
 
   var del = $("<div>").addClass("delButton");
@@ -120,11 +121,14 @@ exports.populateList = function(item, container) {
   calendar.append(calmonth,caldate);
   labelTime.addClass('captionHead');
   labelHost.addClass('captionHead')
+  
+  type.css({ "color" : getPinColor(parseInt(item.type),
+                           false)});
   time.addClass('caption');
   host.addClass('caption');
-  leftCol.append(calendar,labelTime,time,labelHost,host);
-  
-  rightCol.append(name,desc,type,del);
+
+  leftCol.append(calendar,labelTime,time,labelHost,host, type);
+  rightCol.append(name,location,desc,del);
   block.append(leftCol,rightCol);
   li.append(block);
   container.append(li);
@@ -142,7 +146,6 @@ exports.populateSideList = function(item,container) {
   var day = startDate.toDateString().slice(0, 3);
   var date = startDate.getDate();
   var year = startDate.getYear();
-  var type = $('<p>').html(TypeArray[item.type]);
  
   // Generate HTML. 
   var li = $("<li>");
@@ -151,12 +154,13 @@ exports.populateSideList = function(item,container) {
   var date = $('<p>').html(month + " " + date);
   var time = $('<p>').html(dateToTime(item.startDate) + 
               " - " + dateToTime(item.endDate)); 
+  var location = $('<h4>').html(item.location);
   var desc = $('<p>').html(item.desc);
 
-  date.addClass("captionHead")
+  date.addClass("captionHead");
   time.addClass("caption");
   
-  li.append(name, host, date, time, type, $("<hr>"), desc);
+  li.append(name, host, date, time, $("<hr>"), location, desc);
   container.append(li);
   
 }

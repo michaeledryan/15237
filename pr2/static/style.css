@@ -92,6 +92,10 @@ header{
 	cursor: crosshair;
 }
 
+.displayAdd {
+	display: none;
+}
+
 .block{
 	padding: 15px;
 	background-color: white;
@@ -276,7 +280,11 @@ h1{
 h2{	
 	font-family: 'adelle',serif;
 	color: #314E57;
-	padding-bottom: 5px;
+}
+
+h4{
+	font-family: 'brandon-grotesque', serif;
+	color: #314E57;
 }
 
 .captionHead{

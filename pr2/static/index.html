@@ -28,8 +28,8 @@
 				
 			<div class="col2">
 				<div class="roundedBox">
-					<h2>Add New Listing</h2>		
-					<form id="event-listing" action="javascript:prepareToAdd()">
+					<h2 id="addNew">Add New Listing</h2>		
+					<form id="event-listing" class="displayAdd" action="javascript:prepareToAdd()">
 						<div class="row">
 							<input id="event" class="rounded" name="eventName" placeholder="event name" type="text"/>
 						</div>
@@ -45,6 +45,7 @@
 						</div>
 	  
 						<div class="row">
+							<input id="location" class="rounded" name="location" placeholder="location" type="text"/>			
 						</div>
 	  
 						<div class="row">
@@ -56,7 +57,7 @@
 							<input type="radio" name="type" value="0"><span class="radio">Study</span>
 							<input type="radio" name="type" value="1"><span class="radio">Food</span>
 							<input type="radio" name="type" value="2"><span class="radio">Show</span>
-							<input type="radio" name="type" value="3"><span class="radio">Talk</span>
+							<input type="radio" name="type" value="3"><span class="radio">Talk</span> <br>
 							<input type="radio" name="type" value="4"><span class="radio">Miscellaneous</span>
 						</div>
 	

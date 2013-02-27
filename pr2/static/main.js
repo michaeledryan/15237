@@ -9,7 +9,7 @@ var sideListings = [];
 var itemToBeAdded;
 
 // Used to calculate time ranges
-const SECPERDAY = 3600 * 24;
+const SECPERDAY = 3600 * 24 * 1000;
 const SECPERWEEK = SECPERDAY * 7;
 const SECPERMONTH = SECPERDAY * 31; 
 const CANWIDTH = 568, CANHEIGHT = 492;
@@ -67,6 +67,10 @@ $(document).ready(function() {
   $("input[name='filterTime']").change(DOMUTILS.refreshDOM)
   $("#filterDate").val(localDateString);
   $("#date").val(localDateString);
+  $("#addNew").click(function(){
+    $("#event-listing").toggleClass("displayAdd");
+  });
+
 
 });
 
@@ -95,6 +99,7 @@ function prepareToAdd() {
   var endDate = new Date($("#date").val() + " " + $("#timeEnd").val());
   var host = $("#host").val();
   var desc = $("#description").val();
+  var location = $("#location").val();
   var type = $("input[name='type']:checked").val();
 
   if (adding) {
@@ -107,7 +112,8 @@ function prepareToAdd() {
 
   if ((name !== "") && (startDate !== "")
       && (endDate !== "") && (host !== "")
-      && (desc !== "") && (type !== undefined)) {
+      && (desc !== "") && (location !== "")
+      && (type !== undefined)) {
     adding = true;  
     $("canvas").toggleClass('switchCursor');
     $("#submitButton").val("Cancel.");
@@ -131,6 +137,7 @@ function addMyEvent(x,y) {
   var endDate = new Date($("#date").val() + " " + $("#timeEnd").val());
   var host = $("#host").val();
   var desc = $("#description").val();
+  var location = $("#location").val();
   var type = $("input[name='type']:checked").val();
 
   $("canvas").toggleClass('switchCursor');
@@ -138,13 +145,14 @@ function addMyEvent(x,y) {
 
   if ((name !== "") && (startDate !== "")
       && (endDate !== "") && (host !== "")
-      && (desc !== "") && (type !== undefined)) {
+      && (desc !== "") && (location !== "")
+      && (type !== undefined)) {
 
     $("#submitButton").val("Add to map!");
     $(":input[value="+ TypeArray[parseInt(type)].toUpperCase() + "]")
           .prop("checked", true);
     NODECOM.add(new Listing(x, y, name, startDate, endDate, 
-                 host, desc, type));
+                 host, desc, location, type));
     NODECOM.get();
     $(".alert").html("Your event has been added!");
 
@@ -152,16 +160,17 @@ function addMyEvent(x,y) {
       $(".alert").html("Click on the map to set a pin.");
       $(".alert").css({"visibility": "hidden"});
     }, 3000)
+
+    $("#event").val("");
+    $("#host").val("");
+    $("#description").val(""); 
+    $("input[name='type']:checked").prop('checked',false);   
   }
 
   else
-    $(".error").css({"display": "inline"});
-    
-    $("#event").val("");
-    $("#host").val("");
-    $("#description").val("");
-    $("input[name='type']:checked").prop('checked',false);
+    $(".error").css({"display": "inline"}); 
   }
+
 
 /*
   Listener for a mouseDown on the canvas.
@@ -315,7 +324,7 @@ function drawTooltipRect(closeEvents) {
   Constructor for a Listing object, which stores information
   about a given event.
  */
-function Listing(x, y, name, start, end, host, desc, type) {
+function Listing(x, y, name, start, end, host, desc, location, type) {
     this.x = x;
     this.y = y;
     this.eventName = name;
@@ -325,11 +334,12 @@ function Listing(x, y, name, start, end, host, desc, type) {
     this.host = host;
     this.desc = desc;
     this.type = type;
+    this.location = location;
   }
 
 
 /*
- Rounds a Date to the nearest day
+  Rounds a Date to the nearest day.
  */
 function nearestDay(exactDate) {
     return new Date(exactDate.getFullYear(), 
