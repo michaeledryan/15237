@@ -2,6 +2,10 @@ MIKE
 
 Refresh Button!!!!
 
+Clicking on labels should change the checkboxes
+
+refreshDOM whenever you change filter time as well.
+
 Comment code!
 
 Assemble process work and readme
@@ -12,6 +16,11 @@ Dates update to be 1-hour apart?
 
 
 STRETCH
+
+Hide "Add Listings" if not in use.
+  Maybe expand it if you click on the map, but not an event. Collapse after some time?
+
+  When would we hide it again once it's expanded?
 
 make filters scroll.
 
@@ -52,3 +61,23 @@ Knew to go to add listing
 
 Misclicked a lot, especially around date field. Maybe those are awkward?
 
+
+Used clicks to view files, not the bottom listings or the filters.
+
+Thought "Add to map" was confusing. Switch to "Pick a spot" or something like that.
+
+Liked the cursor change
+
+Party events?
+
+Test 3:
+
+Knew to use left-hand bar
+
+Got to talk without filters.
+
+Sort by type? ehh.
+
+Likes the calendar image!
+
+Thought we should hide the whole "Add Listings" bar if it wasn't being used.
