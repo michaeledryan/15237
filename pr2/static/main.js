@@ -61,11 +61,11 @@ $(document).ready(function() {
   // Get listing datarefre
   NODECOM.get();
 
-  // Set up DOM objects
+  // Set up DOM elements
   $(':checkbox').change(DOMUTILS.refreshDOM);
   $("input[name='filterTime']").change(DOMUTILS.refreshDOM)
-  $("#filterDate").val(localDateString);
   $("#filterDate").change(DOMUTILS.refreshDOM);
+  $("#filterDate").val(localDateString);
   $("#date").val(localDateString);
   $("#addNew").click(toggleExpandedAdd);
 

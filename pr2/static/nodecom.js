@@ -46,18 +46,5 @@ exports.del = function(item) {
   });
 }
 
-/* 
-  Deletes the entire server-side datastore.
- */
-exports.delAll = function() {
-  $.ajax({
-    type: "delete",
-    url: "/listings",
-    success: function(data) {
-      listings = data.listings;
-    }
-  });
-}
-
   return exports;
 }());
