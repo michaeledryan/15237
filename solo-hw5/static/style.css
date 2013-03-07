@@ -1,0 +1,91 @@
+/************** reset css ************* */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+body {
+	line-height: 1;
+	padding: 15px;
+}
+ol, ul {
+	list-style: none;
+}
+
+/* Circles for accelerometer */
+
+#c1 {
+	background-color: red;
+	z-index: -1;
+}
+
+#c2 {
+	background-color: blue;
+	z-index: -2;
+}
+
+.circle {
+	border-radius: 999px;
+	width: 150px;
+	height: 150px;
+	position: fixed;
+	display: inline-block;
+	left : 400px;
+	top : 400px;
+}
+
+/* Button divs for geoLocation and localStorage*/
+.button {
+	background-color: lightblue;
+	display: inline-block;
+	padding: 10px;
+	border-radius: 5px;
+}
+/* general styles */
+
+body{
+	font-family: helvetica,arial,san-serif;
+	background-color: gray;
+	color: white;
+
+}
+header{
+	color:gray;
+}
+
+h1{
+	text-transform: uppercase;
+	font-size: 42px;
+	letter-spacing: .3em;
+	font-weight: 700;
+	z-index: 999;
+}
+
+canvas {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	background-color: white;
+}
